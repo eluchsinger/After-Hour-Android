@@ -1,0 +1,27 @@
+<resources>
+    <string name="app_name">After-Hour</string>
+
+    // Permissions
+    <string name="permission_reason_camera">Damit After-Hour QR Codes scannen kann, braucht die App Zugirff auf die Kamera!</string>
+
+    // Buttons
+    <string name="button_cancel">Abbrechen</string>
+    <string name="button_okay">Okay</string>
+
+    // Titel
+    <string name="title_codescanner">Code Scanner</string>
+    <string name="title_myprofile">Mein Profil</string>
+
+    // Navigation Bar
+    <string name="navigation_drawer_open">Öffnen</string>
+    <string name="navigation_drawer_close">Schließen</string>
+
+    // Placeholders
+    <string name="placeholder_event_title">Event Title</string>
+    <string name="placeholder_event_location">Event Location</string>
+    <string name="placeholder_date">Date</string>
+    <string name="placeholder_event_picture">Event Picture</string>
+    <string name="placeholder_text">Nothing to read.</string>
+    <string name="descr_afterhour_icon">After-Hour Icon</string>
+
+</resources>

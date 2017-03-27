@@ -1,0 +1,26 @@
+<resources>
+    <string name="app_name">After-Hour</string>
+
+    // Permissions
+    <string name="permission_reason_camera">In order to Scan QR Codes After-Hour needs access to your camera!</string>
+
+    // Buttons
+    <string name="button_cancel">Cancel</string>
+    <string name="button_okay">Okay</string>
+
+    // Titel
+    <string name="title_codescanner">Code Scanner</string>
+    <string name="title_myprofile">My Profile</string>
+
+    // Navigation Bar
+    <string name="navigation_drawer_open">Öffnen</string>
+    <string name="navigation_drawer_close">Schliessen</string>
+
+    // Placeholders
+    <string name="placeholder_event_title">Event Title</string>
+    <string name="placeholder_event_location">Event Location</string>
+    <string name="placeholder_date">Date</string>
+    <string name="placeholder_event_picture">Event Picture</string>
+    <string name="placeholder_text">Nothing to read.</string>
+    <string name="descr_afterhour_icon">After-Hour Icon</string>
+</resources>
