@@ -113,6 +113,7 @@ public class EntryScannerFragment extends Fragment {
 
         cameraSource = new CameraSource
                 .Builder(rootView.getContext(), barcodeDetector)
+                .setAutoFocusEnabled(true)
                 .build();
 
 
