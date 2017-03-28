@@ -132,9 +132,8 @@ public class EmployeeActivity extends AppCompatActivity implements OnEntryScanne
     private void switchActivity(Class activity) {
         Intent i = new Intent(this, activity);
         i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        finish();
         startActivity(i);
-        return;
+        finish();
     }
 
     @Override

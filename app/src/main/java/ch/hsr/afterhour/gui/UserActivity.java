@@ -129,9 +129,8 @@ public class UserActivity extends AppCompatActivity implements OnMyEventListList
     private void switchActivity(Class activity) {
         Intent i = new Intent(this, activity);
         i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        finish();
         startActivity(i);
-        return;
+        finish();
     }
 
     @Override

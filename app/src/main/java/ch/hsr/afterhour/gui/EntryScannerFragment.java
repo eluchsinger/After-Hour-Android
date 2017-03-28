@@ -29,21 +29,8 @@ import java.io.IOException;
 import ch.hsr.afterhour.R;
 import ch.hsr.afterhour.model.User;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link OnEntryScannerListener} interface
- * to handle interaction events.
- * Use the {@link EntryScannerFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class EntryScannerFragment extends Fragment {
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
 
-    private String mParam1;
-    private String mParam2;
+public class EntryScannerFragment extends Fragment {
 
     // Userlogin Temporary fix
     private String logonUserid;
@@ -54,30 +41,9 @@ public class EntryScannerFragment extends Fragment {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment EntryScannerFragment.
-     */
-    public static EntryScannerFragment newInstance(String param1, String param2) {
-        EntryScannerFragment fragment = new EntryScannerFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
 
@@ -106,9 +72,8 @@ public class EntryScannerFragment extends Fragment {
 
         // If request is cancelled, the result arrays are empty.
         BarcodeDetector barcodeDetector =
-                new BarcodeDetector.Builder(rootView.getContext())
+                new BarcodeDetector.Builder(getContext())
                         .setBarcodeFormats(Barcode.QR_CODE)
-                        .setBarcodeFormats(Barcode.DATA_MATRIX)
                         .build();
 
         cameraSource = new CameraSource
@@ -128,6 +93,9 @@ public class EntryScannerFragment extends Fragment {
                 final SparseArray<Barcode> barcodes = detections.getDetectedItems();
 
                 if (barcodes.size() != 0) {
+                    // todo: remove sysout
+                    System.out.println("Blabla");
+
                     infoPane.post(() -> {
                         String qrCode = barcodes.valueAt(0).displayValue;
 
@@ -227,7 +195,6 @@ public class EntryScannerFragment extends Fragment {
                 // todo: enable again
 //                user = Application.get().getServerAPI().authenticateUser(userid);
             logonUserid = userid;
-                handleResult();
                 return true;
 //            } catch (FoxHttpServiceResultException e) {
 //                e.printStackTrace();
@@ -242,6 +209,7 @@ public class EntryScannerFragment extends Fragment {
         protected void onPostExecute(final Boolean success) {
             mAuthTask = null;
             showProgress(false);
+            handleResult();
 //            infoPane.setText(user.getFullName());
         }
 
