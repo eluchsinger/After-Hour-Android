@@ -9,7 +9,7 @@
 
         <item
             android:id="@+id/employee_nav_scanuser"
-            android:icon="@drawable/ic_scanner_black"
+            android:icon="@mipmap/ic_qrcode_scan_white_48dp"
             android:title="@string/title_codescanner" />
 
     </group>

@@ -24,4 +24,16 @@
     <string name="placeholder_text">Nothing to read.</string>
     <string name="descr_afterhour_icon">After-Hour Icon</string>
 
+    <!-- Strings related to login -->
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Passwort</string>
+    <string name="action_sign_in">Party Hard!</string>
+    <string name="error_invalid_email">Ungültige Email Adresse</string>
+    <string name="error_invalid_password">Passwort zu kurz</string>
+    <string name="error_incorrect_password">Ungültiges Passwort</string>
+    <string name="error_field_required">Dieses Feld wird benoetigt</string>
+    <string name="permission_rationale">"Der Zugriff auf die Kontakte wird benoetigt für Email Vervollstaendigung."
+    </string>
+    <string name="action_register">Registrieren</string>
+
 </resources>
