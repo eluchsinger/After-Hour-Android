@@ -26,8 +26,11 @@ import com.google.android.gms.vision.barcode.BarcodeDetector;
 
 import java.io.IOException;
 
+import ch.hsr.afterhour.Application;
 import ch.hsr.afterhour.R;
 import ch.hsr.afterhour.model.User;
+import ch.viascom.groundwork.foxhttp.exception.FoxHttpException;
+import ch.viascom.groundwork.foxhttp.response.serviceresult.FoxHttpServiceResultException;
 
 
 public class EntryScannerFragment extends Fragment {
@@ -93,9 +96,6 @@ public class EntryScannerFragment extends Fragment {
                 final SparseArray<Barcode> barcodes = detections.getDetectedItems();
 
                 if (barcodes.size() != 0) {
-                    // todo: remove sysout
-                    System.out.println("Blabla");
-
                     infoPane.post(() -> {
                         String qrCode = barcodes.valueAt(0).displayValue;
 
@@ -105,6 +105,11 @@ public class EntryScannerFragment extends Fragment {
                 }
             }
         });
+
+
+
+        mAuthTask = new AuthenticateUserTask();
+        mAuthTask.execute("1");
 
         return rootView;
     }
@@ -191,18 +196,18 @@ public class EntryScannerFragment extends Fragment {
         @Override
         protected Boolean doInBackground(String... params) {
             String userid = params[0];
-//            try {
+            try {
                 // todo: enable again
-//                user = Application.get().getServerAPI().authenticateUser(userid);
+                user = Application.get().getServerAPI().authenticateUser(userid);
             logonUserid = userid;
                 return true;
-//            } catch (FoxHttpServiceResultException e) {
-//                e.printStackTrace();
-//                return false;
-//            } catch (FoxHttpException e) {
-//                e.printStackTrace();
-//                return false;
-//            }
+            } catch (FoxHttpServiceResultException e) {
+                e.printStackTrace();
+                return false;
+            } catch (FoxHttpException e) {
+                e.printStackTrace();
+                return false;
+            }
         }
 
         @Override
@@ -210,7 +215,7 @@ public class EntryScannerFragment extends Fragment {
             mAuthTask = null;
             showProgress(false);
             handleResult();
-//            infoPane.setText(user.getFullName());
+            infoPane.setText(user.getName());
         }
 
         @Override

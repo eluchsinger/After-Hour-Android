@@ -49,7 +49,7 @@ public class DBHelper extends SQLiteOpenHelper {
         user = Application.get().getUser();
         ContentValues values = new ContentValues();
         values.put(UserEntry._ID, user.getId());
-        values.put(UserEntry.COLUMN_NAME_FULLNAME, user.getFullName());
+        values.put(UserEntry.COLUMN_NAME_FULLNAME, user.getName());
         long newRowId = db.insert(UserEntry.TABLE_NAME, null, values);
         final int ERROR_ID = -1;
         if (newRowId == ERROR_ID) {
@@ -76,7 +76,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
     public void removeCredentialsFromDatabase(SQLiteDatabase db) {
         String selection = UserEntry.COLUMN_NAME_FULLNAME + " LIKE ?";
-        String[] selectionArgs = {Application.get().getUser().getFullName()};
+        String[] selectionArgs = {Application.get().getUser().getName()};
         db.delete(UserEntry.TABLE_NAME, selection, selectionArgs);
     }
 }
