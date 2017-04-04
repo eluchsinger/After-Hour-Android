@@ -53,5 +53,7 @@ dependencies {
     compile 'ch.viascom.groundwork:foxhttp:1.2.1'
     compile 'ch.viascom.groundwork:service-result:1.2.1'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
+    compile 'com.google.code.gson:gson:2.8.0'
+
     testCompile 'junit:junit:4.12'
 }
