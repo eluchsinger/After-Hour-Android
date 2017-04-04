@@ -2,6 +2,7 @@ package ch.hsr.afterhour.service.server;
 
 import java.net.MalformedURLException;
 
+import ch.hsr.afterhour.model.Event;
 import ch.hsr.afterhour.model.User;
 import ch.viascom.groundwork.foxhttp.FoxHttpClient;
 import ch.viascom.groundwork.foxhttp.FoxHttpRequest;
@@ -49,17 +50,23 @@ public class FoxHttpAPI {
         return SERVER_PATH;
     }
 
-    public User authenticateUser(String qrcode) throws FoxHttpException {
-//        return requests.authenticateUser(qrcode);
+    public User authenticateUser(String qrcode) throws FoxHttpException, MalformedURLException {
         FoxHttpRequest foxHttpRequest = new FoxHttpRequest(httpClient);
-        try {
-            foxHttpRequest.setUrl("{host}/users/" + qrcode);
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
+        foxHttpRequest.setUrl("{host}/users/" + qrcode);
         foxHttpRequest.setRequestType(RequestType.GET);
         FoxHttpResponse foxHttpResponse = foxHttpRequest.execute();
-        User user = foxHttpResponse.getParsedBody(User.class);
-        return user;
+        return foxHttpResponse.getParsedBody(User.class);
+    }
+
+    public User login(String qrcode) throws FoxHttpException, MalformedURLException {
+        return authenticateUser(qrcode);
+    }
+
+    public Event[] downloadEvents() throws FoxHttpException, MalformedURLException {
+        FoxHttpRequest foxHttpRequest = new FoxHttpRequest(httpClient);
+        foxHttpRequest.setUrl("{host}/events");
+        foxHttpRequest.setRequestType(RequestType.GET);
+        FoxHttpResponse foxHttpResponse = foxHttpRequest.execute();
+        return foxHttpResponse.getParsedBody(Event[].class);
     }
 }

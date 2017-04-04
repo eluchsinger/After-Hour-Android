@@ -4,7 +4,7 @@
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:id="@+id/transaction_item_view"
     android:layout_width="match_parent"
-    android:layout_height="168dp"
+    android:layout_height="184dp"
     android:layout_marginBottom="5dp"
     android:layout_marginLeft="15dp"
     android:layout_marginRight="15dp"
@@ -48,6 +48,15 @@
                     android:layout_marginStart="@dimen/text_margin"
                     android:textAppearance="?attr/textAppearanceListItem"
                     android:text="@string/placeholder_event_location"/>
+
+                <TextView
+                    android:id="@+id/event_description"
+                    android:layout_width="184dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/text_margin"
+                    android:layout_marginStart="@dimen/text_margin"
+                    android:textAppearance="?attr/textAppearanceListItem"
+                    android:text="@string/placeholder_event_description"/>
 
                 <TextView
                     android:id="@+id/event_date"

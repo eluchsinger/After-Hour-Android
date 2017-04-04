@@ -2,23 +2,16 @@ package ch.hsr.afterhour.gui;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
-import android.annotation.TargetApi;
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
 import android.app.LoaderManager.LoaderCallbacks;
-
 import android.content.CursorLoader;
+import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
-
-import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
@@ -35,8 +28,6 @@ import java.util.List;
 
 import ch.hsr.afterhour.R;
 
-import static android.Manifest.permission.READ_CONTACTS;
-
 /**
  * A login screen that offers login via email/password.
  */
@@ -52,7 +43,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      * TODO: remove after connecting to a real authentication system.
      */
     private static final String[] DUMMY_CREDENTIALS = new String[]{
-            "user@hsr.ch:1234", "employee@hsr.ch:1234"
+            "berlusconi@hsr.ch:1234", "employee@hsr.ch:1234"
     };
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
@@ -256,8 +247,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         @Override
         protected Boolean doInBackground(Void... params) {
-            // TODO: attempt authentication against a network service.
-
             try {
                 // Simulate network access.
                 Thread.sleep(2000);
@@ -291,7 +280,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                     case "employee@hsr.ch":
                         intent = new Intent(getBaseContext(), EmployeeActivity.class);
                         break;
-                    case "user@hsr.ch":
+                    case "berlusconi@hsr.ch":
                         intent = new Intent(getBaseContext(), UserActivity.class);
                         break;
                     default:

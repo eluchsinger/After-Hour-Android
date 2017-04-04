@@ -10,19 +10,19 @@ import android.widget.TextView;
 import java.util.List;
 
 import ch.hsr.afterhour.R;
-import ch.hsr.afterhour.gui.MyProfileFragment.OnMyEventListListener;
-import ch.hsr.afterhour.gui.dummy.DummyContent.DummyItem;
+import ch.hsr.afterhour.gui.EventListFragment.OnMyEventListListener;
+import ch.hsr.afterhour.model.Event;
 
 /**
- * {@link RecyclerView.Adapter} that can display a {@link DummyItem} and makes a call to the
+ * {@link RecyclerView.Adapter} that can display a {@link Event} and makes a call to the
  * specified {@link OnMyEventListListener}.
  */
 public class EventRecyclerViewAdapter extends RecyclerView.Adapter<EventRecyclerViewAdapter.ViewHolder> {
 
-    private final List<DummyItem> mValues;
+    private final List<Event> mValues;
     private final OnMyEventListListener mListener;
 
-    public EventRecyclerViewAdapter(List<DummyItem> items, OnMyEventListListener listener) {
+    public EventRecyclerViewAdapter(List<Event> items, OnMyEventListListener listener) {
         mValues = items;
         mListener = listener;
     }
@@ -37,11 +37,8 @@ public class EventRecyclerViewAdapter extends RecyclerView.Adapter<EventRecycler
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
-        holder.mEventTitle.setText(mValues.get(position).title);
-        holder.mEventLocation.setText(mValues.get(position).location);
-        holder.mEventDate.setText(mValues.get(position).date);
-        // todo: add picture uri
-//        holder.mEventPicture.setImageURI(uri);
+        holder.mEventTitle.setText(mValues.get(position).getTitle());
+        holder.mDescription.setText(mValues.get(position).getDescription());
 
         holder.mView.setOnClickListener(v -> {
             if (null != mListener) {
@@ -50,6 +47,31 @@ public class EventRecyclerViewAdapter extends RecyclerView.Adapter<EventRecycler
                 mListener.onMyEventInteraction(holder.mItem);
             }
         });
+
+        // todo: Remove as soon as location and date are added
+        String location = null;
+        try {
+            location = mValues.get(position).getLocation();
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
+        if (location == null) {
+            holder.mEventLocation.setVisibility(View.GONE);
+        } else {
+            holder.mEventLocation.setText(mValues.get(position).getLocation());
+        }
+
+        String date = null;
+        try {
+            date = mValues.get(position).getDate();
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
+        if (date == null) {
+            holder.mEventDate.setVisibility(View.GONE);
+        } else {
+            holder.mEventDate.setText(mValues.get(position).getDate());
+        }
     }
 
     @Override
@@ -63,13 +85,15 @@ public class EventRecyclerViewAdapter extends RecyclerView.Adapter<EventRecycler
         public final TextView mEventLocation;
         public final TextView mEventDate;
         public final ImageView mEventPicture;
-        public DummyItem mItem;
+        public final TextView mDescription;
+        public Event mItem;
 
         public ViewHolder(View view) {
             super(view);
             mView = view;
             mEventTitle = (TextView) view.findViewById(R.id.event_title);
             mEventLocation = (TextView) view.findViewById(R.id.event_location);
+            mDescription = (TextView) view.findViewById(R.id.event_description);
             mEventDate = (TextView) view.findViewById(R.id.event_date);
             mEventPicture = (ImageView) view.findViewById(R.id.event_image_view);
         }

@@ -1,18 +1,11 @@
 package ch.hsr.afterhour.gui;
 
-import android.Manifest;
-import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -22,10 +15,9 @@ import android.view.View;
 import android.widget.TextView;
 
 import ch.hsr.afterhour.R;
-import ch.hsr.afterhour.gui.MyProfileFragment.OnMyEventListListener;
-import ch.hsr.afterhour.gui.dummy.DummyContent.DummyItem;
+import ch.hsr.afterhour.gui.EventListFragment.OnMyEventListListener;
+import ch.hsr.afterhour.model.Event;
 import ch.hsr.afterhour.model.Message;
-import ch.hsr.afterhour.service.database.DBHelper;
 
 public class UserActivity extends AppCompatActivity implements OnMyEventListListener {
 
@@ -40,8 +32,8 @@ public class UserActivity extends AppCompatActivity implements OnMyEventListList
     private FragmentManager fragmentManager;
 
     // Database
-    private DBHelper dbHelper = null;
-    private SQLiteDatabase db = null;
+//    private DBHelper dbHelper = null;
+//    private SQLiteDatabase db = null;
 
 
     @Override
@@ -58,44 +50,17 @@ public class UserActivity extends AppCompatActivity implements OnMyEventListList
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-        verifyPermissions(this);
-
         NavigationView navigationView = (NavigationView) findViewById(R.id.user_nav_view);
         setupDrawerContent(navigationView);
 
         View navHeaderView = navigationView.getHeaderView(0);
         TextView tvNavHeaderFullName = (TextView) navHeaderView.findViewById(R.id.nav_header_user_full_name);
-//        tvNavHeaderFullName.setText(Application.get().getUser().getFullName());
+//        tvNavHeaderFullName.setText(Application.get().getUser().getName());
 
         getSupportActionBar().setTitle(getResources().getString(R.string.title_myprofile));
 
         FragmentTransaction transaction = fragmentManager.beginTransaction();
-        transaction.replace(R.id.fragment_user_container, new MyProfileFragment()).commit();
-    }
-
-    public void verifyPermissions(Activity callbackActivity) {
-        int permissionStatus = ContextCompat.checkSelfPermission(callbackActivity,
-                Manifest.permission.CAMERA);
-
-        // callbackActivity gets the result
-        // of the request onRequestPermissionsResult().
-        if (permissionStatus != PackageManager.PERMISSION_GRANTED) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setMessage(R.string.permission_reason_camera)
-                    .setPositiveButton(R.string.button_okay, (dialog, which) -> requestCameraPermission(callbackActivity))
-                    .setNegativeButton(R.string.button_cancel, (dialog, id) -> {
-                        // User cancelled the dialog
-                    });
-            // Create the AlertDialog object and return it
-            builder.create().show();
-        }
-    }
-
-    public void requestCameraPermission(Activity callbackActivity) {
-        ActivityCompat.requestPermissions(
-                callbackActivity,
-                new String[]{Manifest.permission.CAMERA},
-                MY_PERMISSIONS_REQUEST_CAMERA);
+        transaction.replace(R.id.fragment_user_container, new ProfileFragment()).commit();
     }
 
     private void setupDrawerContent(NavigationView navigationView) {
@@ -111,7 +76,13 @@ public class UserActivity extends AppCompatActivity implements OnMyEventListList
         // Create a new mfragment and specify the mfragment to show based on nav item clicked
         switch (menuItem.getItemId()) {
             case R.id.user_nav_myprofile:
-                switchFragmentFromMenuItem(menuItem, new MyProfileFragment());
+                switchFragmentFromMenuItem(menuItem, new ProfileFragment());
+                break;
+            case R.id.user_nav_eventlist:
+                switchFragmentFromMenuItem(menuItem,  new EventListFragment());
+                break;
+            case R.id.user_nav_logout:
+                attemptLogout();
                 break;
         }
     }
@@ -141,8 +112,8 @@ public class UserActivity extends AppCompatActivity implements OnMyEventListList
 
 
     private void attemptLogout() {
-        dbHelper.removeCredentialsFromDatabase(db);
-//        switchActivity(LoginActivity.class);
+//        dbHelper.removeCredentialsFromDatabase(db);
+        switchActivity(LoginActivity.class);
     }
 
     public Message getMessage() {
@@ -154,7 +125,7 @@ public class UserActivity extends AppCompatActivity implements OnMyEventListList
     }
 
     @Override
-    public void onMyEventInteraction(DummyItem item) {
-        // todo: implement function what happens when clicking on an MyEvent
+    public void onMyEventInteraction(Event item) {
+        // todo: implement function what happens when clicking on an Event in the eventlist
     }
 }

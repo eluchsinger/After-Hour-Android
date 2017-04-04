@@ -14,13 +14,9 @@
 
     </group>
 
-    <!--<item android:title="@string/communicate">
-        <menu>
-            <item
-                android:id="@+id/nav_logout"
-                android:icon="@drawable/ic_exit_to_app_black"
-                android:title="@string/logout" />
-        </menu>
-    </item>-->
+    <item
+        android:id="@+id/employee_nav_logout"
+        android:icon="@drawable/ic_logout"
+        android:title="@string/logout" />
 
 </menu>

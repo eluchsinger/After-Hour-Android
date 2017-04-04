@@ -1,15 +1,28 @@
 package ch.hsr.afterhour.model;
 
 import java.io.Serializable;
+import java.text.DateFormat;
 import java.util.Date;
+import java.util.List;
 
 
 public class User implements Serializable {
 
     private String id;
     private String name;
-    private String firstname;
-//    private Date dateOfBirth;
+    private String firstName;
+    private Date dateOfBirth;
+    private List<Ticket> tickets;
+
+    public String getTickets() {
+        StringBuilder sb = new StringBuilder(1024);
+        for (Ticket ticket : tickets) {
+            sb.append(ticket.getEvent().getTitle() + ", " + ticket.getEvent().getDescription() + "\n");
+        }
+        return sb.toString();
+    }
+
+    public void setTickets(List<Ticket> tickets) { this.tickets = tickets; }
 
     public String getId() {
         return id;
@@ -27,19 +40,19 @@ public class User implements Serializable {
         this.name = name;
     }
 
-    public String getFirstname() {
-        return firstname;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setFirstname(String firstname) {
-        this.firstname = firstname;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
-//    public Date getDateOfBirth() {
-//        return dateOfBirth;
-//    }
-//
-//    public void setDateOfBirth(Date dateOfBirth) {
-//        this.dateOfBirth = dateOfBirth;
-//    }
+    public String getDateOfBirth() {
+        return DateFormat.getDateInstance().format(dateOfBirth);
+    }
+
+    public void setDateOfBirth(Date dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
+    }
 }

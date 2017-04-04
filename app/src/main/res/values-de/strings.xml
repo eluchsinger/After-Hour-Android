@@ -15,6 +15,8 @@
     // Navigation Bar
     <string name="navigation_drawer_open">Öffnen</string>
     <string name="navigation_drawer_close">Schließen</string>
+    <string name="events">Events</string>
+    <string name="logout">Abmelden</string>
 
     // Placeholders
     <string name="placeholder_event_title">Event Title</string>
@@ -23,6 +25,7 @@
     <string name="placeholder_event_picture">Event Picture</string>
     <string name="placeholder_text">Nothing to read.</string>
     <string name="descr_afterhour_icon">After-Hour Icon</string>
+    <string name="placeholder_event_description">Event Beschreibung</string>
 
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>
@@ -35,5 +38,6 @@
     <string name="permission_rationale">"Der Zugriff auf die Kontakte wird benoetigt für Email Vervollstaendigung."
     </string>
     <string name="action_register">Registrieren</string>
-
+    <string name="unexpected_error">Ein unerwarteter Fehler ist aufgetauchtUnexpected error occurred</string>
+    <string name="date_of_birth">Gerburtstag: </string>
 </resources>

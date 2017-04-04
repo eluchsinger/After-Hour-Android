@@ -40,8 +40,8 @@ public class EmployeeActivity extends AppCompatActivity implements OnEntryScanne
     private FragmentManager fragmentManager;
 
     // Database
-    private DBHelper dbHelper = null;
-    private SQLiteDatabase db = null;
+//    private DBHelper dbHelper = null;
+//    private SQLiteDatabase db = null;
 
 
     @Override
@@ -116,6 +116,9 @@ public class EmployeeActivity extends AppCompatActivity implements OnEntryScanne
                 break;
             case R.id.employee_nav_scanuser:
                 switchFragmentFromMenuItem(menuItem, new EntryScannerFragment());
+            case R.id.employee_nav_logout:
+                attemptLogout();
+                break;
         }
     }
 
@@ -144,8 +147,8 @@ public class EmployeeActivity extends AppCompatActivity implements OnEntryScanne
 
 
     private void attemptLogout() {
-        dbHelper.removeCredentialsFromDatabase(db);
-//        switchActivity(LoginActivity.class);
+//        dbHelper.removeCredentialsFromDatabase(db);
+        switchActivity(LoginActivity.class);
     }
 
     public Message getMessage() {

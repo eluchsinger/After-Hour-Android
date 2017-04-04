@@ -2,13 +2,12 @@ package ch.hsr.afterhour.gui;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
-import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.util.SparseArray;
@@ -25,6 +24,7 @@ import com.google.android.gms.vision.barcode.Barcode;
 import com.google.android.gms.vision.barcode.BarcodeDetector;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
 
 import ch.hsr.afterhour.Application;
 import ch.hsr.afterhour.R;
@@ -188,23 +188,21 @@ public class EntryScannerFragment extends Fragment {
         protected void onPreExecute() {
             super.onPreExecute();
             cameraSource.stop();
-//            cameraView.setVisibility(View.GONE);
-//            infoPane.setVisibility(View.GONE);
-//            showProgress(true);
         }
 
         @Override
         protected Boolean doInBackground(String... params) {
             String userid = params[0];
             try {
-                // todo: enable again
                 user = Application.get().getServerAPI().authenticateUser(userid);
-            logonUserid = userid;
                 return true;
             } catch (FoxHttpServiceResultException e) {
                 e.printStackTrace();
                 return false;
             } catch (FoxHttpException e) {
+                e.printStackTrace();
+                return false;
+            } catch (MalformedURLException e) {
                 e.printStackTrace();
                 return false;
             }
@@ -214,8 +212,19 @@ public class EntryScannerFragment extends Fragment {
         protected void onPostExecute(final Boolean success) {
             mAuthTask = null;
             showProgress(false);
-            handleResult();
-            infoPane.setText(user.getName());
+            if (success) {
+                Application.get().setUser(user);
+                infoPane.setText(
+                        "Name: " + user.getName() + ", " + user.getFirstName() + "\n" +
+                        getString(R.string.date_of_birth) + user.getDateOfBirth() + "\n" +
+                        "Tickets: \n" + user.getTickets());
+            } else {
+                Snackbar mySnackbar = Snackbar.make(
+                        getActivity().findViewById(R.id.scan_entry_camera_view),
+                        R.string.unexpected_error,
+                        Snackbar.LENGTH_SHORT);
+                mySnackbar.show();
+            }
         }
 
         @Override
@@ -225,11 +234,6 @@ public class EntryScannerFragment extends Fragment {
         }
     }
 
-    private void handleResult(){
-        infoPane.setText(logonUserid);
-    }
-
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
     private void showProgress(final boolean show) {
         int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
 
