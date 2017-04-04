@@ -106,11 +106,6 @@ public class EntryScannerFragment extends Fragment {
             }
         });
 
-
-
-        mAuthTask = new AuthenticateUserTask();
-        mAuthTask.execute("1");
-
         return rootView;
     }
 
