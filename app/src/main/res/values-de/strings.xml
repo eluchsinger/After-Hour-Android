@@ -34,10 +34,11 @@
     <string name="error_invalid_email">Ungültige Email Adresse</string>
     <string name="error_invalid_password">Passwort zu kurz</string>
     <string name="error_incorrect_password">Ungültiges Passwort</string>
-    <string name="error_field_required">Dieses Feld wird benoetigt</string>
+    <string name="error_field_required">Dieses Feld wird benötigt</string>
     <string name="permission_rationale">"Der Zugriff auf die Kontakte wird benoetigt für Email Vervollstaendigung."
     </string>
     <string name="action_register">Registrieren</string>
-    <string name="unexpected_error">Ein unerwarteter Fehler ist aufgetauchtUnexpected error occurred</string>
+    <string name="unexpected_error">Ein unerwarteter Fehler ist aufgetreten</string>
     <string name="date_of_birth">Gerburtstag: </string>
+    <string name="wrong_login_credentials">Falscher Username oder Password</string>
 </resources>

@@ -5,7 +5,6 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -25,7 +24,6 @@ import android.widget.TextView;
 import ch.hsr.afterhour.R;
 import ch.hsr.afterhour.gui.EntryScannerFragment.OnEntryScannerListener;
 import ch.hsr.afterhour.model.Message;
-import ch.hsr.afterhour.service.database.DBHelper;
 
 public class EmployeeActivity extends AppCompatActivity implements OnEntryScannerListener {
 
@@ -116,6 +114,7 @@ public class EmployeeActivity extends AppCompatActivity implements OnEntryScanne
                 break;
             case R.id.employee_nav_scanuser:
                 switchFragmentFromMenuItem(menuItem, new EntryScannerFragment());
+                break;
             case R.id.employee_nav_logout:
                 attemptLogout();
                 break;
