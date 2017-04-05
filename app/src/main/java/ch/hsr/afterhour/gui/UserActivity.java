@@ -83,6 +83,7 @@ public class UserActivity extends AppCompatActivity implements OnMyEventListList
                 break;
             case R.id.user_nav_logout:
                 attemptLogout();
+                //
                 break;
         }
     }
