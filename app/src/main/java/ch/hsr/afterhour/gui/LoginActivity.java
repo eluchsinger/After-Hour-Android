@@ -16,7 +16,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -28,6 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ch.hsr.afterhour.R;
+import ch.hsr.afterhour.model.User;
 
 /**
  * A login screen that offers login via email/password.
@@ -56,6 +56,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
+    private View mRegisterButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,11 +76,12 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         });
 
         Button mEmailSignInButton = (Button) findViewById(R.id.login_sign_in_button);
-        mEmailSignInButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                attemptLogin();
-            }
+        mEmailSignInButton.setOnClickListener(view -> attemptLogin());
+
+        mRegisterButton = findViewById(R.id.login_register_button);
+        mRegisterButton.setOnClickListener(v -> {
+            Intent intent = new Intent(this, RegisterActivity.class);
+            startActivity(intent);
         });
 
         mLoginFormView = findViewById(R.id.login_form);
@@ -244,6 +246,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         private final String mEmail;
         private final String mPassword;
+        User user;
 
         UserLoginTask(String email, String password) {
             mEmail = email;
@@ -252,6 +255,28 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         @Override
         protected Boolean doInBackground(Void... params) {
+
+
+//            String name = "Muster";
+//            String firstName = "Hans";
+//            String email = "berlusconi@hsr.ch";
+//            String mobileNumber = "0796666666";
+//            Date dateOfBirth = new Date();
+//            try {
+//                dateOfBirth = new SimpleDateFormat("yyyy-MM-dd").parse("2017-02-02");
+//            } catch (ParseException e) {
+//                e.printStackTrace();
+//            }
+//            user = new User(name, firstName,email,mobileNumber,dateOfBirth);
+//            try {
+//                Application.get().getServerAPI().registerUser(user);
+//            } catch (FoxHttpException e) {
+//                e.printStackTrace();
+//            } catch (MalformedURLException e) {
+//                e.printStackTrace();
+//            }
+
+
             try {
                 // Simulate network access.
                 Thread.sleep(2000);

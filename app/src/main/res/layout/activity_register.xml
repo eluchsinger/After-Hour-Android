@@ -1,0 +1,183 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:background="@color/colorPrimaryDark"
+    tools:context="ch.hsr.afterhour.gui.RegisterActivity"
+    android:id="@+id/activity_register">
+
+    <ProgressBar
+        android:id="@+id/register_progress"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone" />
+
+    <ScrollView
+        android:id="@+id/register_form"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="@color/colorPrimaryDark">
+
+        <EditText
+            android:id="@+id/register_firstname"
+            android:maxLines="1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/firstname"
+            android:layout_marginTop="3dp"
+            android:textColor="@color/fontColor"
+            android:textColorHint="@color/fontColorHint"
+            android:shadowColor="@color/fontColor"
+            android:inputType="textPersonName"/>
+
+        <EditText
+            android:id="@+id/register_lastname"
+            android:maxLines="1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/name"
+            android:layout_marginTop="3dp"
+            android:textColor="@color/fontColor"
+            android:textColorHint="@color/fontColorHint"
+            android:inputType="textPersonName"/>
+
+        <TextView
+            android:layout_marginTop="3dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/birthday"
+            android:textColorHint="@color/fontColorHint"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/register_birth_year"
+                android:maxLines="1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/year"
+                android:layout_marginTop="3dp"
+                android:textColor="@color/fontColor"
+                android:textColorHint="@color/fontColorHint"
+                android:inputType="date"
+                android:layout_weight="1"/>
+
+            <EditText
+                android:id="@+id/register_birth_month"
+                android:maxLines="1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/month"
+                android:layout_marginTop="3dp"
+                android:textColor="@color/fontColor"
+                android:textColorHint="@color/fontColorHint"
+                android:inputType="date"
+                android:layout_weight="1"/>
+
+            <EditText
+                android:id="@+id/register_birth_day"
+                android:maxLines="1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/day"
+                android:layout_marginTop="3dp"
+                android:textColor="@color/fontColor"
+                android:textColorHint="@color/fontColorHint"
+                android:inputType="date"
+                android:layout_weight="1"/>
+        </LinearLayout>
+
+        <EditText
+            android:id="@+id/register_email"
+            android:maxLines="1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/email"
+            android:inputType="textEmailAddress"
+            android:layout_marginTop="3dp"
+            android:textColor="@color/fontColor"
+            android:textColorHint="@color/fontColorHint" />
+
+        <EditText
+            android:id="@+id/register_password"
+            android:maxLines="1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/password"
+            android:layout_marginTop="3dp"
+            android:textColor="@color/fontColor"
+            android:textColorHint="@color/fontColorHint"
+            android:inputType="textPassword"/>
+
+        <EditText
+            android:id="@+id/register_reapeat_password"
+            android:maxLines="1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/repeat_password"
+            android:layout_marginTop="3dp"
+            android:textColor="@color/fontColor"
+            android:textColorHint="@color/fontColorHint"
+            android:inputType="textPassword"/>
+
+        <TextView
+            android:layout_marginTop="3dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Mobile Number"
+            android:textColorHint="@color/fontColorHint"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/register_vorwahl"
+                android:maxLines="1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="+41"
+                android:inputType="phone"
+                android:layout_marginTop="3dp"
+                android:layout_marginEnd="7dp"
+                android:textColor="@color/fontColor"
+                android:textColorHint="@color/fontColorHint"/>
+
+            <EditText
+                android:id="@+id/register_mobilenumber"
+                android:maxLines="1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="79 123 45 67"
+                android:inputType="phone"
+                android:layout_marginTop="3dp"
+                android:textColor="@color/fontColor"
+                android:textColorHint="@color/fontColorHint"/>
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/register_register_button"
+            android:layout_marginTop="16dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/register"
+            android:background="@color/colorAccent"/>
+    </LinearLayout>
+</ScrollView>
+</LinearLayout>

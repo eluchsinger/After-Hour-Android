@@ -210,9 +210,9 @@ public class EntryScannerFragment extends Fragment {
             if (success) {
                 Application.get().setUser(user);
                 infoPane.setText(
-                        "Name: " + user.getName() + ", " + user.getFirstName() + "\n" +
-                        getString(R.string.date_of_birth) + user.getDateOfBirth() + "\n" +
-                        "Tickets: \n" + user.getTickets());
+                        "Name: " + user.getName() + ", " + user.getFirstName() + "\n");
+//                        getString(R.string.date_of_birth) + user.getDateOfBirth() + "\n" +
+//                        "Tickets: \n" + user.getTickets());
             } else {
                 Snackbar mySnackbar = Snackbar.make(
                         getActivity().findViewById(R.id.scan_entry_camera_view),

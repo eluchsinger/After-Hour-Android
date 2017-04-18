@@ -11,4 +11,5 @@
     <!-- Event Dimenstions -->
     <dimen name="event_picture_height">136dp</dimen>
     <dimen name="event_picture_width">136dp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
 </resources>

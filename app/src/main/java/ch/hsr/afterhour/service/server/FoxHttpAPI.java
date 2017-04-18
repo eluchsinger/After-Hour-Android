@@ -8,6 +8,8 @@ import ch.viascom.groundwork.foxhttp.FoxHttpClient;
 import ch.viascom.groundwork.foxhttp.FoxHttpRequest;
 import ch.viascom.groundwork.foxhttp.FoxHttpResponse;
 import ch.viascom.groundwork.foxhttp.annotation.processor.FoxHttpAnnotationParser;
+import ch.viascom.groundwork.foxhttp.body.request.FoxHttpRequestBody;
+import ch.viascom.groundwork.foxhttp.body.request.RequestObjectBody;
 import ch.viascom.groundwork.foxhttp.builder.FoxHttpClientBuilder;
 import ch.viascom.groundwork.foxhttp.exception.FoxHttpException;
 import ch.viascom.groundwork.foxhttp.interceptor.FoxHttpInterceptorType;
@@ -18,7 +20,6 @@ import ch.viascom.groundwork.foxhttp.type.RequestType;
 
 
 public class FoxHttpAPI {
-    // Todo: fill in google play server address
     private final static String SERVER_PATH = "http://sinv-56049.edu.hsr.ch:40000";
     private final static String LOGGER_NAME = "After-Hour App | Logger";
 
@@ -30,9 +31,11 @@ public class FoxHttpAPI {
         // Non-encrypted Client / Requests
         FoxHttpClientBuilder builder = new FoxHttpClientBuilder();
         builder.setFoxHttpResponseParser(new GsonParser())
+                .setFoxHttpRequestParser(new GsonParser())
                 .registerFoxHttpInterceptor(FoxHttpInterceptorType.RESPONSE, new DefaultServiceResultFaultInterceptor())
                 .addFoxHttpPlaceholderEntry("host", SERVER_PATH)
-                .setFoxHttpLogger(new SystemOutFoxHttpLogger(true, LOGGER_NAME));
+                .setFoxHttpLogger(new SystemOutFoxHttpLogger(true, LOGGER_NAME))
+                .registerFoxHttpInterceptor(FoxHttpInterceptorType.REQUEST_BODY, new MyRequestBodyInterceptor());
 
         httpClient = builder.build();
         requests = new FoxHttpAnnotationParser().parseInterface(FoxHttpRequests.class, httpClient);
@@ -50,12 +53,16 @@ public class FoxHttpAPI {
         return SERVER_PATH;
     }
 
+    private FoxHttpResponse makeRequest(final String url, final RequestType requestType) throws MalformedURLException, FoxHttpException {
+        FoxHttpRequest foxHttpRequest = new FoxHttpRequest(this.httpClient);
+        foxHttpRequest.setUrl(url);
+        foxHttpRequest.setRequestType(requestType);
+        return foxHttpRequest.execute();
+
+    }
+
     public User authenticateUser(String qrcode) throws FoxHttpException, MalformedURLException {
-        FoxHttpRequest foxHttpRequest = new FoxHttpRequest(httpClient);
-        foxHttpRequest.setUrl("{host}/users/" + qrcode);
-        foxHttpRequest.setRequestType(RequestType.GET);
-        FoxHttpResponse foxHttpResponse = foxHttpRequest.execute();
-        return foxHttpResponse.getParsedBody(User.class);
+        return makeRequest("{host}/users/" + qrcode, RequestType.GET).getParsedBody(User.class);
     }
 
     public User login(String qrcode) throws FoxHttpException, MalformedURLException {
@@ -68,5 +75,16 @@ public class FoxHttpAPI {
         foxHttpRequest.setRequestType(RequestType.GET);
         FoxHttpResponse foxHttpResponse = foxHttpRequest.execute();
         return foxHttpResponse.getParsedBody(Event[].class);
+    }
+
+    public User registerUser(User user) throws FoxHttpException, MalformedURLException{
+        FoxHttpRequestBody requestBody = new RequestObjectBody(user);
+        FoxHttpRequest foxHttpRequest = new FoxHttpRequest(httpClient);
+        foxHttpRequest.setUrl(SERVER_PATH + "/users/register");
+        foxHttpRequest.setRequestType(RequestType.POST);
+        foxHttpRequest.setFollowRedirect(true);
+        foxHttpRequest.setRequestBody(requestBody);
+        FoxHttpResponse foxHttpResponse = foxHttpRequest.execute();
+        return foxHttpResponse.getParsedBody(User.class);
     }
 }

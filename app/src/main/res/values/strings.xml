@@ -42,4 +42,17 @@
     <string name="date_of_birth">Date of Birth: </string>
     <string name="placeholder_event_description">Event Description</string>
     <string name="wrong_login_credentials">Wrong username or password</string>
+
+
+    <string name="firstname">First name</string>
+    <string name="name">Last name</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="repeat_password">Repeat Password</string>
+    <string name="birthday">Birthday</string>
+    <string name="register">Register</string>
+    <string name="passwords_not_equal">Passwords are not equal</string>
+    <string name="year">Year</string>
+    <string name="month">Month</string>
+    <string name="day">Day</string>
 </resources>
