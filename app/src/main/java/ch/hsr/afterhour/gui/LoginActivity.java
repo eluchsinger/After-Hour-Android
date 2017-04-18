@@ -256,27 +256,15 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         @Override
         protected Boolean doInBackground(Void... params) {
 
-
-//            String name = "Muster";
-//            String firstName = "Hans";
-//            String email = "berlusconi@hsr.ch";
-//            String mobileNumber = "0796666666";
-//            Date dateOfBirth = new Date();
 //            try {
-//                dateOfBirth = new SimpleDateFormat("yyyy-MM-dd").parse("2017-02-02");
-//            } catch (ParseException e) {
-//                e.printStackTrace();
-//            }
-//            user = new User(name, firstName,email,mobileNumber,dateOfBirth);
-//            try {
-//                Application.get().getServerAPI().registerUser(user);
+//                user = Application.get().getServerAPI().login(mEmail);
 //            } catch (FoxHttpException e) {
 //                e.printStackTrace();
+//                return false;
 //            } catch (MalformedURLException e) {
 //                e.printStackTrace();
+//                return false;
 //            }
-
-
             try {
                 // Simulate network access.
                 Thread.sleep(2000);
@@ -316,6 +304,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                         intent = new Intent(getBaseContext(), EmployeeActivity.class);
                         break;
                 }
+//                intent = new Intent(LoginActivity.this, UserActivity.class);
                 startActivity(intent);
                 finish();
             } else {
