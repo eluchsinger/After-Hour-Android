@@ -40,7 +40,8 @@
             android:textColor="@color/fontColor"
             android:textColorHint="@color/fontColorHint"
             android:shadowColor="@color/fontColor"
-            android:inputType="textPersonName"/>
+            android:inputType="textPersonName"
+            android:backgroundTint="@color/colorAccent"/>
 
         <EditText
             android:id="@+id/register_lastname"
@@ -51,7 +52,8 @@
             android:layout_marginTop="3dp"
             android:textColor="@color/fontColor"
             android:textColorHint="@color/fontColorHint"
-            android:inputType="textPersonName"/>
+            android:inputType="textPersonName"
+            android:backgroundTint="@color/colorAccent"/>
 
         <TextView
             android:layout_marginTop="3dp"
@@ -75,7 +77,8 @@
                 android:textColor="@color/fontColor"
                 android:textColorHint="@color/fontColorHint"
                 android:inputType="date"
-                android:layout_weight="1"/>
+                android:layout_weight="1"
+                android:backgroundTint="@color/colorAccent"/>
 
             <EditText
                 android:id="@+id/register_birth_month"
@@ -87,7 +90,8 @@
                 android:textColor="@color/fontColor"
                 android:textColorHint="@color/fontColorHint"
                 android:inputType="date"
-                android:layout_weight="1"/>
+                android:layout_weight="1"
+                android:backgroundTint="@color/colorAccent"/>
 
             <EditText
                 android:id="@+id/register_birth_day"
@@ -99,7 +103,8 @@
                 android:textColor="@color/fontColor"
                 android:textColorHint="@color/fontColorHint"
                 android:inputType="date"
-                android:layout_weight="1"/>
+                android:layout_weight="1"
+                android:backgroundTint="@color/colorAccent"/>
         </LinearLayout>
 
         <EditText
@@ -111,7 +116,8 @@
             android:inputType="textEmailAddress"
             android:layout_marginTop="3dp"
             android:textColor="@color/fontColor"
-            android:textColorHint="@color/fontColorHint" />
+            android:textColorHint="@color/fontColorHint"
+            android:backgroundTint="@color/colorAccent" />
 
         <EditText
             android:id="@+id/register_password"
@@ -133,7 +139,8 @@
             android:layout_marginTop="3dp"
             android:textColor="@color/fontColor"
             android:textColorHint="@color/fontColorHint"
-            android:inputType="textPassword"/>
+            android:inputType="textPassword"
+            android:backgroundTint="@color/colorAccent"/>
 
         <TextView
             android:layout_marginTop="3dp"
@@ -157,7 +164,8 @@
                 android:layout_marginTop="3dp"
                 android:layout_marginEnd="7dp"
                 android:textColor="@color/fontColor"
-                android:textColorHint="@color/fontColorHint"/>
+                android:textColorHint="@color/fontColorHint"
+                android:backgroundTint="@color/colorAccent"/>
 
             <EditText
                 android:id="@+id/register_mobilenumber"
@@ -168,7 +176,8 @@
                 android:inputType="phone"
                 android:layout_marginTop="3dp"
                 android:textColor="@color/fontColor"
-                android:textColorHint="@color/fontColorHint"/>
+                android:textColorHint="@color/fontColorHint"
+                android:backgroundTint="@color/colorAccent"/>
         </LinearLayout>
 
         <Button

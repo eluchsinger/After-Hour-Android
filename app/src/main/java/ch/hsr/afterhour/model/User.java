@@ -12,6 +12,7 @@ public class User implements Serializable {
     private String email;
     private String mobileNumber;
     private String dateOfBirth;
+    private boolean isWorking = false;
     private List<Ticket> tickets;
 
     public User(String lastName, String firstName, String email, String mobileNumber, String dateOfBirth) {
@@ -60,11 +61,11 @@ public class User implements Serializable {
         this.id = id;
     }
 
-    public String getName() {
+    public String getLastName() {
         return lastName;
     }
 
-    public void setName(String name) {
+    public void setLastName(String name) {
         this.lastName = name;
     }
 
@@ -82,5 +83,13 @@ public class User implements Serializable {
 
     public void setDateOfBirth(String dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
+    }
+
+    public boolean isWorking() {
+        return isWorking;
+    }
+
+    public void setWorking(boolean working) {
+        isWorking = working;
     }
 }

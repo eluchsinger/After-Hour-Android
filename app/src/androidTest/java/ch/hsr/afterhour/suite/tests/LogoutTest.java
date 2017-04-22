@@ -36,7 +36,7 @@ public class LogoutTest {
         onView(withId(R.id.login_sign_in_button)).perform(click());
         onView(withId(R.id.user_drawer_layout)).perform(DrawerActions.open());
         onView(withId(R.id.user_nav_view))
-                .perform(NavigationViewActions.navigateTo(R.id.user_nav_logout));
+                .perform(NavigationViewActions.navigateTo(R.id.nav_item_logout));
         onView(withId(R.id.login_email_edittext)).check(matches(isDisplayed()));
     }
 

@@ -52,4 +52,14 @@
     <string name="year">Jahr</string>
     <string name="month">Monat</string>
     <string name="day">Tag</string>
+    <string name="employee_login">Mitarbeiter Login</string>
+    <string name="user_login">Benutzer Login</string>
+    <string name="section_format">Hello World from section: %1$d</string>
+    <string name="profile">Profil</string>
+    <string name="coatcheck">Jackenabgabe</string>
+    <string name="dummy_text">Dummy text</string>
+    <string name="profile_picture">Profilbild</string>
+    <string name="dummy_userid">USR-ZRH-000000</string>
+    <string name="last_name">Nachname</string>
+    <string name="creditcard">Kreditkarte</string>
 </resources>

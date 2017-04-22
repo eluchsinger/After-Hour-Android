@@ -13,7 +13,6 @@ import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -23,11 +22,14 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import ch.hsr.afterhour.Application;
 import ch.hsr.afterhour.R;
 import ch.hsr.afterhour.model.User;
+import ch.viascom.groundwork.foxhttp.exception.FoxHttpException;
 
 /**
  * A login screen that offers login via email/password.
@@ -111,27 +113,27 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         View focusView = null;
 
         // Check for a valid password, if the user entered one.
-        if (TextUtils.isEmpty(password)) {
-            mPasswordView.setError(getString(R.string.error_field_required));
-            focusView = mPasswordView;
-            cancel = true;
-        }
-        if (!isPasswordValid(password)) {
-            mPasswordView.setError(getString(R.string.error_invalid_password));
-            focusView = mPasswordView;
-            cancel = true;
-        }
-
-        // Check for a valid email address.
-        if (TextUtils.isEmpty(email)) {
-            mEmailView.setError(getString(R.string.error_field_required));
-            focusView = mEmailView;
-            cancel = true;
-        } else if (!isEmailValid(email)) {
-            mEmailView.setError(getString(R.string.error_invalid_email));
-            focusView = mEmailView;
-            cancel = true;
-        }
+//        if (TextUtils.isEmpty(password)) {
+//            mPasswordView.setError(getString(R.string.error_field_required));
+//            focusView = mPasswordView;
+//            cancel = true;
+//        }
+//        if (!isPasswordValid(password)) {
+//            mPasswordView.setError(getString(R.string.error_invalid_password));
+//            focusView = mPasswordView;
+//            cancel = true;
+//        }
+//
+//        // Check for a valid email address.
+//        if (TextUtils.isEmpty(email)) {
+//            mEmailView.setError(getString(R.string.error_field_required));
+//            focusView = mEmailView;
+//            cancel = true;
+//        } else if (!isEmailValid(email)) {
+//            mEmailView.setError(getString(R.string.error_invalid_email));
+//            focusView = mEmailView;
+//            cancel = true;
+//        }
 
         if (cancel) {
             // There was an error; don't attempt login and focus the first
@@ -265,24 +267,35 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 //                e.printStackTrace();
 //                return false;
 //            }
-            try {
-                // Simulate network access.
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                return false;
-            }
 
-            for (String credential : DUMMY_CREDENTIALS) {
-                String[] pieces = credential.split(":");
 
-                if (pieces[0].equals(mEmail)) {
-                    // Account exists, return true if the password matches.
-                    return pieces[1].equals(mPassword);
-                }
-            }
+
+//            try {
+//                // Simulate network access.
+//                Thread.sleep(2000);
+//            } catch (InterruptedException e) {
+//                return false;
+//            }
+//
+//            for (String credential : DUMMY_CREDENTIALS) {
+//                String[] pieces = credential.split(":");
+//
+//                if (pieces[0].equals(mEmail)) {
+//                    // Account exists, return true if the password matches.
+//                    return pieces[1].equals(mPassword);
+//                }
+//            }
 
             // TODO: register the new account here.
-            return false;
+            try {
+                user = Application.get().getServerAPI().authenticateUser("1");
+                Application.get().setUser(user);
+            } catch (FoxHttpException e) {
+                e.printStackTrace();
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            }
+            return true;
         }
 
         @Override
@@ -293,18 +306,20 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             Intent intent;
 
             if (success) {
-                switch (mEmail) {
-                    case "employee@hsr.ch":
-                        intent = new Intent(getBaseContext(), EmployeeActivity.class);
-                        break;
-                    case "berlusconi@hsr.ch":
-                        intent = new Intent(getBaseContext(), UserActivity.class);
-                        break;
-                    default:
-                        intent = new Intent(getBaseContext(), EmployeeActivity.class);
-                        break;
-                }
-//                intent = new Intent(LoginActivity.this, UserActivity.class);
+//                switch (mEmail) {
+//                    case "employee@hsr.ch":
+//                        intent = new Intent(getBaseContext(), EmployeeActivity.class);
+//                        break;
+//                    case "berlusconi@hsr.ch":
+//                        user = new User();
+//                        Application.get().setUser(user);
+//                        intent = new Intent(getBaseContext(), ProfileActivity.class);
+//                        break;
+//                    default:
+//                        intent = new Intent(getBaseContext(), EmployeeActivity.class);
+//                        break;
+//                }
+                intent = new Intent(LoginActivity.this, ProfileActivity.class);
                 startActivity(intent);
                 finish();
             } else {
@@ -314,8 +329,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                         Snackbar.LENGTH_LONG
                 );
                 snackbar.show();
-
-//                mPasswordView.setError(getString(R.string.error_incorrect_password));
                 mEmailView.requestFocus();
             }
         }

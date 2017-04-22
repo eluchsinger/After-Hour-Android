@@ -49,7 +49,7 @@ public class EventListTest {
     public void ChangeToEvents_ShowsEventlist() {
         onView(withId(R.id.user_drawer_layout)).perform(DrawerActions.open());
         onView(withId(R.id.user_nav_view))
-                .perform(NavigationViewActions.navigateTo(R.id.user_nav_eventlist));
+                .perform(NavigationViewActions.navigateTo(R.id.nav_item_user_login));
         onView(withId(R.id.eventlist)).check(matches(isDisplayed()));
     }
 
@@ -57,7 +57,7 @@ public class EventListTest {
     public void CheckIfAtLeastOneEventDownloaded() {
         onView(withId(R.id.user_drawer_layout)).perform(DrawerActions.open());
         onView(withId(R.id.user_nav_view))
-                .perform(NavigationViewActions.navigateTo(R.id.user_nav_eventlist));
+                .perform(NavigationViewActions.navigateTo(R.id.nav_item_user_login));
 
         // Check item at position 1 has "Some content"
         onView(withRecyclerView(R.id.eventlist).atPosition(1))

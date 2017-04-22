@@ -55,4 +55,14 @@
     <string name="year">Year</string>
     <string name="month">Month</string>
     <string name="day">Day</string>
+    <string name="section_format">Hello World from section: %1$d</string>
+    <string name="employee_login">Employee Login</string>
+    <string name="user_login">User Login</string>
+    <string name="profile">Profile</string>
+    <string name="coatcheck">Coat Check</string>
+    <string name="dummy_text">Dummy text</string>
+    <string name="profile_picture">Profile Picture</string>
+    <string name="dummy_userid">USR-ZRH-000000</string>
+    <string name="last_name">Last name</string>
+    <string name="creditcard">Credit Card</string>
 </resources>

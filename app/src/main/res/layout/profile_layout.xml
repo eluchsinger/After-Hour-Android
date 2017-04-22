@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:orientation="vertical"
+    android:background="@color/colorPrimary">
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="16dp"/>
+
+    <ImageView
+        android:id="@+id/profile_image_container"
+        android:layout_width="160dp"
+        android:layout_height="160dp"
+        android:layout_gravity="center"
+        android:background="@color/colorPrimaryDark"
+        android:contentDescription="@string/profile_picture"/>
+
+    <TextView
+          android:id="@+id/profile_userid"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:textAppearance="?android:attr/textAppearanceLarge"
+          android:text="@string/dummy_userid"
+            android:layout_gravity="center"
+        android:layout_marginTop="4dp"
+        android:textColor="@color/colorPrimaryLight"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingTop="32dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingTop="8dp">
+
+            <TextView
+                android:id="@+id/profile_label_fistname"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textSize="28sp"
+                android:text="@string/firstname"
+                android:layout_marginStart="8dp"/>
+
+            <TextView
+                android:id="@+id/profile_placeholder_firstname"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="28sp"
+                android:text="@string/dummy_text"
+                android:layout_gravity="end"
+                android:layout_marginEnd="8dp"
+                android:textColor="@color/colorPrimaryLight"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingTop="8dp">
+
+            <TextView
+                android:id="@+id/profile_label_lastname"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textSize="28sp"
+                android:text="@string/last_name"
+                android:layout_marginStart="8dp"/>
+
+            <TextView
+                android:id="@+id/profile_placeholder_lastname"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="28sp"
+                android:text="@string/dummy_text"
+                android:layout_gravity="end"
+                android:layout_marginEnd="8dp"
+                android:textColor="@color/colorPrimaryLight"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingTop="8dp">
+
+            <TextView
+                android:id="@+id/profile_label_creditcard"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textSize="28sp"
+                android:text="@string/creditcard"
+                android:layout_marginStart="8dp"/>
+
+            <TextView
+                android:id="@+id/profile_placeholder_creditcard"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="28sp"
+                android:text="@string/dummy_text"
+                android:layout_gravity="end"
+                android:layout_marginEnd="8dp"
+                android:textColor="@color/colorPrimaryLight"/>
+
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

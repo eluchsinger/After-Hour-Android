@@ -40,7 +40,8 @@
                     android:inputType="textEmailAddress"
                     android:maxLines="1"
                     android:textColor="@color/fontColor"
-                    android:textColorHint="@color/fontColorHint" />
+                    android:textColorHint="@color/fontColorHint"
+                    android:backgroundTint="@color/colorAccent"/>
 
                 <EditText
                     android:id="@+id/login_password_edittext"
@@ -52,7 +53,8 @@
                     android:inputType="textPassword"
                     android:maxLines="1"
                     android:textColor="@color/fontColor"
-                    android:textColorHint="@color/fontColorHint"/>
+                    android:textColorHint="@color/fontColorHint"
+                    android:backgroundTint="@color/colorAccent"/>
 
             <Button
                 android:id="@+id/login_sign_in_button"

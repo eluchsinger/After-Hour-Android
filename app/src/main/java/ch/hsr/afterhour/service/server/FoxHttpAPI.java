@@ -58,7 +58,6 @@ public class FoxHttpAPI {
         foxHttpRequest.setUrl(url);
         foxHttpRequest.setRequestType(requestType);
         return foxHttpRequest.execute();
-
     }
 
     public User authenticateUser(String qrcode) throws FoxHttpException, MalformedURLException {
@@ -66,7 +65,7 @@ public class FoxHttpAPI {
     }
 
     public User login(String qrcode) throws FoxHttpException, MalformedURLException {
-        return authenticateUser(qrcode);
+        return makeRequest("{host}/users/mail/" + qrcode, RequestType.GET).getParsedBody(User.class);
     }
 
     public Event[] downloadEvents() throws FoxHttpException, MalformedURLException {
