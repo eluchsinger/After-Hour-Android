@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/profile_drawer_layout"
     android:layout_width="match_parent"
@@ -10,7 +10,7 @@
         android:id="@+id/profile_fragment_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        android:layout_marginBottom="60dp">
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/activity_profile_fab"
@@ -20,4 +20,12 @@
         android:layout_margin="@dimen/fab_margin"
         app:srcCompat="@android:drawable/ic_dialog_email" />
     </FrameLayout>
-</LinearLayout>
+
+    <com.roughike.bottombar.BottomBar
+        android:id="@+id/bottomBar"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_weight="1"
+        android:layout_alignParentBottom="true"
+        app:bb_tabXmlResource="@xml/bottombar_tabs" />
+</RelativeLayout>

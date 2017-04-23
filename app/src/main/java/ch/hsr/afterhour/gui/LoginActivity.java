@@ -258,28 +258,17 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         @Override
         protected Boolean doInBackground(Void... params) {
-
-            for (String credential : DUMMY_CREDENTIALS) {
-                String[] pieces = credential.split(":");
-
-                if (pieces[0].equals(mEmail)) {
-                    // Account exists, return true if the password matches.
-                    if (pieces[1].equals(mPassword)) {
-                        try {
-                            user = Application.get().getServerAPI().authenticateUser("1");
-                            Application.get().setUser(user);
-                            return true;
-                        } catch (FoxHttpException e) {
-                            e.printStackTrace();
-                        } catch (MalformedURLException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }
+            try {
+                user = Application.get().getServerAPI().login(mEmail, mPassword);
+                Application.get().setUser(user);
+                return true;
+            } catch (FoxHttpException e) {
+                e.printStackTrace();
+                return false;
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+                return false;
             }
-
-            // TODO: register the new account here.
-            return false;
         }
 
         @Override
@@ -290,18 +279,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             Intent intent;
 
             if (success) {
-                switch (mEmail) {
-                    case "employee@hsr.ch":
-                        intent = new Intent(getBaseContext(), EmployeeActivity.class);
-                        break;
-                    case "berlusconi@hsr.ch":
-                        intent = new Intent(getBaseContext(), ProfileActivity.class);
-                        break;
-                    default:
-                        intent = new Intent(getBaseContext(), EmployeeActivity.class);
-                        break;
-                }
-//                intent = new Intent(LoginActivity.this, ProfileActivity.class);
+                intent = new Intent(LoginActivity.this, ProfileActivity.class);
                 startActivity(intent);
                 finish();
             } else {

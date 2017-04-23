@@ -41,6 +41,8 @@
     <string name="unexpected_error">Ein unerwarteter Fehler ist aufgetreten</string>
     <string name="date_of_birth">Gerburtstag: </string>
     <string name="wrong_login_credentials">Falscher Username oder Password</string>
+
+    <!-- Strings related to Profile-->
     <string name="firstname">Vorname</string>
     <string name="name">Name</string>
     <string name="email">Email</string>
@@ -62,4 +64,8 @@
     <string name="dummy_userid">USR-ZRH-000000</string>
     <string name="last_name">Nachname</string>
     <string name="creditcard">Kreditkarte</string>
+
+    <!-- Strings related to bottom bar-->
+    <string name="billing">Abrechnung</string>
+    <string name="drinks">Drinks</string>
 </resources>

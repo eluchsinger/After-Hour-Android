@@ -1,0 +1,24 @@
+<!-- XML file for com.roughike:bottom-bar -->
+<tabs>
+    <tab
+        id="@+id/tab_profile"
+        icon="@drawable/ic_profile_light"
+        title="@string/profile"
+        barColorWhenSelected="@color/colorPrimaryDark"/>
+    <tab
+        id="@+id/tab_events"
+        icon="@drawable/ic_events_light"
+        title="@string/events"
+        barColorWhenSelected="@color/colorPrimaryDark"/>
+    <tab
+        id="@+id/tab_drinks"
+        icon="@drawable/ic_drink_light"
+        title="@string/drinks"
+        barColorWhenSelected="@color/colorPrimaryDark" />
+    <tab
+        id="@+id/tab_billing"
+        icon="@drawable/ic_dollar_light"
+        title="@string/billing"
+        barColorWhenSelected="@color/colorPrimaryDark" />
+</tabs>
+

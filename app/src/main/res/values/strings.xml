@@ -43,7 +43,7 @@
     <string name="placeholder_event_description">Event Description</string>
     <string name="wrong_login_credentials">Wrong username or password</string>
 
-
+<!-- strings related to profile-->
     <string name="firstname">First name</string>
     <string name="name">Last name</string>
     <string name="email">Email</string>
@@ -65,4 +65,8 @@
     <string name="dummy_userid">USR-ZRH-000000</string>
     <string name="last_name">Last name</string>
     <string name="creditcard">Credit Card</string>
+
+    <!-- Strings related to bottom bar-->
+    <string name="billing">Billing</string>
+    <string name="drinks">Drinks</string>
 </resources>
