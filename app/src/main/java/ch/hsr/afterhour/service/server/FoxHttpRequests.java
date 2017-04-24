@@ -9,6 +9,6 @@ import ch.viascom.groundwork.foxhttp.exception.FoxHttpException;
 @Path("{host}")
 public interface FoxHttpRequests {
 
-    @POST("/login")
+    @POST("/users/login")
     User login(@Field("email") String email, @Field("password") String password) throws FoxHttpException;
 }
