@@ -16,8 +16,9 @@ import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.OnTabSelectListener;
 
 import ch.hsr.afterhour.R;
+import ch.hsr.afterhour.model.Event;
 
-public class ProfileActivity extends FragmentActivity {
+public class ProfileActivity extends FragmentActivity implements EventListFragment.OnMyEventListListener {
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -52,6 +53,10 @@ public class ProfileActivity extends FragmentActivity {
                     case R.id.tab_events:
                         // The tab with id R.id.tab_favorites was selected,
                         // change your content accordingly.
+                        fragmentManager.beginTransaction().replace(
+                                R.id.profile_fragment_container,
+                                new EventListFragment())
+                                .commit();
                         break;
                     case R.id.tab_drinks:
                         // The tab with id R.id.tab_favorites was selected,
@@ -91,5 +96,10 @@ public class ProfileActivity extends FragmentActivity {
         logToggle.setTitle("Menu");
 
         return super.onPrepareOptionsMenu(menu);
+    }
+
+    @Override
+    public void onMyEventInteraction(Event item) {
+
     }
 }
