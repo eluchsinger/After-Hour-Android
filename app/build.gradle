@@ -50,6 +50,7 @@ dependencies {
     compile 'com.google.code.gson:gson:2.8.0'
     compile 'com.google.zxing:android-integration:3.3.0'
     compile 'com.roughike:bottom-bar:2.3.1'
+    compile 'com.github.kenglxn.QRGen:android:2.2.0'
 
     testCompile 'junit:junit:4.12'
 }
