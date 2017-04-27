@@ -34,7 +34,12 @@ public class ProfileActivity extends FragmentActivity {
 
     private void addFloatingButton() {
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.activity_profile_fab);
-//        fab.setOnClickListener(v -> showPersonalQrCode());
+        fab.setOnClickListener(v -> showPersonalQrCode());
+    }
+
+    private void showPersonalQrCode() {
+        FragmentManager fm = getSupportFragmentManager();
+        fm.beginTransaction().add(new IdentityFragment()).commit();
     }
 
     private void addBottombar() {

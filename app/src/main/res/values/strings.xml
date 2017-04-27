@@ -43,7 +43,7 @@
     <string name="placeholder_event_description">Event Description</string>
     <string name="wrong_login_credentials">Wrong username or password</string>
 
-<!-- strings related to profile-->
+    <!-- strings related to profile-->
     <string name="firstname">First name</string>
     <string name="name">Last name</string>
     <string name="email">Email</string>
