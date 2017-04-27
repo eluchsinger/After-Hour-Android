@@ -17,18 +17,18 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 
 import java.net.MalformedURLException;
+import java.util.Map;
 
 import ch.hsr.afterhour.Application;
 import ch.hsr.afterhour.R;
 import ch.hsr.afterhour.model.User;
 import ch.viascom.groundwork.foxhttp.exception.FoxHttpException;
 
-/**
- * A login screen that offers login via email/password.
- */
+
 public class LoginActivity extends AppCompatActivity {
 
     private UserLoginTask mAuthTask = null;
+    private final String LOGIN_PREFS = "login_credentials";
 
     // UI references.
     private AutoCompleteTextView mEmailView;
@@ -43,6 +43,24 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        setupMainViews();
+        settings = getSharedPreferences(LOGIN_PREFS, MODE_PRIVATE);
+        Map<String, ?> preferenceMap = settings.getAll();
+        if (!preferenceMap.isEmpty()) {
+            showProgress(true);
+            mAuthTask = new UserLoginTask(preferenceMap.get("email").toString(), preferenceMap.get("password").toString());
+            mAuthTask.execute();
+        } else {
+            setupAdditionalViews();
+        }
+    }
+
+    private void setupMainViews() {
+        mLoginFormView = findViewById(R.id.login_form);
+        mProgressView = findViewById(R.id.login_progress);
+    }
+
+    private void setupAdditionalViews() {
         mEmailView = (AutoCompleteTextView) findViewById(R.id.login_email_edittext);
         mPasswordView = (EditText) findViewById(R.id.login_password_edittext);
         mPasswordView.setOnEditorActionListener((textView, id, keyEvent) -> {
@@ -52,27 +70,17 @@ public class LoginActivity extends AppCompatActivity {
             }
             return false;
         });
-
         Button mEmailSignInButton = (Button) findViewById(R.id.login_sign_in_button);
         mEmailSignInButton.setOnClickListener(view -> attemptLogin());
-
         View mRegisterButton = findViewById(R.id.login_register_button);
         mRegisterButton.setOnClickListener(v -> {
-            Intent intent = new Intent(this, RegisterActivity.class);
-            startActivity(intent);
+            Intent register = new Intent(this, RegisterActivity.class);
+            startActivity(register);
         });
-
-        mLoginFormView = findViewById(R.id.login_form);
-        mProgressView = findViewById(R.id.login_progress);
         mRemembermeCb = (CheckBox) findViewById(R.id.login_autologin_checkbox);
     }
 
 
-    /**
-     * Attempts to sign in or register the account specified by the login form.
-     * If there are form errors (invalid email, missing fields, etc.), the
-     * errors are presented and no actual login attempt is made.
-     */
     private void attemptLogin() {
         if (mAuthTask != null) {
             return;
@@ -116,6 +124,10 @@ public class LoginActivity extends AppCompatActivity {
             focusView.requestFocus();
         } else {
             showProgress(true);
+            SharedPreferences.Editor editor = settings.edit();
+            editor.putString("email", email);
+            editor.putString("password", password);
+            editor.apply();
             mAuthTask = new UserLoginTask(email, password);
             mAuthTask.execute();
         }
@@ -131,9 +143,7 @@ public class LoginActivity extends AppCompatActivity {
         return password.length() > 3;
     }
 
-    /**
-     * Shows the progress UI and hides the login form.
-     */
+
     private void showProgress(final boolean show) {
         int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
 
@@ -155,11 +165,7 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    /**
-     * Represents an asynchronous login/registration task used to authenticate
-     * the user.
-     */
-    class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
+    private class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
 
         private final String mEmail;
         private final String mPassword;
@@ -174,9 +180,6 @@ public class LoginActivity extends AppCompatActivity {
         protected Boolean doInBackground(Void... params) {
             try {
                 user = Application.get().getServerAPI().login(mEmail, mPassword);
-                user = new User("Muster", "Max", "me@world.com", "+41791234567", "2017-02-02");
-                user.setId("1");
-                Application.get().setUser(user);
                 return true;
             } catch (FoxHttpException e) {
                 e.printStackTrace();
@@ -197,14 +200,9 @@ public class LoginActivity extends AppCompatActivity {
             Intent intent;
 
             if (success) {
+                user = new User("Muster", "Max", "me@world.com", "+41791234567", "2017-02-02");
+                user.setId("1");
                 Application.get().setUser(user);
-                if (mRemembermeCb.isChecked()) {
-                    SharedPreferences settings = getSharedPreferences("login", MODE_PRIVATE);
-                    SharedPreferences.Editor editor = settings.edit();
-                    editor.putString("username", mEmail);
-                    editor.putString("password", mPassword);
-                    editor.commit();
-                }
                 intent = new Intent(LoginActivity.this, ProfileActivity.class);
                 startActivity(intent);
                 finish();
@@ -215,6 +213,8 @@ public class LoginActivity extends AppCompatActivity {
                         Snackbar.LENGTH_LONG
                 );
                 snackbar.show();
+                SharedPreferences.Editor editor = settings.edit();
+                editor.clear().apply();
                 mEmailView.requestFocus();
             }
         }
@@ -223,6 +223,8 @@ public class LoginActivity extends AppCompatActivity {
         protected void onCancelled() {
             mAuthTask = null;
             showProgress(false);
+            SharedPreferences.Editor editor = settings.edit();
+            editor.clear().apply();
         }
     }
 }
