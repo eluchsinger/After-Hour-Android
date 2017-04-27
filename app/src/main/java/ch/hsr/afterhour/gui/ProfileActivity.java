@@ -9,6 +9,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.OnTabSelectListener;
@@ -19,6 +20,7 @@ import ch.hsr.afterhour.service.BottombarHelper;
 public class ProfileActivity extends FragmentActivity {
 
     private FragmentManager fragmentManager;
+    private FloatingActionButton fab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,8 +35,8 @@ public class ProfileActivity extends FragmentActivity {
     }
 
     private void addFloatingButton() {
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.activity_profile_fab);
-        fab.setOnClickListener(v -> showPersonalQrCode());
+        fab = (FloatingActionButton) findViewById(R.id.activity_profile_fab);
+        fab.setOnClickListener(v -> {showPersonalQrCode(); fab.setVisibility(View.INVISIBLE);});
     }
 
     private void showPersonalQrCode() {
@@ -74,6 +76,7 @@ public class ProfileActivity extends FragmentActivity {
     public void onBackPressed() {
         switch (fragmentManager.getBackStackEntryCount()) {
             case 1:
+                fab.setVisibility(View.VISIBLE);
                 fragmentManager.popBackStack();
                 fragmentManager.beginTransaction()
                         .replace(R.id.profile_fragment_container, new ProfileFragment())

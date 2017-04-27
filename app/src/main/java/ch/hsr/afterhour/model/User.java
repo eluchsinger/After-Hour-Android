@@ -1,5 +1,7 @@
 package ch.hsr.afterhour.model;
 
+import android.graphics.Bitmap;
+
 import java.io.Serializable;
 import java.util.List;
 
@@ -14,6 +16,7 @@ public class User implements Serializable {
     private String dateOfBirth;
     private boolean isWorking = false;
     private List<Ticket> tickets;
+    private Bitmap qrImage = null;
 
     public User(String lastName, String firstName, String email, String mobileNumber, String dateOfBirth) {
         this.lastName = lastName;
@@ -25,6 +28,14 @@ public class User implements Serializable {
 
     public User() {
 
+    }
+
+    public Bitmap getQrImage() {
+        return qrImage;
+    }
+
+    public void setQrImage(Bitmap qrImage) {
+        this.qrImage = qrImage;
     }
 
     public String getEmail() {

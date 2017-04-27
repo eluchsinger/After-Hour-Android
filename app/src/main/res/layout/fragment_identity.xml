@@ -5,6 +5,7 @@
     android:background="@color/colorPrimaryDark">
 
     <ImageView
+        android:id="@+id/identity_fragment_image"
         android:layout_width="160dp"
         android:layout_height="160dp"
         android:layout_gravity="center" />
