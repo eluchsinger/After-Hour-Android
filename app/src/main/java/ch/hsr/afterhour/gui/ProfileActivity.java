@@ -38,8 +38,10 @@ public class ProfileActivity extends FragmentActivity {
     }
 
     private void showPersonalQrCode() {
-        FragmentManager fm = getSupportFragmentManager();
-        fm.beginTransaction().add(new IdentityFragment()).commit();
+        fragmentManager.beginTransaction()
+                .replace(R.id.profile_fragment_container, new IdentityFragment())
+                .addToBackStack(null)
+                .commit();
     }
 
     private void addBottombar() {
@@ -66,5 +68,20 @@ public class ProfileActivity extends FragmentActivity {
         logToggle.setTitle("Menu");
 
         return super.onPrepareOptionsMenu(menu);
+    }
+
+    @Override
+    public void onBackPressed() {
+        switch (fragmentManager.getBackStackEntryCount()) {
+            case 1:
+                fragmentManager.popBackStack();
+                fragmentManager.beginTransaction()
+                        .replace(R.id.profile_fragment_container, new ProfileFragment())
+                        .commit();
+                break;
+            default:
+                finish();
+                break;
+        }
     }
 }
