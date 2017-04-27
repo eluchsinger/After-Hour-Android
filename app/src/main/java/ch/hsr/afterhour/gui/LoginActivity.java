@@ -3,6 +3,7 @@ package ch.hsr.afterhour.gui;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
@@ -12,6 +13,7 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 
 import java.net.MalformedURLException;
@@ -33,6 +35,9 @@ public class LoginActivity extends AppCompatActivity {
     private EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
+    private View mRegisterButton;
+    private CheckBox mRemembermeCb;
+    private SharedPreferences settings = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +64,7 @@ public class LoginActivity extends AppCompatActivity {
 
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
+        mRemembermeCb = (CheckBox) findViewById(R.id.login_autologin_checkbox);
     }
 
 
@@ -191,6 +197,14 @@ public class LoginActivity extends AppCompatActivity {
             Intent intent;
 
             if (success) {
+                Application.get().setUser(user);
+                if (mRemembermeCb.isChecked()) {
+                    SharedPreferences settings = getSharedPreferences("login", MODE_PRIVATE);
+                    SharedPreferences.Editor editor = settings.edit();
+                    editor.putString("username", mEmail);
+                    editor.putString("password", mPassword);
+                    editor.commit();
+                }
                 intent = new Intent(LoginActivity.this, ProfileActivity.class);
                 startActivity(intent);
                 finish();
