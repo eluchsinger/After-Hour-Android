@@ -33,7 +33,6 @@ public class LoginActivity extends AppCompatActivity {
     private EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
-    private View mRegisterButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +51,7 @@ public class LoginActivity extends AppCompatActivity {
         Button mEmailSignInButton = (Button) findViewById(R.id.login_sign_in_button);
         mEmailSignInButton.setOnClickListener(view -> attemptLogin());
 
-        mRegisterButton = findViewById(R.id.login_register_button);
+        View mRegisterButton = findViewById(R.id.login_register_button);
         mRegisterButton.setOnClickListener(v -> {
             Intent intent = new Intent(this, RegisterActivity.class);
             startActivity(intent);
@@ -108,12 +107,8 @@ public class LoginActivity extends AppCompatActivity {
         }
 
         if (cancel) {
-            // There was an error; don't attempt login and focus the first
-            // form field with an error.
             focusView.requestFocus();
         } else {
-            // Show a progress spinner, and kick off a background task to
-            // perform the user login attempt.
             showProgress(true);
             mAuthTask = new UserLoginTask(email, password);
             mAuthTask.execute();
@@ -173,12 +168,17 @@ public class LoginActivity extends AppCompatActivity {
         protected Boolean doInBackground(Void... params) {
             try {
                 user = Application.get().getServerAPI().login(mEmail, mPassword);
+                user = new User("Muster", "Max", "me@world.com", "+41791234567", "2017-02-02");
+                user.setId("1");
                 Application.get().setUser(user);
                 return true;
             } catch (FoxHttpException e) {
                 e.printStackTrace();
                 return false;
             } catch (MalformedURLException e) {
+                e.printStackTrace();
+                return false;
+            } catch (Exception e) {
                 e.printStackTrace();
                 return false;
             }
@@ -188,7 +188,6 @@ public class LoginActivity extends AppCompatActivity {
         protected void onPostExecute(final Boolean success) {
             mAuthTask = null;
             showProgress(false);
-
             Intent intent;
 
             if (success) {
