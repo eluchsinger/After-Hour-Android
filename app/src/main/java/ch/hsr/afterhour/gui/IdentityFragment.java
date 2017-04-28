@@ -3,7 +3,6 @@ package ch.hsr.afterhour.gui;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,9 +29,7 @@ public class IdentityFragment extends Fragment {
         if (image == null) {
             QrBarcodeGenerator qrGenerator  = new QrBarcodeGenerator();
             image = qrGenerator.generateBarcode(
-                    "USR-ZRH-" + Application.get().getUser().getId(),
-                    ContextCompat.getColor(rootView.getContext(), R.color.fontColor),
-                    ContextCompat.getColor(rootView.getContext(), R.color.colorPrimaryDark)
+                    "USR-ZRH-" + Application.get().getUser().getId()
             );
             Application.get().getUser().setQrImage(image);
         }
