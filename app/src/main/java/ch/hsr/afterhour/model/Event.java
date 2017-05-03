@@ -1,5 +1,7 @@
 package ch.hsr.afterhour.model;
 
+import android.graphics.Bitmap;
+
 import java.text.DateFormat;
 import java.util.Date;
 
@@ -14,6 +16,7 @@ public class Event {
     private String location;
     private Date date;
     private String description;
+    private Bitmap picture;
 
     public int getId() {
         return id;
@@ -53,5 +56,13 @@ public class Event {
 
     public void setDate(Date date) {
         this.date = date;
+    }
+
+    public void setPicture(Bitmap picture){
+        this.picture = picture;
+    }
+
+    public Bitmap getPicture(){
+        return picture;
     }
 }

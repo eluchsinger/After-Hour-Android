@@ -1,6 +1,8 @@
 package ch.hsr.afterhour.gui;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
@@ -8,9 +10,11 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import java.net.MalformedURLException;
 import java.util.Arrays;
@@ -33,6 +37,7 @@ public class EventListFragment extends Fragment {
     private OnMyEventListListener mListener;
     private RecyclerView mRecyclerView;
     private DownloadEventsTask mDownloadTask;
+    private EventRecyclerViewAdapter eventRecyclerViewAdapter;
     private Event[] events;
 
     /**
@@ -109,6 +114,7 @@ public class EventListFragment extends Fragment {
         protected Boolean doInBackground(Void... params) {
             try {
                 events = Application.get().getServerAPI().downloadEvents();
+                //Bitmap bitmap = Application.get().getServerAPI().getEventImage(1);
                 return true;
             } catch (FoxHttpException e) {
                 e.printStackTrace();
@@ -123,7 +129,8 @@ public class EventListFragment extends Fragment {
         protected void onPostExecute(Boolean success) {
             if (success) {
                 if (mRecyclerView != null) {
-                    mRecyclerView.setAdapter(new EventRecyclerViewAdapter(Arrays.asList(events), mListener));
+                    eventRecyclerViewAdapter = new EventRecyclerViewAdapter(Arrays.asList(events), mListener);
+                    mRecyclerView.setAdapter(eventRecyclerViewAdapter);
                 } else {
                     Snackbar snackbar = Snackbar.make(
                             getActivity().findViewById(R.id.fragment_user_container),
@@ -131,6 +138,35 @@ public class EventListFragment extends Fragment {
                             Snackbar.LENGTH_SHORT);
                     snackbar.show();
                 }
+            }
+        }
+    }
+
+    class DownloadEventPicturesTask extends AsyncTask<Void, Void, Boolean> {
+
+        @Override
+        protected Boolean doInBackground(Void... params) {
+            try {
+                Bitmap bitmap;
+                for (Event event : events){
+                    String bitmapdata = Application.get().getServerAPI().getEventImage(1);
+                    byte[] decoded = Base64.decode(bitmapdata, Base64.DEFAULT);
+                    bitmap = BitmapFactory.decodeByteArray(decoded, 0, decoded.length);
+                    event.setPicture(bitmap);
+                }
+                return true;
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (FoxHttpException e) {
+                e.printStackTrace();
+            }
+            return false;
+        }
+
+        @Override
+        protected void onPostExecute(Boolean success){
+            if (success){
+                eventRecyclerViewAdapter.notifyDataSetChanged();
             }
         }
     }
