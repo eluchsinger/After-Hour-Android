@@ -100,7 +100,7 @@ public class FoxHttpAPI {
 
     public String getEventImage(int eventId) throws FoxHttpException, MalformedURLException {
         FoxHttpRequest foxHttpRequest = new FoxHttpRequest(httpClient);
-        String urlParameters = "/events/" + eventId + "/image2";
+        String urlParameters = "/events/" + eventId + "/image";
         foxHttpRequest.setUrl("{host}" + urlParameters);
         foxHttpRequest.setRequestType(RequestType.GET);
         FoxHttpResponse foxHttpResponse = foxHttpRequest.execute();
