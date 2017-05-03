@@ -114,7 +114,6 @@ public class EventListFragment extends Fragment {
         protected Boolean doInBackground(Void... params) {
             try {
                 events = Application.get().getServerAPI().downloadEvents();
-                //Bitmap bitmap = Application.get().getServerAPI().getEventImage(1);
                 return true;
             } catch (FoxHttpException e) {
                 e.printStackTrace();
@@ -131,6 +130,8 @@ public class EventListFragment extends Fragment {
                 if (mRecyclerView != null) {
                     eventRecyclerViewAdapter = new EventRecyclerViewAdapter(Arrays.asList(events), mListener);
                     mRecyclerView.setAdapter(eventRecyclerViewAdapter);
+                    DownloadEventPicturesTask downloadEventPicturesTask = new DownloadEventPicturesTask();
+                    downloadEventPicturesTask.execute();
                 } else {
                     Snackbar snackbar = Snackbar.make(
                             getActivity().findViewById(R.id.fragment_user_container),
@@ -149,7 +150,7 @@ public class EventListFragment extends Fragment {
             try {
                 Bitmap bitmap;
                 for (Event event : events){
-                    String bitmapdata = Application.get().getServerAPI().getEventImage(1);
+                    String bitmapdata = Application.get().getServerAPI().getEventImage(event.getId());
                     byte[] decoded = Base64.decode(bitmapdata, Base64.DEFAULT);
                     bitmap = BitmapFactory.decodeByteArray(decoded, 0, decoded.length);
                     event.setPicture(bitmap);

@@ -39,6 +39,7 @@ public class EventRecyclerViewAdapter extends RecyclerView.Adapter<EventRecycler
         holder.mItem = mValues.get(position);
         holder.mEventTitle.setText(mValues.get(position).getTitle());
         holder.mDescription.setText(mValues.get(position).getDescription());
+        holder.mEventPicture.setImageBitmap(mValues.get(position).getPicture());
 
         holder.mView.setOnClickListener(v -> {
             if (null != mListener) {
