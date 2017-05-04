@@ -148,11 +148,8 @@ public class EventListFragment extends Fragment {
         @Override
         protected Boolean doInBackground(Void... params) {
             try {
-                Bitmap bitmap;
                 for (Event event : events){
-                    String bitmapdata = Application.get().getServerAPI().getEventImage(event.getId());
-                    byte[] decoded = Base64.decode(bitmapdata, Base64.DEFAULT);
-                    bitmap = BitmapFactory.decodeByteArray(decoded, 0, decoded.length);
+                    final Bitmap bitmap = Application.get().getServerAPI().getEventImage(event.getId());
                     event.setPicture(bitmap);
                 }
                 return true;

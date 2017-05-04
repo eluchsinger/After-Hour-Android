@@ -1,5 +1,9 @@
 package ch.hsr.afterhour.service.server;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+
+import java.io.ByteArrayOutputStream;
 import java.net.MalformedURLException;
 
 import ch.hsr.afterhour.model.Event;
@@ -20,7 +24,7 @@ import ch.viascom.groundwork.foxhttp.type.RequestType;
 
 
 public class FoxHttpAPI {
-    private final static String SERVER_PATH = "http://152.96.234.23:9000";
+    private final static String SERVER_PATH = "http://localhost:9000";
     private final static String LOGGER_NAME = "After-Hour App | Logger";
 
     private FoxHttpClient httpClient;
@@ -89,12 +93,13 @@ public class FoxHttpAPI {
         return foxHttpResponse.getParsedBody(User.class);
     }
 
-    public String getEventImage(int eventId) throws FoxHttpException, MalformedURLException {
+    public Bitmap getEventImage(int eventId) throws FoxHttpException, MalformedURLException {
         FoxHttpRequest foxHttpRequest = new FoxHttpRequest(httpClient);
         String urlParameters = "/events/" + eventId + "/image";
         foxHttpRequest.setUrl("{host}" + urlParameters);
         foxHttpRequest.setRequestType(RequestType.GET);
         FoxHttpResponse foxHttpResponse = foxHttpRequest.execute();
-        return foxHttpResponse.getResponseBody().getBody().toString();
+        final byte[] bytes = foxHttpResponse.getResponseBody().getBody().toByteArray();
+        return BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
     }
 }
