@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.List;
@@ -45,6 +46,7 @@ public class EventRecyclerViewAdapter extends RecyclerView.Adapter<EventRecycler
             if (null != mListener) {
                 // Notify the active callbacks interface (the activity, if the
                 // fragment is attached to one) that an item has been selected.
+                holder.mEventDetails.setVisibility(View.VISIBLE);
                 mListener.onMyEventInteraction(holder.mItem);
             }
         });
@@ -88,6 +90,7 @@ public class EventRecyclerViewAdapter extends RecyclerView.Adapter<EventRecycler
         public final ImageView mEventPicture;
         public final TextView mDescription;
         public Event mItem;
+        public LinearLayout mEventDetails;
 
         public ViewHolder(View view) {
             super(view);
@@ -97,6 +100,7 @@ public class EventRecyclerViewAdapter extends RecyclerView.Adapter<EventRecycler
             mDescription = (TextView) view.findViewById(R.id.event_description);
             mEventDate = (TextView) view.findViewById(R.id.event_date);
             mEventPicture = (ImageView) view.findViewById(R.id.event_image_view);
+            mEventDetails = (LinearLayout) view.findViewById(R.id.event_detail);
         }
 
         @Override
