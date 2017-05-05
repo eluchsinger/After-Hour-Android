@@ -113,7 +113,7 @@ public class EventRecyclerViewAdapter extends RecyclerView.Adapter<EventRecycler
             RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.ticket_category_list);
 
             ticketCategoryRecyclerViewAdapter = new TicketCategoryRecyclerViewAdapter(
-                    new ArrayList<TicketCategory>(), null);
+                    new ArrayList<TicketCategory>(), mListener);
 
 
             recyclerView.setAdapter(ticketCategoryRecyclerViewAdapter);

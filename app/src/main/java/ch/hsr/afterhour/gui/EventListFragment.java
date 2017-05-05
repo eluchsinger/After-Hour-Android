@@ -19,6 +19,7 @@ import java.util.Arrays;
 import ch.hsr.afterhour.Application;
 import ch.hsr.afterhour.R;
 import ch.hsr.afterhour.model.Event;
+import ch.hsr.afterhour.model.TicketCategory;
 import ch.viascom.groundwork.foxhttp.exception.FoxHttpException;
 
 /**
@@ -80,8 +81,7 @@ public class EventListFragment extends Fragment {
         if (context instanceof OnMyEventListListener) {
             mListener = (OnMyEventListListener) context;
         } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnMyEventListListener");
+           throw new RuntimeException("Must implement OnMyEventListener");
         }
     }
 
@@ -90,6 +90,7 @@ public class EventListFragment extends Fragment {
         super.onDetach();
         mListener = null;
     }
+
 
     /**
      * This interface must be implemented by activities that contain this
@@ -103,7 +104,9 @@ public class EventListFragment extends Fragment {
      */
     public interface OnMyEventListListener {
         void onMyEventInteraction(Event item);
+        void buyTicket(TicketCategory ticketCategoryId);
     }
+
 
     class DownloadEventsTask extends AsyncTask<Void, Void, Boolean> {
 
