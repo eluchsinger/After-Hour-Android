@@ -48,6 +48,12 @@ public class TicketCategoryRecyclerViewAdapter extends RecyclerView.Adapter<Tick
         });
     }
 
+    public void updateList(List<TicketCategory> items){
+        mValues.clear();
+        mValues.addAll(items);
+        notifyDataSetChanged();
+    }
+
     @Override
     public int getItemCount() {
         return mValues.size();

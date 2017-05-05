@@ -8,11 +8,14 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import ch.hsr.afterhour.R;
 import ch.hsr.afterhour.gui.EventListFragment.OnMyEventListListener;
 import ch.hsr.afterhour.model.Event;
+import ch.hsr.afterhour.model.TicketCategory;
 
 /**
  * {@link RecyclerView.Adapter} that can display a {@link Event} and makes a call to the
@@ -37,10 +40,12 @@ public class EventRecyclerViewAdapter extends RecyclerView.Adapter<EventRecycler
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        holder.mItem = mValues.get(position);
+        holder.setItem(mValues.get(position));
         holder.mEventTitle.setText(mValues.get(position).getTitle());
         holder.mDescription.setText(mValues.get(position).getDescription());
         holder.mEventPicture.setImageBitmap(mValues.get(position).getPicture());
+
+
 
         holder.mView.setOnClickListener(v -> {
             if (null != mListener) {
@@ -91,9 +96,9 @@ public class EventRecyclerViewAdapter extends RecyclerView.Adapter<EventRecycler
         public final TextView mEventDate;
         public final ImageView mEventPicture;
         public final TextView mDescription;
-        //public Fragment mFragment;
         public Event mItem;
         public LinearLayout mEventDetails;
+        public TicketCategoryRecyclerViewAdapter ticketCategoryRecyclerViewAdapter;
 
         public ViewHolder(View view) {
             super(view);
@@ -104,6 +109,16 @@ public class EventRecyclerViewAdapter extends RecyclerView.Adapter<EventRecycler
             mEventDate = (TextView) view.findViewById(R.id.event_date);
             mEventPicture = (ImageView) view.findViewById(R.id.event_image_view);
             mEventDetails = (LinearLayout) view.findViewById(R.id.event_detail);
+
+            RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.ticket_category_list);
+
+            ticketCategoryRecyclerViewAdapter = new TicketCategoryRecyclerViewAdapter(
+                    new ArrayList<TicketCategory>(), null);
+
+
+            recyclerView.setAdapter(ticketCategoryRecyclerViewAdapter);
+
+
 
 
 
@@ -119,6 +134,12 @@ public class EventRecyclerViewAdapter extends RecyclerView.Adapter<EventRecycler
         @Override
         public String toString() {
             return super.toString() + " '" + mEventLocation.getText() + "'";
+        }
+
+        public void setItem(Event item){
+            this.mItem = item;
+
+            ticketCategoryRecyclerViewAdapter.updateList(Arrays.asList(item.getTicketCategories()));
         }
     }
 }
