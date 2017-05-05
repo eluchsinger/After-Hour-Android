@@ -17,6 +17,7 @@ public class Event {
     private Date date;
     private String description;
     private Bitmap picture;
+    private TicketCategory[] ticketCategories;
 
     public int getId() {
         return id;
@@ -64,5 +65,13 @@ public class Event {
 
     public Bitmap getPicture(){
         return picture;
+    }
+
+    public TicketCategory[] getTicketCategories() {
+        return ticketCategories;
+    }
+
+    public void setTicketCategories(TicketCategory[] ticketCategories) {
+        this.ticketCategories = ticketCategories;
     }
 }

@@ -47,6 +47,8 @@ public class EventRecyclerViewAdapter extends RecyclerView.Adapter<EventRecycler
                 // Notify the active callbacks interface (the activity, if the
                 // fragment is attached to one) that an item has been selected.
                 holder.mEventDetails.setVisibility(View.VISIBLE);
+
+
                 mListener.onMyEventInteraction(holder.mItem);
             }
         });
@@ -89,6 +91,7 @@ public class EventRecyclerViewAdapter extends RecyclerView.Adapter<EventRecycler
         public final TextView mEventDate;
         public final ImageView mEventPicture;
         public final TextView mDescription;
+        //public Fragment mFragment;
         public Event mItem;
         public LinearLayout mEventDetails;
 
@@ -101,6 +104,16 @@ public class EventRecyclerViewAdapter extends RecyclerView.Adapter<EventRecycler
             mEventDate = (TextView) view.findViewById(R.id.event_date);
             mEventPicture = (ImageView) view.findViewById(R.id.event_image_view);
             mEventDetails = (LinearLayout) view.findViewById(R.id.event_detail);
+
+
+
+
+            //mFragment = (Fragment) view.findViewById(R.id.fragment_detail_event);
+
+
+            //TicketCategoryListFragment fragment = new TicketCategoryListFragment();
+            //fragment.setTicketCategories(mItem.getTicketCategories());
+            //mFragment.addView(fragment.getView());
         }
 
         @Override

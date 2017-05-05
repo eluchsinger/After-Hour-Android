@@ -95,12 +95,12 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/event">
 
-            <TextView
+            <fragment
+                android:name="ch.hsr.afterhour.gui.TicketCategoryListFragment"
                 android:layout_width="match_parent"
-                android:layout_height="100dp"
-                android:text="PlaceHolder"
-                android:textSize="36sp"
-                android:textStyle="bold" />
+                android:layout_height="wrap_content"
+                tools:layout="@layout/fragment_ticketcategory_list" />
+
         </LinearLayout>
 
     </RelativeLayout>

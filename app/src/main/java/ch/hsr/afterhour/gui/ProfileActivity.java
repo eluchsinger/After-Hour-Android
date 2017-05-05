@@ -100,6 +100,5 @@ public class ProfileActivity extends FragmentActivity implements EventListFragme
 
     @Override
     public void onMyEventInteraction(Event item) {
-
     }
 }
