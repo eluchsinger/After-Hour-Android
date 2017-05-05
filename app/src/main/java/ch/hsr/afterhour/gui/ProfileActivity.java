@@ -1,5 +1,6 @@
 package ch.hsr.afterhour.gui;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.design.widget.FloatingActionButton;
@@ -17,10 +18,9 @@ import com.roughike.bottombar.OnTabSelectListener;
 
 import java.net.MalformedURLException;
 
-import ch.hsr.afterhour.gui.EventListFragment.OnMyEventListListener;
-
 import ch.hsr.afterhour.Application;
 import ch.hsr.afterhour.R;
+import ch.hsr.afterhour.gui.EventListFragment.OnMyEventListListener;
 import ch.hsr.afterhour.model.Event;
 import ch.hsr.afterhour.model.TicketCategory;
 import ch.viascom.groundwork.foxhttp.exception.FoxHttpException;
@@ -79,7 +79,7 @@ public class ProfileActivity extends FragmentActivity implements OnMyEventListLi
                         fragmentManager.beginTransaction().replace(
                                 R.id.profile_fragment_container,
                                 new ProfileFragment())
-                        .commit();
+                                .commit();
                         break;
                 }
             }
@@ -110,13 +110,29 @@ public class ProfileActivity extends FragmentActivity implements OnMyEventListLi
     }
 
     @Override
-    public void buyTicket(TicketCategory ticketCategoryId) {
-        try {
-            Application.get().getServerAPI().buyTicket(1, ticketCategoryId.getId());
-        } catch (FoxHttpException e) {
-            e.printStackTrace();
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
+    public void buyTicket(TicketCategory ticketCategory) {
+        BuyTicketTask buyTicketTask = new BuyTicketTask();
+        buyTicketTask.execute(ticketCategory);
+    }
+
+    class BuyTicketTask extends AsyncTask<TicketCategory, Void, Boolean> {
+
+        @Override
+        protected Boolean doInBackground(TicketCategory... ticketCategories) {
+            try {
+                Application.get().getServerAPI().buyTicket(1, ticketCategories[0].getId());
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (FoxHttpException e) {
+                e.printStackTrace();
+            }
+            return true;
+        }
+
+        @Override
+        protected void onPostExecute(Boolean success) {
+            if (success) {
+            }
         }
     }
 }
