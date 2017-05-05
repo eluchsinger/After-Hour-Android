@@ -70,14 +70,14 @@ public class EventRecyclerViewAdapter extends RecyclerView.Adapter<EventRecycler
 
         String date = null;
         try {
-            date = mValues.get(position).getDate();
+            date = mValues.get(position).getEventDate();
         } catch (NullPointerException e) {
             e.printStackTrace();
         }
         if (date == null) {
             holder.mEventDate.setVisibility(View.GONE);
         } else {
-            holder.mEventDate.setText(mValues.get(position).getDate());
+            holder.mEventDate.setText(mValues.get(position).getEventDate());
         }
     }
 

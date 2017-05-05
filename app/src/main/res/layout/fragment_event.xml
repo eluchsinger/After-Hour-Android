@@ -1,113 +1,194 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/transaction_item_view"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="250dp"
     android:layout_marginBottom="5dp"
     android:layout_marginLeft="15dp"
     android:layout_marginRight="15dp"
     android:layout_marginTop="5dp"
     card_view:cardCornerRadius="4dp">
 
-    <RelativeLayout
+    <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_gravity="center_vertical">
 
-        <LinearLayout
-            android:id="@+id/event"
-            android:layout_width="match_parent"
-            android:layout_height="184dp"
-            android:layout_alignParentStart="true"
-            android:layout_marginTop="4dp"
-            android:baselineAligned="false"
-            android:orientation="horizontal">
+        <ImageView
+            android:id="@+id/event_image_view"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_gravity="end"
+            android:contentDescription="@string/placeholder_event_picture"
+            android:scaleType="centerCrop"
+            card_view:layout_constraintBottom_toBottomOf="parent"
+            card_view:layout_constraintLeft_toLeftOf="parent"
+            card_view:layout_constraintRight_toRightOf="parent"
+            card_view:layout_constraintTop_toTopOf="parent"
+            card_view:srcCompat="@color/colorAccent"
+            tools:layout_constraintBottom_creator="1"
+            tools:layout_constraintLeft_creator="1"
+            tools:layout_constraintRight_creator="1"
+            tools:layout_constraintTop_creator="1" />
 
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/constraintLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_marginBottom="0dp"
+            android:layout_marginRight="0dp"
+            android:layout_marginTop="0dp"
+            android:background="#A000"
+            android:maxWidth="200dp"
+            android:minWidth="150dp"
+            card_view:layout_constraintBottom_toBottomOf="parent"
+            card_view:layout_constraintRight_toRightOf="@+id/event_image_view"
+            card_view:layout_constraintTop_toTopOf="parent"
+            card_view:layout_constraintVertical_bias="0.0"
+            tools:layout_constraintBottom_creator="1"
+            tools:layout_constraintTop_creator="1">
 
-            <LinearLayout
-                android:layout_width="160dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/event_title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/text_margin"
-                    android:layout_marginTop="@dimen/text_margin"
-                    android:text="@string/placeholder_event_title"
-                    android:textAppearance="?attr/textAppearanceListItem" />
-
-                <TextView
-                    android:id="@+id/event_location"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/text_margin"
-                    android:layout_marginTop="@dimen/text_margin"
-                    android:text="@string/placeholder_event_location"
-                    android:textAppearance="?attr/textAppearanceListItem" />
-
-                <TextView
-                    android:id="@+id/event_description"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/text_margin"
-                    android:layout_marginTop="@dimen/text_margin"
-                    android:text="@string/placeholder_event_description"
-                    android:textAppearance="?attr/textAppearanceListItem" />
-
-                <TextView
-                    android:id="@+id/event_date"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/text_margin"
-                    android:layout_marginTop="@dimen/double_text_margin"
-                    android:text="@string/placeholder_date"
-                    android:textAppearance="?attr/textAppearanceListItem" />
-            </LinearLayout>
-
-            <LinearLayout
+            <TextView
+                android:id="@+id/event_title"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp"
-                android:layout_marginTop="4dp"
-                android:layout_weight="1"
-                android:orientation="vertical">
+                android:layout_marginBottom="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:text="@string/placeholder_event_title"
+                android:textAppearance="?attr/textAppearanceListItem"
+                android:textColor="@color/fontColor"
+                card_view:layout_constraintBottom_toTopOf="@+id/ratingBar"
+                card_view:layout_constraintLeft_toLeftOf="parent"
+                card_view:layout_constraintRight_toRightOf="parent"
+                tools:layout_constraintLeft_creator="1" />
 
-                <ImageView
-                    android:id="@+id/event_image_view"
-                    android:layout_width="@dimen/event_picture_width"
-                    android:layout_height="@dimen/event_picture_height"
-                    android:layout_gravity="end"
-                    android:contentDescription="@string/placeholder_event_picture"
-                    card_view:srcCompat="@mipmap/qrcode_sample" />
-            </LinearLayout>
-        </LinearLayout>
+            <RatingBar
+                android:id="@+id/ratingBar"
+                style="@style/Widget.AppCompat.RatingBar.Small"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:layout_marginLeft="8dp"
+                android:numStars="5"
+                android:rating="3"
+                card_view:layout_constraintBottom_toTopOf="@+id/event_description"
+                card_view:layout_constraintLeft_toLeftOf="parent" />
+
+            <TextView
+                android:id="@+id/event_description"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:text="@string/placeholder_event_description"
+                android:textAppearance="?attr/textAppearanceListItem"
+                android:textColor="@color/fontColor"
+                card_view:layout_constraintBottom_toTopOf="@+id/event_location"
+                card_view:layout_constraintHorizontal_bias="0.0"
+                card_view:layout_constraintLeft_toLeftOf="parent"
+                card_view:layout_constraintRight_toRightOf="parent" />
+
+            <TextView
+                android:id="@+id/event_location"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:text="@string/placeholder_event_location"
+                android:textAppearance="?attr/textAppearanceListItem"
+                android:textColor="@color/fontColor"
+                card_view:layout_constraintBottom_toTopOf="@+id/event_date"
+                card_view:layout_constraintHorizontal_bias="0.0"
+                card_view:layout_constraintLeft_toLeftOf="parent"
+                card_view:layout_constraintRight_toRightOf="parent" />
+
+            <TextView
+                android:id="@+id/event_date"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:text="@string/placeholder_date"
+                android:textAppearance="?attr/textAppearanceListItem"
+                android:textColor="@color/fontColor"
+                card_view:layout_constraintBottom_toTopOf="@+id/imageButtonLike"
+                card_view:layout_constraintHorizontal_bias="0.0"
+                card_view:layout_constraintLeft_toLeftOf="parent"
+                card_view:layout_constraintRight_toRightOf="parent" />
+
+            <android.support.v7.widget.AppCompatImageButton
+                android:id="@+id/imageButtonShare"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:layout_marginLeft="8dp"
+                android:background="@null"
+                android:scaleType="fitCenter"
+                android:tint="@color/fontColor"
+                card_view:layout_constraintBottom_toBottomOf="parent"
+                card_view:layout_constraintLeft_toLeftOf="parent"
+                card_view:srcCompat="@drawable/ic_share_black_24dp" />
+
+            <android.support.v7.widget.AppCompatImageButton
+                android:id="@+id/imageButtonLike"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:background="@null"
+                android:tint="@color/fontColor"
+                card_view:layout_constraintBottom_toBottomOf="parent"
+                card_view:layout_constraintLeft_toRightOf="@+id/imageButtonShare"
+                card_view:layout_constraintRight_toLeftOf="@+id/imageButtonShopping"
+                card_view:srcCompat="@drawable/ic_plus_one_black_24dp" />
+
+            <android.support.v7.widget.AppCompatImageButton
+                android:id="@+id/imageButtonShopping"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:layout_marginRight="8dp"
+                android:background="@null"
+                android:tint="@color/fontColor"
+                card_view:layout_constraintBottom_toBottomOf="parent"
+                card_view:layout_constraintRight_toRightOf="parent"
+                card_view:srcCompat="@drawable/ic_shopping_cart_black_24dp" />
+
+        </android.support.constraint.ConstraintLayout>
 
         <LinearLayout
-            android:visibility="gone"
             android:id="@+id/event_detail"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/event">
+            android:layout_marginBottom="8dp"
+            android:visibility="visible"
+            card_view:layout_constraintBottom_toBottomOf="@+id/event_image_view"
+            card_view:layout_constraintLeft_toLeftOf="parent"
+            card_view:layout_constraintRight_toLeftOf="@+id/constraintLayout"
+            card_view:layout_constraintTop_toTopOf="parent"
+            tools:layout_constraintBottom_creator="1"
+            tools:layout_constraintLeft_creator="1"
+            tools:layout_constraintTop_creator="1">
 
-            <android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:app="http://schemas.android.com/apk/res-auto"
-                xmlns:tools="http://schemas.android.com/tools"
+            <android.support.v7.widget.RecyclerView
                 android:id="@+id/ticket_category_list"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
-                app:layoutManager="LinearLayoutManager"
+                card_view:layoutManager="LinearLayoutManager"
                 tools:context="ch.hsr.afterhour.gui.TicketCategoryListFragment"
                 tools:listitem="@layout/fragment_ticketcategory" />
 
         </LinearLayout>
 
-    </RelativeLayout>
+    </android.support.constraint.ConstraintLayout>
+
 </android.support.v7.widget.CardView>
