@@ -207,7 +207,6 @@
                     card_view:layout_constraintLeft_toLeftOf="@+id/event_detail"
                     card_view:layout_constraintRight_toRightOf="@+id/event_detail"
                     card_view:layout_constraintTop_toTopOf="parent"
-                    tools:context="ch.hsr.afterhour.gui.TicketCategoryListFragment"
                     tools:listitem="@layout/fragment_ticketcategory" />
             </LinearLayout>
 

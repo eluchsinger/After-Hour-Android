@@ -116,16 +116,6 @@ public class EventRecyclerViewAdapter extends RecyclerView.Adapter<EventRecycler
             recyclerView.setAdapter(ticketCategoryRecyclerViewAdapter);
 
 
-
-
-
-
-            //mFragment = (Fragment) view.findViewById(R.id.fragment_detail_event);
-
-
-            //TicketCategoryListFragment fragment = new TicketCategoryListFragment();
-            //fragment.setTicketCategories(mItem.getTicketCategories());
-            //mFragment.addView(fragment.getView());
         }
 
         @Override
