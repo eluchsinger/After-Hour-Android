@@ -101,4 +101,12 @@ public class FoxHttpAPI {
         final byte[] bytes = foxHttpResponse.getResponseBody().getBody().toByteArray();
         return BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
     }
+
+    public void buyTicket(int userId, int ticketCategoryId) throws MalformedURLException, FoxHttpException {
+        FoxHttpRequest foxHttpRequest = new FoxHttpRequest(httpClient);
+        String urlParameters = "/ticket/" + ticketCategoryId + "/user/" + userId;
+        foxHttpRequest.setUrl("{host}" + urlParameters);
+        foxHttpRequest.setRequestType(RequestType.GET);
+        FoxHttpResponse foxHttpResponse = foxHttpRequest.execute();
+    }
 }

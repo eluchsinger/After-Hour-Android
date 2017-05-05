@@ -9,16 +9,17 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import ch.hsr.afterhour.gui.EventListFragment.OnMyEventListListener;
+
 import ch.hsr.afterhour.R;
-import ch.hsr.afterhour.gui.TicketCategoryListFragment.OnListFragmentInteractionListener;
 import ch.hsr.afterhour.model.TicketCategory;
 
 public class TicketCategoryRecyclerViewAdapter extends RecyclerView.Adapter<TicketCategoryRecyclerViewAdapter.ViewHolder> {
 
     private final List<TicketCategory> mValues;
-    private final OnListFragmentInteractionListener mListener;
+    private final OnMyEventListListener mListener;
 
-    public TicketCategoryRecyclerViewAdapter(List<TicketCategory> items, OnListFragmentInteractionListener listener) {
+    public TicketCategoryRecyclerViewAdapter(List<TicketCategory> items, OnMyEventListListener listener) {
         mValues = items;
         mListener = listener;
     }
@@ -36,13 +37,18 @@ public class TicketCategoryRecyclerViewAdapter extends RecyclerView.Adapter<Tick
         holder.mCategoryName.setText(mValues.get(position).getName());
         holder.mPrice.setText(Double.toString(mValues.get(position).getPrice()));
 
-        holder.mView.setOnClickListener(new View.OnClickListener() {
+
+
+        holder.mButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (null != mListener) {
                     // Notify the active callbacks interface (the activity, if the
                     // fragment is attached to one) that an item has been selected.
-                    //mListener.onListFragmentInteraction(holder.mItem);
+                    //mListener.onListFragmentInteraction();
+                    mListener.buyTicket(holder.mItem);
+
+
                 }
             }
         });

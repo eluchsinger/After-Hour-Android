@@ -15,10 +15,17 @@ import android.view.MenuItem;
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.OnTabSelectListener;
 
+import java.net.MalformedURLException;
+
+import ch.hsr.afterhour.gui.EventListFragment.OnMyEventListListener;
+
+import ch.hsr.afterhour.Application;
 import ch.hsr.afterhour.R;
 import ch.hsr.afterhour.model.Event;
+import ch.hsr.afterhour.model.TicketCategory;
+import ch.viascom.groundwork.foxhttp.exception.FoxHttpException;
 
-public class ProfileActivity extends FragmentActivity implements EventListFragment.OnMyEventListListener {
+public class ProfileActivity extends FragmentActivity implements OnMyEventListListener {
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -100,5 +107,16 @@ public class ProfileActivity extends FragmentActivity implements EventListFragme
 
     @Override
     public void onMyEventInteraction(Event item) {
+    }
+
+    @Override
+    public void buyTicket(TicketCategory ticketCategoryId) {
+        try {
+            Application.get().getServerAPI().buyTicket(1, ticketCategoryId.getId());
+        } catch (FoxHttpException e) {
+            e.printStackTrace();
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
     }
 }

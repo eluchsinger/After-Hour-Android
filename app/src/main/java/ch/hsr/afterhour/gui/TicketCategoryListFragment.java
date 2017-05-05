@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import ch.hsr.afterhour.R;
-import ch.hsr.afterhour.gui.dummy.DummyContent.DummyItem;
+import ch.hsr.afterhour.gui.EventListFragment.OnMyEventListListener;
 import ch.hsr.afterhour.model.TicketCategory;
 
 /**
@@ -26,7 +26,7 @@ import ch.hsr.afterhour.model.TicketCategory;
 public class TicketCategoryListFragment extends Fragment {
     private static final String ARG_COLUMN_COUNT = "column-count";
     private int mColumnCount = 1;
-    private OnListFragmentInteractionListener mListener;
+    private OnMyEventListListener mListener;
     private TicketCategoryRecyclerViewAdapter adapter;
     private TicketCategory[] ticketCategories;
 
@@ -85,10 +85,10 @@ public class TicketCategoryListFragment extends Fragment {
     public void onAttach(Context context) {
         super.onAttach(context);
         if (context instanceof OnListFragmentInteractionListener) {
-            mListener = (OnListFragmentInteractionListener) context;
+            mListener = (OnMyEventListListener) context;
         } else {
-            //throw new RuntimeException(context.toString()
-              //      + " must implement OnListFragmentInteractionListener");
+            throw new RuntimeException(context.toString()
+                    + " must implement OnListFragmentInteractionListener");
         }
     }
 
@@ -109,7 +109,6 @@ public class TicketCategoryListFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnListFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onListFragmentInteraction(DummyItem item);
+        void onListFragmentInteraction(TicketCategory category);
     }
 }

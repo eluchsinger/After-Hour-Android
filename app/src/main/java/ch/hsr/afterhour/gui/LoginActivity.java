@@ -18,13 +18,15 @@ import java.net.MalformedURLException;
 
 import ch.hsr.afterhour.Application;
 import ch.hsr.afterhour.R;
+import ch.hsr.afterhour.model.Event;
+import ch.hsr.afterhour.model.TicketCategory;
 import ch.hsr.afterhour.model.User;
 import ch.viascom.groundwork.foxhttp.exception.FoxHttpException;
 
 /**
  * A login screen that offers login via email/password.
  */
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity implements EventListFragment.OnMyEventListListener {
 
     private UserLoginTask mAuthTask = null;
 
@@ -152,6 +154,15 @@ public class LoginActivity extends AppCompatActivity {
                 mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
             }
         });
+    }
+
+    @Override
+    public void onMyEventInteraction(Event item) {
+
+    }
+
+    @Override
+    public void buyTicket(TicketCategory ticketCategoryId) {
     }
 
     /**
