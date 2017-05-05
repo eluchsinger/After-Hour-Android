@@ -7,4 +7,5 @@
 
     <color name="fontColor">#FFFFFF</color>
     <color name="fontColorHint">#AAAAAA</color>
+    <color name="fontColorPositive">#2e7d32</color>
 </resources>
