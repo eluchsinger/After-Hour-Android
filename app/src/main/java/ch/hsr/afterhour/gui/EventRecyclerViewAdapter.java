@@ -48,39 +48,12 @@ public class EventRecyclerViewAdapter extends RecyclerView.Adapter<EventRecycler
         holder.mDescription.setText(mValues.get(position).getDescription());
         holder.mEventPicture.setImageBitmap(mValues.get(position).getPicture());
 
-
-
         holder.mView.setOnClickListener(v -> {
             if (null != mListener) {
                 // Notify the active callbacks interface (the activity, if the
                 // fragment is attached to one) that an item has been selected.
             }
         });
-
-        // todo: Remove as soon as location and date are added
-        String location = null;
-        try {
-            location = mValues.get(position).getLocation();
-        } catch (NullPointerException e) {
-            e.printStackTrace();
-        }
-        if (location == null) {
-            holder.mEventLocation.setVisibility(View.GONE);
-        } else {
-            holder.mEventLocation.setText(mValues.get(position).getLocation());
-        }
-
-        String date = null;
-        try {
-            date = mValues.get(position).getEventDate();
-        } catch (NullPointerException e) {
-            e.printStackTrace();
-        }
-        if (date == null) {
-            holder.mEventDate.setVisibility(View.GONE);
-        } else {
-            holder.mEventDate.setText(mValues.get(position).getEventDate());
-        }
     }
 
     @Override
@@ -123,7 +96,6 @@ public class EventRecyclerViewAdapter extends RecyclerView.Adapter<EventRecycler
             mShowTicketCategoriesConstraints.clone(mEventCardLayout);
 
             // Make the event details 50% of the width of the card.
-
             mShoppingButton.setOnClickListener(v -> {
                 if(isShowingTicketCategories) {
                     hideTicketCategories();
@@ -139,10 +111,7 @@ public class EventRecyclerViewAdapter extends RecyclerView.Adapter<EventRecycler
             ticketCategoryRecyclerViewAdapter = new TicketCategoryRecyclerViewAdapter(
                     new ArrayList<>(), mListener);
 
-
             recyclerView.setAdapter(ticketCategoryRecyclerViewAdapter);
-
-
         }
 
         private void showTicketCategories() {

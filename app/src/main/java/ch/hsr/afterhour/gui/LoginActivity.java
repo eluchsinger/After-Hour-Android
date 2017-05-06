@@ -26,16 +26,10 @@ import ch.hsr.afterhour.model.TicketCategory;
 import ch.hsr.afterhour.model.User;
 import ch.viascom.groundwork.foxhttp.exception.FoxHttpException;
 
-<<<<<<< HEAD
 /**
  * A login screen that offers login via email/password.
  */
 public class LoginActivity extends AppCompatActivity implements EventListFragment.OnMyEventListListener {
-=======
-
-public class LoginActivity extends AppCompatActivity {
->>>>>>> refs/remotes/origin/developer
-
     private UserLoginTask mAuthTask = null;
     private final String LOGIN_PREFS = "login_credentials";
 
@@ -174,7 +168,6 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-<<<<<<< HEAD
     @Override
     public void onMyEventInteraction(Event item) {
 
@@ -188,11 +181,7 @@ public class LoginActivity extends AppCompatActivity {
      * Represents an asynchronous login/registration task used to authenticate
      * the user.
      */
-    class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
-=======
     private class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
->>>>>>> refs/remotes/origin/developer
-
         private final String mEmail;
         private final String mPassword;
         User user;

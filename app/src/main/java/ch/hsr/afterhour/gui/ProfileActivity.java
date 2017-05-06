@@ -1,10 +1,7 @@
 package ch.hsr.afterhour.gui;
 
-<<<<<<< HEAD
 import android.os.AsyncTask;
-=======
 import android.content.Context;
->>>>>>> refs/remotes/origin/developer
 import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.design.widget.FloatingActionButton;
@@ -22,14 +19,11 @@ import java.net.MalformedURLException;
 
 import ch.hsr.afterhour.Application;
 import ch.hsr.afterhour.R;
-<<<<<<< HEAD
 import ch.hsr.afterhour.gui.EventListFragment.OnMyEventListListener;
 import ch.hsr.afterhour.model.Event;
 import ch.hsr.afterhour.model.TicketCategory;
 import ch.viascom.groundwork.foxhttp.exception.FoxHttpException;
-=======
 import ch.hsr.afterhour.service.BottombarHelper;
->>>>>>> refs/remotes/origin/developer
 
 public class ProfileActivity extends FragmentActivity implements OnMyEventListListener {
 
@@ -66,7 +60,6 @@ public class ProfileActivity extends FragmentActivity implements OnMyEventListLi
         bottomBar.setOnTabSelectListener(new OnTabSelectListener() {
             @Override
             public void onTabSelected(@IdRes int tabId) {
-<<<<<<< HEAD
                 switch (tabId) {
                     case R.id.tab_events:
                         // The tab with id R.id.tab_favorites was selected,
@@ -93,9 +86,8 @@ public class ProfileActivity extends FragmentActivity implements OnMyEventListLi
                                 .commit();
                         break;
                 }
-=======
-                BottombarHelper.onClickBottombarItem(context, tabId);
->>>>>>> refs/remotes/origin/developer
+                // Todo: Wieder einkommentieren (Marcel?)
+//                BottombarHelper.onClickBottombarItem(context, tabId);
             }
         });
     }
@@ -116,7 +108,6 @@ public class ProfileActivity extends FragmentActivity implements OnMyEventListLi
     }
 
     @Override
-<<<<<<< HEAD
     public void onMyEventInteraction(Event item) {
     }
 
@@ -144,7 +135,9 @@ public class ProfileActivity extends FragmentActivity implements OnMyEventListLi
         protected void onPostExecute(Boolean success) {
             if (success) {
             }
-=======
+        }
+    }
+
     public void onBackPressed() {
         switch (fragmentManager.getBackStackEntryCount()) {
             case 1:
@@ -157,7 +150,6 @@ public class ProfileActivity extends FragmentActivity implements OnMyEventListLi
             default:
                 finish();
                 break;
->>>>>>> refs/remotes/origin/developer
         }
     }
 }
