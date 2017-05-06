@@ -4,14 +4,13 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import java.util.List;
 
-import ch.hsr.afterhour.gui.EventListFragment.OnMyEventListListener;
-
 import ch.hsr.afterhour.R;
+import ch.hsr.afterhour.gui.EventListFragment.OnMyEventListListener;
 import ch.hsr.afterhour.model.TicketCategory;
 
 public class TicketCategoryRecyclerViewAdapter extends RecyclerView.Adapter<TicketCategoryRecyclerViewAdapter.ViewHolder> {
@@ -37,19 +36,12 @@ public class TicketCategoryRecyclerViewAdapter extends RecyclerView.Adapter<Tick
         holder.mCategoryName.setText(mValues.get(position).getName());
         holder.mPrice.setText(Double.toString(mValues.get(position).getPrice()));
 
-
-
-        holder.mButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (null != mListener) {
-                    // Notify the active callbacks interface (the activity, if the
-                    // fragment is attached to one) that an item has been selected.
-                    //mListener.onListFragmentInteraction();
-                    mListener.buyTicket(holder.mItem);
-
-
-                }
+        holder.mButtonBuy.setOnClickListener(v -> {
+            if (null != mListener) {
+                // Notify the active callbacks interface (the activity, if the
+                // fragment is attached to one) that an item has been selected.
+                //mListener.onListFragmentInteraction();
+                mListener.buyTicket(holder.mItem);
             }
         });
     }
@@ -69,13 +61,13 @@ public class TicketCategoryRecyclerViewAdapter extends RecyclerView.Adapter<Tick
         public final View mView;
         public final TextView mCategoryName;
         public final TextView mPrice;
-        public final Button mButton;
+        public final ImageButton mButtonBuy;
         public TicketCategory mItem;
 
         public ViewHolder(View view) {
             super(view);
             mView = view;
-            mButton = (Button) view.findViewById(R.id.button);
+            mButtonBuy = (ImageButton) view.findViewById(R.id.imageButtonBuy);
             mCategoryName = (TextView) view.findViewById(R.id.categoryName);
             mPrice = (TextView) view.findViewById(R.id.price);
         }
