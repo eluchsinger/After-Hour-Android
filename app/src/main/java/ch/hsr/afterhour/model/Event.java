@@ -1,5 +1,7 @@
 package ch.hsr.afterhour.model;
 
+import android.graphics.Bitmap;
+
 import java.text.DateFormat;
 import java.util.Date;
 
@@ -11,9 +13,11 @@ public class Event {
 
     private int id;
     private String title;
-    private String location;
-    private Date date;
+    private Location location;
+    private Date eventDate;
     private String description;
+    private Bitmap picture;
+    private TicketCategory[] ticketCategories;
 
     public int getId() {
         return id;
@@ -40,18 +44,34 @@ public class Event {
     }
 
     public String getLocation() {
-        return location;
+        return location.getName();
     }
 
-    public void setLocation(String location) {
+    public void setLocation(Location location) {
         this.location = location;
     }
 
-    public String getDate() {
-        return DateFormat.getDateInstance().format(date);
+    public String getEventDate() {
+        return DateFormat.getDateInstance().format(eventDate);
     }
 
-    public void setDate(Date date) {
-        this.date = date;
+    public void setEventDate(Date eventDate) {
+        this.eventDate = eventDate;
+    }
+
+    public void setPicture(Bitmap picture){
+        this.picture = picture;
+    }
+
+    public Bitmap getPicture(){
+        return picture;
+    }
+
+    public TicketCategory[] getTicketCategories() {
+        return ticketCategories;
+    }
+
+    public void setTicketCategories(TicketCategory[] ticketCategories) {
+        this.ticketCategories = ticketCategories;
     }
 }

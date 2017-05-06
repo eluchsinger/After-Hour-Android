@@ -21,12 +21,15 @@ import java.util.Map;
 
 import ch.hsr.afterhour.Application;
 import ch.hsr.afterhour.R;
+import ch.hsr.afterhour.model.Event;
+import ch.hsr.afterhour.model.TicketCategory;
 import ch.hsr.afterhour.model.User;
 import ch.viascom.groundwork.foxhttp.exception.FoxHttpException;
 
-
-public class LoginActivity extends AppCompatActivity {
-
+/**
+ * A login screen that offers login via email/password.
+ */
+public class LoginActivity extends AppCompatActivity implements EventListFragment.OnMyEventListListener {
     private UserLoginTask mAuthTask = null;
     private final String LOGIN_PREFS = "login_credentials";
 
@@ -165,8 +168,20 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    private class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
+    @Override
+    public void onMyEventInteraction(Event item) {
 
+    }
+
+    @Override
+    public void buyTicket(TicketCategory ticketCategoryId) {
+    }
+
+    /**
+     * Represents an asynchronous login/registration task used to authenticate
+     * the user.
+     */
+    private class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
         private final String mEmail;
         private final String mPassword;
         User user;

@@ -3,8 +3,9 @@
     <color name="colorPrimary">#333333</color>
     <color name="colorPrimaryDark">#0c0c0c</color>
     <color name="colorPrimaryLight">#5c5c5c</color>
-    <color name="colorAccent">#EC2E4A</color>
+    <color name="colorAccent">#ec2e4a</color>
 
     <color name="fontColor">#FFFFFF</color>
     <color name="fontColorHint">#AAAAAA</color>
+    <color name="fontColorPositive">#2e7d32</color>
 </resources>

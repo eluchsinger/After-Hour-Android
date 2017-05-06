@@ -1,5 +1,6 @@
 package ch.hsr.afterhour.gui;
 
+import android.os.AsyncTask;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
@@ -14,10 +15,17 @@ import android.view.View;
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.OnTabSelectListener;
 
+import java.net.MalformedURLException;
+
+import ch.hsr.afterhour.Application;
 import ch.hsr.afterhour.R;
+import ch.hsr.afterhour.gui.EventListFragment.OnMyEventListListener;
+import ch.hsr.afterhour.model.Event;
+import ch.hsr.afterhour.model.TicketCategory;
+import ch.viascom.groundwork.foxhttp.exception.FoxHttpException;
 import ch.hsr.afterhour.service.BottombarHelper;
 
-public class ProfileActivity extends FragmentActivity {
+public class ProfileActivity extends FragmentActivity implements OnMyEventListListener {
 
     private FragmentManager fragmentManager;
     private FloatingActionButton fab;
@@ -52,7 +60,34 @@ public class ProfileActivity extends FragmentActivity {
         bottomBar.setOnTabSelectListener(new OnTabSelectListener() {
             @Override
             public void onTabSelected(@IdRes int tabId) {
-                BottombarHelper.onClickBottombarItem(context, tabId);
+                switch (tabId) {
+                    case R.id.tab_events:
+                        // The tab with id R.id.tab_favorites was selected,
+                        // change your content accordingly.
+                        fragmentManager.beginTransaction().replace(
+                                R.id.profile_fragment_container,
+                                new EventListFragment())
+                                .commit();
+                        break;
+                    case R.id.tab_drinks:
+                        // The tab with id R.id.tab_favorites was selected,
+                        // change your content accordingly.
+                        break;
+                    case R.id.tab_billing:
+                        // The tab with id R.id.tab_favorites was selected,
+                        // change your content accordingly.
+                        break;
+                    default:
+                        // The tab with id R.id.tab_favorites was selected,
+                        // change your content accordingly.
+                        fragmentManager.beginTransaction().replace(
+                                R.id.profile_fragment_container,
+                                new ProfileFragment())
+                                .commit();
+                        break;
+                }
+                // Todo: Wieder einkommentieren (Marcel?)
+//                BottombarHelper.onClickBottombarItem(context, tabId);
             }
         });
     }
@@ -73,6 +108,36 @@ public class ProfileActivity extends FragmentActivity {
     }
 
     @Override
+    public void onMyEventInteraction(Event item) {
+    }
+
+    @Override
+    public void buyTicket(TicketCategory ticketCategory) {
+        BuyTicketTask buyTicketTask = new BuyTicketTask();
+        buyTicketTask.execute(ticketCategory);
+    }
+
+    class BuyTicketTask extends AsyncTask<TicketCategory, Void, Boolean> {
+
+        @Override
+        protected Boolean doInBackground(TicketCategory... ticketCategories) {
+            try {
+                Application.get().getServerAPI().buyTicket(1, ticketCategories[0].getId());
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (FoxHttpException e) {
+                e.printStackTrace();
+            }
+            return true;
+        }
+
+        @Override
+        protected void onPostExecute(Boolean success) {
+            if (success) {
+            }
+        }
+    }
+
     public void onBackPressed() {
         switch (fragmentManager.getBackStackEntryCount()) {
             case 1:

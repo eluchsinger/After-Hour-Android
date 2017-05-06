@@ -15,6 +15,7 @@ import ch.hsr.afterhour.R;
 import ch.hsr.afterhour.gui.EventListFragment.OnMyEventListListener;
 import ch.hsr.afterhour.model.Event;
 import ch.hsr.afterhour.model.Message;
+import ch.hsr.afterhour.model.TicketCategory;
 import ch.hsr.afterhour.service.NavigationDrawerHelper;
 
 public class UserActivity extends AppCompatActivity implements OnMyEventListListener {
@@ -76,5 +77,10 @@ public class UserActivity extends AppCompatActivity implements OnMyEventListList
     @Override
     public void onMyEventInteraction(Event item) {
         // todo: implement function what happens when clicking on an Event in the eventlist
+    }
+
+    @Override
+    public void buyTicket(TicketCategory ticketCategoryId) {
+
     }
 }

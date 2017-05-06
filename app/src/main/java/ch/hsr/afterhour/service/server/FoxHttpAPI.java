@@ -1,5 +1,8 @@
 package ch.hsr.afterhour.service.server;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+
 import java.net.MalformedURLException;
 
 import ch.hsr.afterhour.model.Event;
@@ -20,7 +23,7 @@ import ch.viascom.groundwork.foxhttp.type.RequestType;
 
 
 public class FoxHttpAPI {
-    private final static String SERVER_PATH = "http://sinv-56049.edu.hsr.ch:40000";
+    private final static String SERVER_PATH = "http://152.96.237.8:9000";
     private final static String LOGGER_NAME = "After-Hour App | Logger";
 
     private FoxHttpClient httpClient;
@@ -65,10 +68,12 @@ public class FoxHttpAPI {
     }
 
     public User login(String email, String password) throws FoxHttpException, MalformedURLException {
-        return requests.login(email, password);
+        //Todo: Delete Temporary Login and Return requests.login
+        //return requests.login(email, password);
+        return new User("Schwyter","Fabian","fab.schwyter@gmail.com","0799163565",null);
     }
 
-    public Event[] downloadEvents() throws FoxHttpException, MalformedURLException {
+    public Event[] downloadEvents() throws FoxHttpException , MalformedURLException {
         FoxHttpRequest foxHttpRequest = new FoxHttpRequest(httpClient);
         foxHttpRequest.setUrl("{host}/events");
         foxHttpRequest.setRequestType(RequestType.GET);
@@ -85,5 +90,23 @@ public class FoxHttpAPI {
         foxHttpRequest.setRequestBody(requestBody);
         FoxHttpResponse foxHttpResponse = foxHttpRequest.execute();
         return foxHttpResponse.getParsedBody(User.class);
+    }
+
+    public Bitmap getEventImage(int eventId) throws FoxHttpException, MalformedURLException {
+        FoxHttpRequest foxHttpRequest = new FoxHttpRequest(httpClient);
+        String urlParameters = "/events/" + eventId + "/image";
+        foxHttpRequest.setUrl("{host}" + urlParameters);
+        foxHttpRequest.setRequestType(RequestType.GET);
+        FoxHttpResponse foxHttpResponse = foxHttpRequest.execute();
+        final byte[] bytes = foxHttpResponse.getResponseBody().getBody().toByteArray();
+        return BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+    }
+
+    public void buyTicket(int userId, int ticketCategoryId) throws MalformedURLException, FoxHttpException {
+        FoxHttpRequest foxHttpRequest = new FoxHttpRequest(httpClient);
+        String urlParameters = "/ticket/" + ticketCategoryId + "/user/" + userId;
+        foxHttpRequest.setUrl("{host}" + urlParameters);
+        foxHttpRequest.setRequestType(RequestType.GET);
+        FoxHttpResponse foxHttpResponse = foxHttpRequest.execute();
     }
 }

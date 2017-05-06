@@ -1,6 +1,7 @@
 package ch.hsr.afterhour.gui;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
@@ -18,6 +19,7 @@ import java.util.Arrays;
 import ch.hsr.afterhour.Application;
 import ch.hsr.afterhour.R;
 import ch.hsr.afterhour.model.Event;
+import ch.hsr.afterhour.model.TicketCategory;
 import ch.viascom.groundwork.foxhttp.exception.FoxHttpException;
 
 /**
@@ -33,6 +35,7 @@ public class EventListFragment extends Fragment {
     private OnMyEventListListener mListener;
     private RecyclerView mRecyclerView;
     private DownloadEventsTask mDownloadTask;
+    private EventRecyclerViewAdapter eventRecyclerViewAdapter;
     private Event[] events;
 
     /**
@@ -78,8 +81,7 @@ public class EventListFragment extends Fragment {
         if (context instanceof OnMyEventListListener) {
             mListener = (OnMyEventListListener) context;
         } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnMyEventListListener");
+           throw new RuntimeException("Must implement OnMyEventListener");
         }
     }
 
@@ -88,6 +90,7 @@ public class EventListFragment extends Fragment {
         super.onDetach();
         mListener = null;
     }
+
 
     /**
      * This interface must be implemented by activities that contain this
@@ -101,7 +104,9 @@ public class EventListFragment extends Fragment {
      */
     public interface OnMyEventListListener {
         void onMyEventInteraction(Event item);
+        void buyTicket(TicketCategory ticketCategoryId);
     }
+
 
     class DownloadEventsTask extends AsyncTask<Void, Void, Boolean> {
 
@@ -123,7 +128,10 @@ public class EventListFragment extends Fragment {
         protected void onPostExecute(Boolean success) {
             if (success) {
                 if (mRecyclerView != null) {
-                    mRecyclerView.setAdapter(new EventRecyclerViewAdapter(Arrays.asList(events), mListener));
+                    eventRecyclerViewAdapter = new EventRecyclerViewAdapter(Arrays.asList(events), mListener);
+                    mRecyclerView.setAdapter(eventRecyclerViewAdapter);
+                    DownloadEventPicturesTask downloadEventPicturesTask = new DownloadEventPicturesTask();
+                    downloadEventPicturesTask.execute();
                 } else {
                     Snackbar snackbar = Snackbar.make(
                             getActivity().findViewById(R.id.fragment_user_container),
@@ -131,6 +139,32 @@ public class EventListFragment extends Fragment {
                             Snackbar.LENGTH_SHORT);
                     snackbar.show();
                 }
+            }
+        }
+    }
+
+    class DownloadEventPicturesTask extends AsyncTask<Void, Void, Boolean> {
+
+        @Override
+        protected Boolean doInBackground(Void... params) {
+            try {
+                for (Event event : events){
+                    final Bitmap bitmap = Application.get().getServerAPI().getEventImage(event.getId());
+                    event.setPicture(bitmap);
+                }
+                return true;
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (FoxHttpException e) {
+                e.printStackTrace();
+            }
+            return false;
+        }
+
+        @Override
+        protected void onPostExecute(Boolean success){
+            if (success){
+                eventRecyclerViewAdapter.notifyDataSetChanged();
             }
         }
     }
