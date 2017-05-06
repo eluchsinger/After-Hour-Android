@@ -245,7 +245,7 @@ public class RegisterActivity extends AppCompatActivity {
             showProgress(false);
 
             if (success) {
-                Intent intent = new Intent(getBaseContext(), UserActivity.class);
+                Intent intent = new Intent(getBaseContext(), ProfileActivity.class);
                 startActivity(intent);
             } else {
                 Snackbar snackbar = Snackbar.make(

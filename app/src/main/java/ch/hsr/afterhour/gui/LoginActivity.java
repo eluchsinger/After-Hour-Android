@@ -3,6 +3,7 @@ package ch.hsr.afterhour.gui;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
@@ -12,9 +13,11 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 
 import java.net.MalformedURLException;
+import java.util.Map;
 
 import ch.hsr.afterhour.Application;
 import ch.hsr.afterhour.R;
@@ -23,12 +26,18 @@ import ch.hsr.afterhour.model.TicketCategory;
 import ch.hsr.afterhour.model.User;
 import ch.viascom.groundwork.foxhttp.exception.FoxHttpException;
 
+<<<<<<< HEAD
 /**
  * A login screen that offers login via email/password.
  */
 public class LoginActivity extends AppCompatActivity implements EventListFragment.OnMyEventListListener {
+=======
+
+public class LoginActivity extends AppCompatActivity {
+>>>>>>> refs/remotes/origin/developer
 
     private UserLoginTask mAuthTask = null;
+    private final String LOGIN_PREFS = "login_credentials";
 
     // UI references.
     private AutoCompleteTextView mEmailView;
@@ -36,11 +45,31 @@ public class LoginActivity extends AppCompatActivity implements EventListFragmen
     private View mProgressView;
     private View mLoginFormView;
     private View mRegisterButton;
+    private CheckBox mRemembermeCb;
+    private SharedPreferences settings = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        setupMainViews();
+        settings = getSharedPreferences(LOGIN_PREFS, MODE_PRIVATE);
+        Map<String, ?> preferenceMap = settings.getAll();
+        if (!preferenceMap.isEmpty()) {
+            showProgress(true);
+            mAuthTask = new UserLoginTask(preferenceMap.get("email").toString(), preferenceMap.get("password").toString());
+            mAuthTask.execute();
+        } else {
+            setupAdditionalViews();
+        }
+    }
+
+    private void setupMainViews() {
+        mLoginFormView = findViewById(R.id.login_form);
+        mProgressView = findViewById(R.id.login_progress);
+    }
+
+    private void setupAdditionalViews() {
         mEmailView = (AutoCompleteTextView) findViewById(R.id.login_email_edittext);
         mPasswordView = (EditText) findViewById(R.id.login_password_edittext);
         mPasswordView.setOnEditorActionListener((textView, id, keyEvent) -> {
@@ -50,26 +79,17 @@ public class LoginActivity extends AppCompatActivity implements EventListFragmen
             }
             return false;
         });
-
         Button mEmailSignInButton = (Button) findViewById(R.id.login_sign_in_button);
         mEmailSignInButton.setOnClickListener(view -> attemptLogin());
-
-        mRegisterButton = findViewById(R.id.login_register_button);
+        View mRegisterButton = findViewById(R.id.login_register_button);
         mRegisterButton.setOnClickListener(v -> {
-            Intent intent = new Intent(this, RegisterActivity.class);
-            startActivity(intent);
+            Intent register = new Intent(this, RegisterActivity.class);
+            startActivity(register);
         });
-
-        mLoginFormView = findViewById(R.id.login_form);
-        mProgressView = findViewById(R.id.login_progress);
+        mRemembermeCb = (CheckBox) findViewById(R.id.login_autologin_checkbox);
     }
 
 
-    /**
-     * Attempts to sign in or register the account specified by the login form.
-     * If there are form errors (invalid email, missing fields, etc.), the
-     * errors are presented and no actual login attempt is made.
-     */
     private void attemptLogin() {
         if (mAuthTask != null) {
             return;
@@ -110,13 +130,13 @@ public class LoginActivity extends AppCompatActivity implements EventListFragmen
         }
 
         if (cancel) {
-            // There was an error; don't attempt login and focus the first
-            // form field with an error.
             focusView.requestFocus();
         } else {
-            // Show a progress spinner, and kick off a background task to
-            // perform the user login attempt.
             showProgress(true);
+            SharedPreferences.Editor editor = settings.edit();
+            editor.putString("email", email);
+            editor.putString("password", password);
+            editor.apply();
             mAuthTask = new UserLoginTask(email, password);
             mAuthTask.execute();
         }
@@ -132,9 +152,7 @@ public class LoginActivity extends AppCompatActivity implements EventListFragmen
         return password.length() > 3;
     }
 
-    /**
-     * Shows the progress UI and hides the login form.
-     */
+
     private void showProgress(final boolean show) {
         int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
 
@@ -156,6 +174,7 @@ public class LoginActivity extends AppCompatActivity implements EventListFragmen
         });
     }
 
+<<<<<<< HEAD
     @Override
     public void onMyEventInteraction(Event item) {
 
@@ -170,6 +189,9 @@ public class LoginActivity extends AppCompatActivity implements EventListFragmen
      * the user.
      */
     class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
+=======
+    private class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
+>>>>>>> refs/remotes/origin/developer
 
         private final String mEmail;
         private final String mPassword;
@@ -184,12 +206,14 @@ public class LoginActivity extends AppCompatActivity implements EventListFragmen
         protected Boolean doInBackground(Void... params) {
             try {
                 user = Application.get().getServerAPI().login(mEmail, mPassword);
-                Application.get().setUser(user);
                 return true;
             } catch (FoxHttpException e) {
                 e.printStackTrace();
                 return false;
             } catch (MalformedURLException e) {
+                e.printStackTrace();
+                return false;
+            } catch (Exception e) {
                 e.printStackTrace();
                 return false;
             }
@@ -199,10 +223,12 @@ public class LoginActivity extends AppCompatActivity implements EventListFragmen
         protected void onPostExecute(final Boolean success) {
             mAuthTask = null;
             showProgress(false);
-
             Intent intent;
 
             if (success) {
+                user = new User("Muster", "Max", "me@world.com", "+41791234567", "2017-02-02");
+                user.setId("1");
+                Application.get().setUser(user);
                 intent = new Intent(LoginActivity.this, ProfileActivity.class);
                 startActivity(intent);
                 finish();
@@ -213,6 +239,8 @@ public class LoginActivity extends AppCompatActivity implements EventListFragmen
                         Snackbar.LENGTH_LONG
                 );
                 snackbar.show();
+                SharedPreferences.Editor editor = settings.edit();
+                editor.clear().apply();
                 mEmailView.requestFocus();
             }
         }
@@ -221,6 +249,8 @@ public class LoginActivity extends AppCompatActivity implements EventListFragmen
         protected void onCancelled() {
             mAuthTask = null;
             showProgress(false);
+            SharedPreferences.Editor editor = settings.edit();
+            editor.clear().apply();
         }
     }
 }

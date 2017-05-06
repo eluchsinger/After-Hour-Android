@@ -49,7 +49,10 @@ dependencies {
     compile 'ch.viascom.groundwork:foxhttp:1.2.1'
     compile 'ch.viascom.groundwork:service-result:1.2.1'
     compile 'com.google.code.gson:gson:2.8.0'
-    compile 'com.google.zxing:android-integration:3.3.0'
     compile 'com.roughike:bottom-bar:2.3.1'
+<<<<<<< HEAD
+=======
+    compile 'com.github.kenglxn.QRGen:android:2.2.0'
+>>>>>>> refs/remotes/origin/developer
     testCompile 'junit:junit:4.12'
 }

@@ -68,4 +68,5 @@
     <!-- Strings related to bottom bar-->
     <string name="billing">Abrechnung</string>
     <string name="drinks">Drinks</string>
+    <string name="autologin">Autologin</string>
 </resources>

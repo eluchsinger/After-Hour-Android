@@ -1,17 +1,19 @@
 package ch.hsr.afterhour.gui;
 
+<<<<<<< HEAD
 import android.os.AsyncTask;
+=======
+import android.content.Context;
+>>>>>>> refs/remotes/origin/developer
 import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.view.ViewPager;
-import android.support.v4.widget.DrawerLayout;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.OnTabSelectListener;
@@ -20,42 +22,51 @@ import java.net.MalformedURLException;
 
 import ch.hsr.afterhour.Application;
 import ch.hsr.afterhour.R;
+<<<<<<< HEAD
 import ch.hsr.afterhour.gui.EventListFragment.OnMyEventListListener;
 import ch.hsr.afterhour.model.Event;
 import ch.hsr.afterhour.model.TicketCategory;
 import ch.viascom.groundwork.foxhttp.exception.FoxHttpException;
+=======
+import ch.hsr.afterhour.service.BottombarHelper;
+>>>>>>> refs/remotes/origin/developer
 
 public class ProfileActivity extends FragmentActivity implements OnMyEventListListener {
 
-    /**
-     * The {@link android.support.v4.view.PagerAdapter} that will provide
-     * fragments for each of the sections. We use a
-     * {@link FragmentPagerAdapter} derivative, which will keep every
-     * loaded fragment in memory. If this becomes too memory intensive, it
-     * may be best to switch to a
-     * {@link android.support.v4.app.FragmentStatePagerAdapter}.
-     */
-//    private SectionsPagerAdapter mSectionsPagerAdapter;
-
-    /**
-     * The {@link ViewPager} that will host the section contents.
-     */
-//    private ViewPager mViewPager;
-    private DrawerLayout drawer;
-
     private FragmentManager fragmentManager;
+    private FloatingActionButton fab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
         fragmentManager = getSupportFragmentManager();
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.activity_profile_fab);
-//        fab.setOnClickListener(v -> showPersonalQrCode());
+        addFloatingButton();
+        addBottombar();
+        FragmentTransaction ft = fragmentManager.beginTransaction();
+        ProfileFragment fragment = new ProfileFragment();
+        ft.replace(R.id.profile_fragment_container, fragment).commit();
+    }
+
+    private void addFloatingButton() {
+        fab = (FloatingActionButton) findViewById(R.id.activity_profile_fab);
+        fab.setOnClickListener(v -> {showPersonalQrCode(); fab.setVisibility(View.INVISIBLE);});
+    }
+
+    private void showPersonalQrCode() {
+        fragmentManager.beginTransaction()
+                .replace(R.id.profile_fragment_container, new IdentityFragment())
+                .addToBackStack(null)
+                .commit();
+    }
+
+    private void addBottombar() {
         BottomBar bottomBar = (BottomBar) findViewById(R.id.bottomBar);
+        Context context = this;
         bottomBar.setOnTabSelectListener(new OnTabSelectListener() {
             @Override
             public void onTabSelected(@IdRes int tabId) {
+<<<<<<< HEAD
                 switch (tabId) {
                     case R.id.tab_events:
                         // The tab with id R.id.tab_favorites was selected,
@@ -82,12 +93,11 @@ public class ProfileActivity extends FragmentActivity implements OnMyEventListLi
                                 .commit();
                         break;
                 }
+=======
+                BottombarHelper.onClickBottombarItem(context, tabId);
+>>>>>>> refs/remotes/origin/developer
             }
         });
-
-        FragmentTransaction ft = fragmentManager.beginTransaction();
-        ProfileFragment fragment = new ProfileFragment();
-        ft.replace(R.id.profile_fragment_container, fragment).commit();
     }
 
     @Override
@@ -106,6 +116,7 @@ public class ProfileActivity extends FragmentActivity implements OnMyEventListLi
     }
 
     @Override
+<<<<<<< HEAD
     public void onMyEventInteraction(Event item) {
     }
 
@@ -133,6 +144,20 @@ public class ProfileActivity extends FragmentActivity implements OnMyEventListLi
         protected void onPostExecute(Boolean success) {
             if (success) {
             }
+=======
+    public void onBackPressed() {
+        switch (fragmentManager.getBackStackEntryCount()) {
+            case 1:
+                fab.setVisibility(View.VISIBLE);
+                fragmentManager.popBackStack();
+                fragmentManager.beginTransaction()
+                        .replace(R.id.profile_fragment_container, new ProfileFragment())
+                        .commit();
+                break;
+            default:
+                finish();
+                break;
+>>>>>>> refs/remotes/origin/developer
         }
     }
 }
