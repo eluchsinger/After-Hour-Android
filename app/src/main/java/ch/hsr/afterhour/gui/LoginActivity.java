@@ -127,10 +127,12 @@ public class LoginActivity extends AppCompatActivity implements EventListFragmen
             focusView.requestFocus();
         } else {
             showProgress(true);
-            SharedPreferences.Editor editor = settings.edit();
-            editor.putString("email", email);
-            editor.putString("password", password);
-            editor.apply();
+            if (mRemembermeCb.isChecked()) {
+                SharedPreferences.Editor editor = settings.edit();
+                editor.putString("email", email);
+                editor.putString("password", password);
+                editor.apply();
+            }
             mAuthTask = new UserLoginTask(email, password);
             mAuthTask.execute();
         }
