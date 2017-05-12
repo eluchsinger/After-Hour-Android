@@ -2,13 +2,12 @@ package ch.hsr.afterhour.gui;
 
 import android.support.constraint.ConstraintLayout;
 import android.support.constraint.ConstraintSet;
-import android.support.constraint.Guideline;
 import android.support.transition.TransitionManager;
+import android.support.v7.widget.AppCompatImageButton;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -18,6 +17,7 @@ import java.util.List;
 
 import ch.hsr.afterhour.R;
 import ch.hsr.afterhour.gui.EventListFragment.OnMyEventListListener;
+import ch.hsr.afterhour.gui.widgets.SmartImageButton;
 import ch.hsr.afterhour.model.Event;
 
 /**
@@ -43,10 +43,13 @@ public class EventRecyclerViewAdapter extends RecyclerView.Adapter<EventRecycler
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        holder.setItem(mValues.get(position));
-        holder.mEventTitle.setText(mValues.get(position).getTitle());
-        holder.mDescription.setText(mValues.get(position).getDescription());
-        holder.mEventPicture.setImageBitmap(mValues.get(position).getPicture());
+        final Event event = mValues.get(position);
+        holder.setItem(event);
+        holder.mEventTitle.setText(event.getTitle());
+        holder.mDescription.setText(event.getDescription());
+        holder.mEventPicture.setImageBitmap(event.getPicture());
+        holder.mEventDate.setText(event.getEventDate());
+        holder.mEventLocation.setText(event.getLocation());
 
         holder.mView.setOnClickListener(v -> {
             if (null != mListener) {
@@ -68,10 +71,8 @@ public class EventRecyclerViewAdapter extends RecyclerView.Adapter<EventRecycler
         private final TextView mEventDate;
         private final ImageView mEventPicture;
         private final TextView mDescription;
-        private final ImageButton mShoppingButton;
+        private final AppCompatImageButton mShoppingButton;
         private final ConstraintLayout mEventCardLayout;
-        private final ConstraintLayout mEventDetailsLayout;
-        private final ConstraintLayout mTicketCategoriesLayout;
 
         private final ConstraintSet mResetConstraints = new ConstraintSet();
         private final ConstraintSet mShowTicketCategoriesConstraints = new ConstraintSet();
@@ -87,10 +88,8 @@ public class EventRecyclerViewAdapter extends RecyclerView.Adapter<EventRecycler
             mDescription = (TextView) view.findViewById(R.id.event_description);
             mEventDate = (TextView) view.findViewById(R.id.event_date);
             mEventPicture = (ImageView) view.findViewById(R.id.event_image_view);
-            mShoppingButton = (ImageButton) view.findViewById(R.id.imageButtonShopping);
+            mShoppingButton = (AppCompatImageButton) view.findViewById(R.id.imageButtonShopping);
             mEventCardLayout = (ConstraintLayout) view.findViewById(R.id.constraintLayoutEventCard);
-            mEventDetailsLayout = (ConstraintLayout) view.findViewById(R.id.constraintLayoutEventDetails);
-            mTicketCategoriesLayout = (ConstraintLayout) view.findViewById(R.id.constraintLayoutTicketCategories);
 
             mResetConstraints.clone(mEventCardLayout);
             mShowTicketCategoriesConstraints.clone(mEventCardLayout);
@@ -105,7 +104,6 @@ public class EventRecyclerViewAdapter extends RecyclerView.Adapter<EventRecycler
                 isShowingTicketCategories = !isShowingTicketCategories;
             });
 
-
             RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.ticket_category_list);
 
             ticketCategoryRecyclerViewAdapter = new TicketCategoryRecyclerViewAdapter(
@@ -114,6 +112,9 @@ public class EventRecyclerViewAdapter extends RecyclerView.Adapter<EventRecycler
             recyclerView.setAdapter(ticketCategoryRecyclerViewAdapter);
         }
 
+        /**
+         * Slides the card to show the ticket categories.
+         */
         private void showTicketCategories() {
             TransitionManager.beginDelayedTransition(mEventCardLayout);
             mShowTicketCategoriesConstraints.connect(R.id.constraintLayoutTicketCategories, ConstraintSet.LEFT, R.id.guidelineMiddle, ConstraintSet.RIGHT, 0);
@@ -124,6 +125,9 @@ public class EventRecyclerViewAdapter extends RecyclerView.Adapter<EventRecycler
             mShowTicketCategoriesConstraints.applyTo(mEventCardLayout);
         }
 
+        /**
+         * Slides the card to hide ticket categories.
+         */
         private void hideTicketCategories() {
             TransitionManager.beginDelayedTransition(mEventCardLayout);
             mResetConstraints.applyTo(mEventCardLayout);
