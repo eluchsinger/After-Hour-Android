@@ -67,7 +67,7 @@
         android:layout_marginBottom="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginTop="8dp"
-        android:background="@null"
+        android:background="@drawable/ripple_ticketcategory_buttons"
         android:tint="@color/colorAccent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent"

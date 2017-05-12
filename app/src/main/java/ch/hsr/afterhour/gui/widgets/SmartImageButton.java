@@ -1,7 +1,6 @@
 package ch.hsr.afterhour.gui.widgets;
 
 import android.content.Context;
-import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.DrawableCompat;
