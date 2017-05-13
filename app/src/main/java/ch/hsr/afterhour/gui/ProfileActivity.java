@@ -21,13 +21,15 @@ import java.net.MalformedURLException;
 import ch.hsr.afterhour.Application;
 import ch.hsr.afterhour.R;
 import ch.hsr.afterhour.gui.EventListFragment.OnMyEventListListener;
+import ch.hsr.afterhour.model.CoatCheck;
 import ch.hsr.afterhour.model.Event;
 import ch.hsr.afterhour.model.TicketCategory;
 import ch.hsr.afterhour.model.User;
+import ch.hsr.afterhour.service.BottombarHelper;
 import ch.viascom.groundwork.foxhttp.exception.FoxHttpException;
 import ch.viascom.groundwork.foxhttp.response.serviceresult.FoxHttpServiceResultException;
 
-public class ProfileActivity extends FragmentActivity implements OnMyEventListListener, ProfileFragment.FabButtonClickedListener, EntryScannerFragment.OnEntryScannerListener {
+public class ProfileActivity extends FragmentActivity implements OnMyEventListListener, ProfileFragment.FabButtonClickedListener, ScannerFragment.OnEntryScannerListener {
 
     private final int FRAGMENT_CONTAINER = R.id.profile_fragment_container;
     private FragmentManager fragmentManager;
@@ -75,34 +77,7 @@ public class ProfileActivity extends FragmentActivity implements OnMyEventListLi
         bottomBar.setOnTabSelectListener(new OnTabSelectListener() {
             @Override
             public void onTabSelected(@IdRes int tabId) {
-                switch (tabId) {
-                    case R.id.tab_events:
-                        // The tab with id R.id.tab_favorites was selected,
-                        // change your content accordingly.
-                        fragmentManager.beginTransaction().replace(
-                                R.id.profile_fragment_container,
-                                new EventListFragment())
-                                .commit();
-                        break;
-                    case R.id.tab_drinks:
-                        // The tab with id R.id.tab_favorites was selected,
-                        // change your content accordingly.
-                        break;
-                    case R.id.tab_billing:
-                        // The tab with id R.id.tab_favorites was selected,
-                        // change your content accordingly.
-                        break;
-                    default:
-                        // The tab with id R.id.tab_favorites was selected,
-                        // change your content accordingly.
-                        fragmentManager.beginTransaction().replace(
-                                R.id.profile_fragment_container,
-                                new ProfileFragment())
-                                .commit();
-                        break;
-                }
-                // Todo: Wieder einkommentieren (Marcel?)
-//                BottombarHelper.onClickBottombarItem(context, tabId);
+                BottombarHelper.onClickBottombarItem(context, tabId);
             }
         });
     }
@@ -138,9 +113,9 @@ public class ProfileActivity extends FragmentActivity implements OnMyEventListLi
     }
 
     @Override
-    public void intentionToScanUser() {
+    public void intentionToScan() {
         fragmentManager.beginTransaction().addToBackStack(null)
-                .replace(FRAGMENT_CONTAINER, new EntryScannerFragment())
+                .replace(FRAGMENT_CONTAINER, new ScannerFragment())
                 .commit();
     }
 
@@ -148,6 +123,15 @@ public class ProfileActivity extends FragmentActivity implements OnMyEventListLi
     public void onUserScanned(String userId) {
         mAuthTask = new AuthenticateUserTask(this);
         mAuthTask.execute(userId);
+    }
+
+    @Override
+    public void onCoatCheckScanned(CoatCheck coatCheck) {
+        Application.get().getUser().addCoatCheck(coatCheck);
+        fragmentManager.popBackStack();
+        fragmentManager.beginTransaction()
+                .replace(R.id.profile_fragment_container, new ProfileFragment())
+                .commit();
     }
 
     private class BuyTicketTask extends AsyncTask<TicketCategory, Void, Boolean> {

@@ -13,16 +13,19 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.List;
+
 import ch.hsr.afterhour.Application;
 import ch.hsr.afterhour.R;
 import ch.hsr.afterhour.gui.view.SlidingTabLayout;
+import ch.hsr.afterhour.model.CoatCheck;
 import ch.hsr.afterhour.model.User;
 
 public class ProfileFragment extends Fragment {
 
     public interface FabButtonClickedListener {
         void intentionToShowPersonalQrCode();
-        void intentionToScanUser();
+        void intentionToScan();
     }
 
     private final int PROFILE_FRAGMENT = 0;
@@ -34,6 +37,8 @@ public class ProfileFragment extends Fragment {
 
     // Data Holders
     private User scannedUser;
+    List<CoatCheck> coatChecks;
+    private CoatCheck scannedCoatCheck;
     private FabButtonClickedListener mListener;
     private Context rootContext;
 
@@ -55,6 +60,10 @@ public class ProfileFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_profile, container, false);
         activityFab = ((ProfileActivity) getActivity()).getFab();
         activityFab.setOnClickListener(v -> mListener.intentionToShowPersonalQrCode());
+        coatChecks = Application.get().getUser().getCoatChecks();
+        if (!coatChecks.isEmpty()) {
+            scannedCoatCheck = coatChecks.get(0);
+        }
         return rootView;
     }
 
@@ -63,7 +72,7 @@ public class ProfileFragment extends Fragment {
         mViewPager = (ViewPager) view.findViewById(R.id.viewpager);
         mViewPager.setAdapter(new SamplePagerAdapter());
         scannedUser = ((ProfileActivity) rootContext).getScannedUser();
-        mViewPager.setCurrentItem( scannedUser!=null ? ADDITIONAL_FRAGMENT : PROFILE_FRAGMENT );
+        mViewPager.setCurrentItem( (scannedUser!=null || scannedCoatCheck!=null) ? ADDITIONAL_FRAGMENT : PROFILE_FRAGMENT );
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -73,7 +82,7 @@ public class ProfileFragment extends Fragment {
             public void onPageSelected(int position) {
                 switch (position) {
                     case ADDITIONAL_FRAGMENT:
-                        activityFab.setOnClickListener(v -> mListener.intentionToScanUser());
+                        activityFab.setOnClickListener(v -> mListener.intentionToScan());
                         break;
                     default:
                         activityFab.setOnClickListener(v -> mListener.intentionToShowPersonalQrCode());
@@ -188,8 +197,14 @@ public class ProfileFragment extends Fragment {
             View view;
             view = getActivity().getLayoutInflater().inflate(R.layout.coatcheck_layout,
                     container, false);
-            TextView title = (TextView) view.findViewById(R.id.coatcheck_title);
-            title.setText(R.string.coatcheck);
+            TextView coatCheckId = (TextView) view.findViewById(R.id.coatcheck_id);
+            TextView coatCheckEvent = (TextView) view.findViewById(R.id.coatcheck_event);
+            CoatCheck coatCheck;
+            coatCheck = coatChecks.isEmpty() ? null : coatChecks.get(0);
+            coatCheckId.setText(
+                    coatCheck!=null ? Integer.toString(coatCheck.getId()) : getString(R.string.coatcheck));
+            coatCheckEvent.setText(
+                    coatCheck!=null ? coatCheck.getEvent().getTitle() : "No Coat Check registered");
             return view;
         }
 
@@ -199,19 +214,19 @@ public class ProfileFragment extends Fragment {
             view = getActivity().getLayoutInflater().inflate(R.layout.scanned_user_layout,
                     container, false);
 
-            TextView firstname, lastName,errorMessageTextView;
-            firstname =(TextView) view.findViewById(R.id.scanned_user_firstname);
+            TextView firstName, lastName,errorMessageTextView;
+            firstName =(TextView) view.findViewById(R.id.scanned_user_firstname);
             lastName =(TextView) view.findViewById(R.id.scanned_user_lastname);
             errorMessageTextView = (TextView) view.findViewById(R.id.scanned_user_error);
             if (scannedUser != null) {
                 errorMessageTextView.setVisibility(View.GONE);
-                firstname.setText(scannedUser.getFirstName());
+                firstName.setText(scannedUser.getFirstName());
                 lastName.setText(scannedUser.getLastName());
-                firstname.setVisibility(View.VISIBLE);
+                firstName.setVisibility(View.VISIBLE);
                 lastName.setVisibility(View.VISIBLE);
 
             } else {
-                firstname.setVisibility(View.GONE);
+                firstName.setVisibility(View.GONE);
                 lastName.setVisibility(View.GONE);
                 errorMessageTextView.setVisibility(View.VISIBLE);
             }

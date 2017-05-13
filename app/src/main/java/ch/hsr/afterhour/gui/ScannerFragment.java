@@ -7,6 +7,7 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.util.SparseArray;
@@ -24,18 +25,23 @@ import com.google.android.gms.vision.barcode.BarcodeDetector;
 
 import java.io.IOException;
 
+import ch.hsr.afterhour.Application;
 import ch.hsr.afterhour.R;
+import ch.hsr.afterhour.model.CoatCheck;
+import ch.hsr.afterhour.model.Event;
 import ch.hsr.afterhour.service.Scanner.Scanner;
 
 
-public class EntryScannerFragment extends Fragment {
+public class ScannerFragment extends Fragment {
 
     public interface OnEntryScannerListener {
-        void onUserScanned(String userId);
+        void onUserScanned(String id);
+        void onCoatCheckScanned(CoatCheck coatCheck);
     }
 
     // UI Elements & Views
     private View progressView;
+    FloatingActionButton fab;
 
     // camera
     private SurfaceView cameraView;
@@ -55,6 +61,11 @@ public class EntryScannerFragment extends Fragment {
         progressView = rootView.findViewById(R.id.scan_entry_progressbar);
         cameraView = (SurfaceView) rootView.findViewById(R.id.scan_entry_camera_view);
         infoPane = (TextView) rootView.findViewById(R.id.scan_entry_info_bar);
+        if (Application.get().getUser().isEmployeee()) {
+            infoPane.setText(R.string.scan_user_id);
+        } else {
+            infoPane.setText(R.string.scan_coat_check);
+        }
         entryScanner = new EntryScanner(getContext());
         uiHandler = new Handler() {
             @Override
@@ -62,10 +73,13 @@ public class EntryScannerFragment extends Fragment {
                 switch (msg.what) {
                     case QR_DETECTED:
                         entryScanner.stop();
+                        showProgress(Application.get().getUser().isEmployeee());
                         break;
                 }
             }
         };
+        fab = ((ProfileActivity) getContext()).getFab();
+        fab.setVisibility(View.GONE);
         return rootView;
     }
 
@@ -99,7 +113,7 @@ public class EntryScannerFragment extends Fragment {
         private CameraSource mCameraSource;
         private BarcodeDetector mBarcodeDetector;
         private Context mContext;
-        private boolean userScanned = false;
+        private boolean itemScanned = false;
 
         public EntryScanner(Context context) {
             mContext = context;
@@ -138,19 +152,38 @@ public class EntryScannerFragment extends Fragment {
                 public void receiveDetections(Detector.Detections<Barcode> detections) {
                     final SparseArray<Barcode> barcodes = detections.getDetectedItems();
                     boolean noBarcodeDetected = barcodes.size() == 0;
-                    if (noBarcodeDetected || userScanned) {
+                    if (noBarcodeDetected || itemScanned) {
                         return;
                     }
-                    userScanned = true;
-                    Message message = uiHandler.obtainMessage(QR_DETECTED);
-                    message.sendToTarget();
-                    infoPane.post(() -> {
-                        String qrCode = barcodes.valueAt(0).displayValue;
-                        String userId = qrCode.substring(8, qrCode.length());
-                        mListener.onUserScanned(userId);
-                    });
+                    String qrCode = barcodes.valueAt(0).displayValue;
+                    String id = qrCode.substring(8, qrCode.length());
+                    boolean isEmployee = Application.get().getUser().isEmployeee();
+                    validateQrCode(qrCode, isEmployee);
+                    if (itemScanned) {
+                        Message message = uiHandler.obtainMessage(QR_DETECTED);
+                        message.sendToTarget();
+                        infoPane.post(() -> {
+                            fab.setVisibility(View.VISIBLE);
+                            if (isEmployee) {
+                                mListener.onUserScanned(id);
+                            } else {
+                                Event dummyEvent = new Event();
+                                dummyEvent.setTitle("Dummy Event");
+                                CoatCheck coatCheck = new CoatCheck(dummyEvent, Integer.parseInt(id));
+                                mListener.onCoatCheckScanned(coatCheck);
+                            }
+                        });
+                    }
                 }
             });
+        }
+
+        private void validateQrCode(String qrCode, boolean isEmployee) {
+            if (isEmployee) {
+                itemScanned = qrCode.startsWith("USR-");
+            } else {
+                itemScanned = qrCode.startsWith("CCK-");
+            }
         }
 
         @Override

@@ -69,10 +69,10 @@ public class FoxHttpAPI {
 
     public User login(String email, String password) throws FoxHttpException, MalformedURLException {
         //Todo: Delete Temporary Login and Return requests.login
-        //return requests.login(email, password);
-        User user = new User("Muster", "Max", "me@world.com", "+41791234567", "2017-02-02", true);
-        user.setId("1");
-        return user;
+        return requests.login(email, password);
+//        User user = new User("Muster", "Max", "me@world.com", "+41791234567", "2017-02-02", true);
+//        user.setId("1");
+//        return user;
     }
 
     public Event[] downloadEvents() throws FoxHttpException , MalformedURLException {

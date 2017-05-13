@@ -71,6 +71,8 @@
     <string name="drinks">Drinks</string>
     <string name="autologin">Autologin</string>
 
-    <!-- Strings related to scnned user -->
+    <!-- Strings related to scanned user -->
     <string name="no_valid_scanned_user_detected">Kein gültiger User gescannt</string>
+    <string name="scan_user_id">Bitte scannen Sie den QR Code eines Benutzers</string>
+    <string name="scan_coat_check">Bitte Jacke abgeben und Bügel scannen</string>
 </resources>

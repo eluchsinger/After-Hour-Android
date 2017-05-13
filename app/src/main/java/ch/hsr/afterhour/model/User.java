@@ -3,6 +3,7 @@ package ch.hsr.afterhour.model;
 import android.graphics.Bitmap;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -18,6 +19,7 @@ public class User implements Serializable {
     private List<Ticket> tickets;
     private Bitmap qrImage = null;
     private boolean isEmployeee;
+    private ArrayList<CoatCheck> coatChecks = new ArrayList<>();
 
     public User(String lastName, String firstName, String email, String mobileNumber, String dateOfBirth, boolean isEmployee) {
         this.lastName = lastName;
@@ -30,6 +32,14 @@ public class User implements Serializable {
 
     public User() {
 
+    }
+
+    public List<CoatCheck> getCoatChecks() {
+        return coatChecks;
+    }
+
+    public void addCoatCheck(CoatCheck coatCheck) {
+        coatChecks.add(coatCheck);
     }
 
     public boolean isEmployeee() {
