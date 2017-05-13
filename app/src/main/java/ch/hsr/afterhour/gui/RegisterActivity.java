@@ -173,7 +173,7 @@ public class RegisterActivity extends AppCompatActivity {
             focusView.requestFocus();
         } else {
             user = new User(lastName, firstName, email,
-                    vorwahl + mobile, birthday);
+                    vorwahl + mobile, birthday, false);
             showProgress(true);
             mAuthTask = new RegisterUserTask();
             mAuthTask.execute();

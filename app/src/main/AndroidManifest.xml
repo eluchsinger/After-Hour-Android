@@ -37,14 +37,6 @@
             android:label="@string/app_name"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".gui.EmployeeActivity"
-            android:label="@string/app_name"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".gui.UserActivity"
-            android:label="@string/app_name"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".gui.ProfileActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"/>

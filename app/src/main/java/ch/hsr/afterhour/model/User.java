@@ -17,17 +17,27 @@ public class User implements Serializable {
     private boolean isWorking = false;
     private List<Ticket> tickets;
     private Bitmap qrImage = null;
+    private boolean isEmployeee;
 
-    public User(String lastName, String firstName, String email, String mobileNumber, String dateOfBirth) {
+    public User(String lastName, String firstName, String email, String mobileNumber, String dateOfBirth, boolean isEmployee) {
         this.lastName = lastName;
         this.firstName = firstName;
         this.email = email;
         this.mobileNumber = mobileNumber;
         this.dateOfBirth = dateOfBirth;
+        this.isEmployeee = isEmployee;
     }
 
     public User() {
 
+    }
+
+    public boolean isEmployeee() {
+        return isEmployeee;
+    }
+
+    public void setIsEmployeee(boolean employeee) {
+        isEmployeee = employeee;
     }
 
     public Bitmap getQrImage() {

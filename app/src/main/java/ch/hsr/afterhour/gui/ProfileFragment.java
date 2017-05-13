@@ -1,6 +1,9 @@
 package ch.hsr.afterhour.gui;
 
+import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -13,17 +16,45 @@ import android.widget.TextView;
 import ch.hsr.afterhour.Application;
 import ch.hsr.afterhour.R;
 import ch.hsr.afterhour.gui.view.SlidingTabLayout;
+import ch.hsr.afterhour.model.User;
 
 public class ProfileFragment extends Fragment {
 
+    public interface FabButtonClickedListener {
+        void intentionToShowPersonalQrCode();
+        void intentionToScanUser();
+    }
+
+    private final int PROFILE_FRAGMENT = 0;
+    private final int ADDITIONAL_FRAGMENT = 1;
+
     private SlidingTabLayout mSlidingTabLayout;
     private ViewPager mViewPager;
+    private FloatingActionButton activityFab = null;
+
+    // Data Holders
+    private User scannedUser;
+    private FabButtonClickedListener mListener;
+    private Context rootContext;
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof FabButtonClickedListener) {
+            mListener = (FabButtonClickedListener) context;
+        } else {
+            throw new IllegalStateException(context + " must implement " + getClass() + " FabButtonClickedListener!");
+        }
+        rootContext = context;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_profile, container, false);
+        activityFab = ((ProfileActivity) getActivity()).getFab();
+        activityFab.setOnClickListener(v -> mListener.intentionToShowPersonalQrCode());
         return rootView;
     }
 
@@ -31,16 +62,34 @@ public class ProfileFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         mViewPager = (ViewPager) view.findViewById(R.id.viewpager);
         mViewPager.setAdapter(new SamplePagerAdapter());
+        scannedUser = ((ProfileActivity) rootContext).getScannedUser();
+        mViewPager.setCurrentItem( scannedUser!=null ? ADDITIONAL_FRAGMENT : PROFILE_FRAGMENT );
+        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                switch (position) {
+                    case ADDITIONAL_FRAGMENT:
+                        activityFab.setOnClickListener(v -> mListener.intentionToScanUser());
+                        break;
+                    default:
+                        activityFab.setOnClickListener(v -> mListener.intentionToShowPersonalQrCode());
+                        break;
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
         mSlidingTabLayout = (SlidingTabLayout) view.findViewById(R.id.sliding_tabs);
         mSlidingTabLayout.setViewPager(mViewPager);
     }
 
-    /**
-     * The {@link android.support.v4.view.PagerAdapter} used to display pages in this sample.
-     * The individual pages are simple and just display two lines of text. The important section of
-     * this class is the {@link #getPageTitle(int)} method which controls what is displayed in the
-     * {@link SlidingTabLayout}.
-     */
     class SamplePagerAdapter extends PagerAdapter {
 
         /**
@@ -74,6 +123,9 @@ public class ProfileFragment extends Fragment {
                 case 0:
                     return getString(R.string.profile);
                 case 1:
+                    if (Application.get().getUser().isEmployeee()) {
+                        return getString(R.string.employee);
+                    }
                     return getString(R.string.coatcheck);
                 default:
                     return "no title";
@@ -89,36 +141,80 @@ public class ProfileFragment extends Fragment {
         public Object instantiateItem(ViewGroup container, int position) {
             View view;
             switch (position) {
-                case 0:
-                    view = getActivity().getLayoutInflater().inflate(R.layout.profile_layout,
-                            container, false);
-                    TextView userid = (TextView) view.findViewById(R.id.profile_userid);
-                    userid.setText("USR-ZRH-" + Application.get().getUser().getId());
-                    TextView firstname = (TextView) view.findViewById(R.id.profile_placeholder_firstname);
-                    firstname.setText(Application.get().getUser().getFirstName());
-                    TextView lastname = (TextView) view.findViewById(R.id.profile_placeholder_lastname);
-                    lastname.setText(Application.get().getUser().getLastName());
-                    TextView creditCard = (TextView) view.findViewById(R.id.profile_placeholder_creditcard);
-                    creditCard.setText(R.string.dummy_text);
-
-                    ImageView profileImage = (ImageView) view.findViewById(R.id.profile_image_container);
-                    profileImage.setImageResource(R.drawable.silvio_berlusconi_portrait);
+                case PROFILE_FRAGMENT:
+                    view = initProfileView(container);
+                    configureProfileView(view);
                     break;
-                case 1:
-                    view = getActivity().getLayoutInflater().inflate(R.layout.coatcheck_layout,
-                            container, false);
-                    TextView coatChecktitle = (TextView) view.findViewById(R.id.coatcheck_title);
-                    coatChecktitle.setText(R.string.coatcheck);
+                case ADDITIONAL_FRAGMENT:
+                    boolean isEmployee = Application.get().getUser().isEmployeee();
+                    if (isEmployee) {
+                        view = setEmployeeView(container);
+                    } else {
+                        view = setUserView(container);
+                    }
                     break;
                 default:
-                    view = getActivity().getLayoutInflater().inflate(R.layout.coatcheck_layout,
-                            container, false);
-                    TextView defaultTitle = (TextView) view.findViewById(R.id.coatcheck_title);
-                    defaultTitle.setText(R.string.dummy_text);
+                    view = setUserView(container);
                     break;
 
             }
             container.addView(view);
+            return view;
+        }
+
+        private void configureProfileView(View view) {
+            TextView userid = (TextView) view.findViewById(R.id.profile_userid);
+            userid.setText("USR-ZRH-" + Application.get().getUser().getId());
+            TextView firstname = (TextView) view.findViewById(R.id.profile_placeholder_firstname);
+            firstname.setText(Application.get().getUser().getFirstName());
+            TextView lastname = (TextView) view.findViewById(R.id.profile_placeholder_lastname);
+            lastname.setText(Application.get().getUser().getLastName());
+            TextView creditCard = (TextView) view.findViewById(R.id.profile_placeholder_creditcard);
+            creditCard.setText(R.string.dummy_text);
+
+            ImageView profileImage = (ImageView) view.findViewById(R.id.profile_image_container);
+            profileImage.setImageResource(R.drawable.silvio_berlusconi_portrait);
+        }
+
+        private View initProfileView(ViewGroup container) {
+            View view;
+            view = getActivity().getLayoutInflater().inflate(R.layout.profile_layout,
+                    container, false);
+            return view;
+        }
+
+        @NonNull
+        private View setUserView(ViewGroup container) {
+            View view;
+            view = getActivity().getLayoutInflater().inflate(R.layout.coatcheck_layout,
+                    container, false);
+            TextView title = (TextView) view.findViewById(R.id.coatcheck_title);
+            title.setText(R.string.coatcheck);
+            return view;
+        }
+
+        @NonNull
+        private View setEmployeeView(ViewGroup container) {
+            View view;
+            view = getActivity().getLayoutInflater().inflate(R.layout.scanned_user_layout,
+                    container, false);
+
+            TextView firstname, lastName,errorMessageTextView;
+            firstname =(TextView) view.findViewById(R.id.scanned_user_firstname);
+            lastName =(TextView) view.findViewById(R.id.scanned_user_lastname);
+            errorMessageTextView = (TextView) view.findViewById(R.id.scanned_user_error);
+            if (scannedUser != null) {
+                errorMessageTextView.setVisibility(View.GONE);
+                firstname.setText(scannedUser.getFirstName());
+                lastName.setText(scannedUser.getLastName());
+                firstname.setVisibility(View.VISIBLE);
+                lastName.setVisibility(View.VISIBLE);
+
+            } else {
+                firstname.setVisibility(View.GONE);
+                lastName.setVisibility(View.GONE);
+                errorMessageTextView.setVisibility(View.VISIBLE);
+            }
             return view;
         }
 
@@ -132,4 +228,6 @@ public class ProfileFragment extends Fragment {
         }
 
     }
+
+
 }

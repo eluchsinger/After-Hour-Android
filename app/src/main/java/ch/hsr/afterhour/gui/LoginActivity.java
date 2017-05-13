@@ -179,10 +179,7 @@ public class LoginActivity extends AppCompatActivity implements EventListFragmen
     public void buyTicket(TicketCategory ticketCategoryId) {
     }
 
-    /**
-     * Represents an asynchronous login/registration task used to authenticate
-     * the user.
-     */
+
     private class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
         private final String mEmail;
         private final String mPassword;
@@ -217,8 +214,6 @@ public class LoginActivity extends AppCompatActivity implements EventListFragmen
             Intent intent;
 
             if (success) {
-                user = new User("Muster", "Max", "me@world.com", "+41791234567", "2017-02-02");
-                user.setId("1");
                 Application.get().setUser(user);
                 intent = new Intent(LoginActivity.this, ProfileActivity.class);
                 startActivity(intent);

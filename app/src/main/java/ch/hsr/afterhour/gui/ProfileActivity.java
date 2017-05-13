@@ -1,7 +1,7 @@
 package ch.hsr.afterhour.gui;
 
-import android.os.AsyncTask;
 import android.content.Context;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.design.widget.FloatingActionButton;
@@ -11,6 +11,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.OnTabSelectListener;
@@ -22,13 +23,28 @@ import ch.hsr.afterhour.R;
 import ch.hsr.afterhour.gui.EventListFragment.OnMyEventListListener;
 import ch.hsr.afterhour.model.Event;
 import ch.hsr.afterhour.model.TicketCategory;
+import ch.hsr.afterhour.model.User;
 import ch.viascom.groundwork.foxhttp.exception.FoxHttpException;
-import ch.hsr.afterhour.service.BottombarHelper;
+import ch.viascom.groundwork.foxhttp.response.serviceresult.FoxHttpServiceResultException;
 
-public class ProfileActivity extends FragmentActivity implements OnMyEventListListener {
+public class ProfileActivity extends FragmentActivity implements OnMyEventListListener, ProfileFragment.FabButtonClickedListener, EntryScannerFragment.OnEntryScannerListener {
 
+    private final int FRAGMENT_CONTAINER = R.id.profile_fragment_container;
     private FragmentManager fragmentManager;
     private FloatingActionButton fab;
+
+    // Data Holder
+    private User scannedUser = null;
+    private AuthenticateUserTask mAuthTask;
+
+
+    public FloatingActionButton getFab() {
+        return fab;
+    }
+
+    public User getScannedUser() {
+        return scannedUser;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,12 +60,11 @@ public class ProfileActivity extends FragmentActivity implements OnMyEventListLi
 
     private void addFloatingButton() {
         fab = (FloatingActionButton) findViewById(R.id.activity_profile_fab);
-        fab.setOnClickListener(v -> {showPersonalQrCode(); fab.setVisibility(View.INVISIBLE);});
     }
 
     private void showPersonalQrCode() {
         fragmentManager.beginTransaction()
-                .replace(R.id.profile_fragment_container, new IdentityFragment())
+                .replace(FRAGMENT_CONTAINER, new IdentityFragment())
                 .addToBackStack(null)
                 .commit();
     }
@@ -117,18 +132,37 @@ public class ProfileActivity extends FragmentActivity implements OnMyEventListLi
         buyTicketTask.execute(ticketCategory);
     }
 
-    class BuyTicketTask extends AsyncTask<TicketCategory, Void, Boolean> {
+    @Override
+    public void intentionToShowPersonalQrCode() {
+        showPersonalQrCode();
+    }
+
+    @Override
+    public void intentionToScanUser() {
+        fragmentManager.beginTransaction().addToBackStack(null)
+                .replace(FRAGMENT_CONTAINER, new EntryScannerFragment())
+                .commit();
+    }
+
+    @Override
+    public void onUserScanned(String userId) {
+        mAuthTask = new AuthenticateUserTask(this);
+        mAuthTask.execute(userId);
+    }
+
+    private class BuyTicketTask extends AsyncTask<TicketCategory, Void, Boolean> {
 
         @Override
         protected Boolean doInBackground(TicketCategory... ticketCategories) {
             try {
                 Application.get().getServerAPI().buyTicket(1, ticketCategories[0].getId());
+                return true;
             } catch (MalformedURLException e) {
                 e.printStackTrace();
             } catch (FoxHttpException e) {
                 e.printStackTrace();
             }
-            return true;
+            return false;
         }
 
         @Override
@@ -152,4 +186,53 @@ public class ProfileActivity extends FragmentActivity implements OnMyEventListLi
                 break;
         }
     }
+    private class AuthenticateUserTask extends AsyncTask<String, Void, Boolean> {
+
+        private Context mContext;
+
+        public AuthenticateUserTask(Context context) {
+            mContext = context;
+        }
+
+        @Override
+        protected Boolean doInBackground(String... params) {
+            String userid = params[0];
+            try {
+                scannedUser = Application.get().getServerAPI().authenticateUser(userid);
+                return true;
+            } catch (FoxHttpServiceResultException e) {
+                e.printStackTrace();
+                return false;
+            } catch (FoxHttpException e) {
+                e.printStackTrace();
+                return false;
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+                return false;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(final Boolean success) {
+            mAuthTask = null;
+            if (success) {
+                fragmentManager.popBackStack();
+                fragmentManager.beginTransaction()
+                        .replace(R.id.profile_fragment_container, new ProfileFragment())
+                        .commit();
+            } else {
+                Toast.makeText(mContext, getString(R.string.unexpected_error), Toast.LENGTH_LONG);
+                fragmentManager.popBackStack();
+                fragmentManager.beginTransaction()
+                        .replace(R.id.profile_fragment_container, new ProfileFragment())
+                        .commit();
+            }
+        }
+
+        @Override
+        protected void onCancelled() {
+            mAuthTask = null;
+        }
+    }
+
 }
