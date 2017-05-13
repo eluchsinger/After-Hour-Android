@@ -20,16 +20,13 @@ import java.net.MalformedURLException;
 
 import ch.hsr.afterhour.Application;
 import ch.hsr.afterhour.R;
-import ch.hsr.afterhour.gui.EventListFragment.OnMyEventListListener;
 import ch.hsr.afterhour.model.CoatCheck;
-import ch.hsr.afterhour.model.Event;
-import ch.hsr.afterhour.model.TicketCategory;
 import ch.hsr.afterhour.model.User;
 import ch.hsr.afterhour.service.BottombarHelper;
 import ch.viascom.groundwork.foxhttp.exception.FoxHttpException;
 import ch.viascom.groundwork.foxhttp.response.serviceresult.FoxHttpServiceResultException;
 
-public class ProfileActivity extends FragmentActivity implements OnMyEventListListener, ProfileFragment.FabButtonClickedListener, ScannerFragment.OnEntryScannerListener {
+public class ProfileActivity extends FragmentActivity implements ProfileFragment.FabButtonClickedListener, ScannerFragment.OnEntryScannerListener {
 
     private final int FRAGMENT_CONTAINER = R.id.profile_fragment_container;
     private FragmentManager fragmentManager;
@@ -57,7 +54,7 @@ public class ProfileActivity extends FragmentActivity implements OnMyEventListLi
         addBottombar();
         FragmentTransaction ft = fragmentManager.beginTransaction();
         ProfileFragment fragment = new ProfileFragment();
-        ft.replace(R.id.profile_fragment_container, fragment).commit();
+        ft.replace(FRAGMENT_CONTAINER, fragment).commit();
     }
 
     private void addFloatingButton() {
@@ -98,16 +95,6 @@ public class ProfileActivity extends FragmentActivity implements OnMyEventListLi
     }
 
     @Override
-    public void onMyEventInteraction(Event item) {
-    }
-
-    @Override
-    public void buyTicket(TicketCategory ticketCategory) {
-        BuyTicketTask buyTicketTask = new BuyTicketTask();
-        buyTicketTask.execute(ticketCategory);
-    }
-
-    @Override
     public void intentionToShowPersonalQrCode() {
         showPersonalQrCode();
     }
@@ -132,28 +119,6 @@ public class ProfileActivity extends FragmentActivity implements OnMyEventListLi
         fragmentManager.beginTransaction()
                 .replace(R.id.profile_fragment_container, new ProfileFragment())
                 .commit();
-    }
-
-    private class BuyTicketTask extends AsyncTask<TicketCategory, Void, Boolean> {
-
-        @Override
-        protected Boolean doInBackground(TicketCategory... ticketCategories) {
-            try {
-                Application.get().getServerAPI().buyTicket(1, ticketCategories[0].getId());
-                return true;
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            } catch (FoxHttpException e) {
-                e.printStackTrace();
-            }
-            return false;
-        }
-
-        @Override
-        protected void onPostExecute(Boolean success) {
-            if (success) {
-            }
-        }
     }
 
     public void onBackPressed() {
