@@ -10,6 +10,7 @@ import android.widget.ImageView;
 
 import ch.hsr.afterhour.Application;
 import ch.hsr.afterhour.R;
+import ch.hsr.afterhour.service.barcode.BarcodeGenerator;
 import ch.hsr.afterhour.service.barcode.QrBarcodeGenerator;
 
 
@@ -27,7 +28,7 @@ public class IdentityFragment extends Fragment {
         ImageView imageHolder = (ImageView) rootView.findViewById(R.id.identity_fragment_image);
         Bitmap image = Application.get().getUser().getQrImage();
         if (image == null) {
-            QrBarcodeGenerator qrGenerator  = new QrBarcodeGenerator();
+            BarcodeGenerator qrGenerator  = new QrBarcodeGenerator(); // todo: mitgeben beim erzeugen
             image = qrGenerator.generateBarcode(
                     "USR-ZRH-" + Application.get().getUser().getId()
             );

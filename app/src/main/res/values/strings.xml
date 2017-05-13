@@ -65,9 +65,13 @@
     <string name="dummy_userid">USR-ZRH-000000</string>
     <string name="last_name">Last name</string>
     <string name="creditcard">Credit Card</string>
+    <string name="employee">Employee</string>
 
     <!-- Strings related to bottom bar-->
     <string name="billing">Billing</string>
     <string name="drinks">Drinks</string>
     <string name="autologin">Autologin</string>
+
+    <!-- Strings related to scnned user -->
+    <string name="no_valid_scanned_user_detected">No valid scanned user detected</string>
 </resources>
