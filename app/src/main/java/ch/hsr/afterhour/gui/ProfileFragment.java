@@ -132,7 +132,7 @@ public class ProfileFragment extends Fragment {
                 case 0:
                     return getString(R.string.profile);
                 case 1:
-                    if (Application.get().getUser().isEmployeee()) {
+                    if (Application.get().getUser().isEmployee()) {
                         return getString(R.string.employee);
                     }
                     return getString(R.string.coatcheck);
@@ -155,7 +155,7 @@ public class ProfileFragment extends Fragment {
                     configureProfileView(view);
                     break;
                 case ADDITIONAL_FRAGMENT:
-                    boolean isEmployee = Application.get().getUser().isEmployeee();
+                    boolean isEmployee = Application.get().getUser().isEmployee();
                     if (isEmployee) {
                         view = setEmployeeView(container);
                     } else {

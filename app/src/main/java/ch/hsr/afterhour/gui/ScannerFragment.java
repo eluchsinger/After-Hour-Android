@@ -61,7 +61,7 @@ public class ScannerFragment extends Fragment {
         progressView = rootView.findViewById(R.id.scan_entry_progressbar);
         cameraView = (SurfaceView) rootView.findViewById(R.id.scan_entry_camera_view);
         infoPane = (TextView) rootView.findViewById(R.id.scan_entry_info_bar);
-        if (Application.get().getUser().isEmployeee()) {
+        if (Application.get().getUser().isEmployee()) {
             infoPane.setText(R.string.scan_user_id);
         } else {
             infoPane.setText(R.string.scan_coat_check);
@@ -73,7 +73,7 @@ public class ScannerFragment extends Fragment {
                 switch (msg.what) {
                     case QR_DETECTED:
                         entryScanner.stop();
-                        showProgress(Application.get().getUser().isEmployeee());
+                        showProgress(Application.get().getUser().isEmployee());
                         break;
                 }
             }
@@ -157,7 +157,7 @@ public class ScannerFragment extends Fragment {
                     }
                     String qrCode = barcodes.valueAt(0).displayValue;
                     String id = qrCode.substring(8, qrCode.length());
-                    boolean isEmployee = Application.get().getUser().isEmployeee();
+                    boolean isEmployee = Application.get().getUser().isEmployee();
                     validateQrCode(qrCode, isEmployee);
                     if (itemScanned) {
                         Message message = uiHandler.obtainMessage(QR_DETECTED);
