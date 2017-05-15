@@ -16,6 +16,7 @@ import java.net.MalformedURLException;
 
 import ch.hsr.afterhour.Application;
 import ch.hsr.afterhour.R;
+import ch.hsr.afterhour.model.Gender;
 import ch.hsr.afterhour.model.User;
 import ch.viascom.groundwork.foxhttp.exception.FoxHttpException;
 
@@ -172,7 +173,7 @@ public class RegisterActivity extends AppCompatActivity {
         if (cancel) {
             focusView.requestFocus();
         } else {
-            user = new User(lastName, firstName, email,
+            user = new User(lastName, firstName, email, Gender.MALE,
                     vorwahl + mobile, birthday, false);
             showProgress(true);
             mAuthTask = new RegisterUserTask();

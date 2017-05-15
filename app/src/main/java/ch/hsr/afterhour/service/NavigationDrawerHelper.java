@@ -15,7 +15,7 @@ public class NavigationDrawerHelper {
         switch (menuItem.getItemId()) {
             case R.id.nav_item_toggle_login:
                 if (menuItem.getTitle().equals(context.getString(R.string.employee_login))) {
-                    if (Application.get().getUser().isEmployeee()) {
+                    if (Application.get().getUser().isEmployee()) {
                         // todo: open Employee view
                     }
                     menuItem.setTitle(context.getString(R.string.user_login));
