@@ -20,6 +20,7 @@ import android.widget.TextView;
 
 import com.flipboard.bottomsheet.BottomSheetLayout;
 import com.flipboard.bottomsheet.OnSheetDismissedListener;
+import com.google.android.gms.vision.text.Text;
 
 import java.util.List;
 
@@ -45,6 +46,9 @@ public class ProfileFragment extends Fragment {
     private Context rootContext;
 
     private TextView bottomSheetTitle;
+
+    private TextView firstName;
+    private TextView lastName;
 
     @Override
     public void onAttach(Context context) {
@@ -78,6 +82,12 @@ public class ProfileFragment extends Fragment {
         BottomSheetBehavior bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
         bottomSheetBehavior.setPeekHeight((int) calculateBottomsheetPeekHeight());
         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+
+        this.firstName = (TextView) view.findViewById(R.id.profile_firstname);
+        this.lastName = (TextView) view.findViewById(R.id.profile_lastname);
+
+        this.firstName.setText(Application.get().getUser().getFirstName());
+        this.lastName.setText(Application.get().getUser().getLastName());
     }
 
 //    class SamplePagerAdapter extends PagerAdapter {
