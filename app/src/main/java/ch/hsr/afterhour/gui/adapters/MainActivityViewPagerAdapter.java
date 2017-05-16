@@ -15,7 +15,7 @@ import ch.hsr.afterhour.gui.ScannerFragment;
  */
 public class MainActivityViewPagerAdapter extends FragmentPagerAdapter {
 
-    public enum MainFragments {
+    private enum MainFragments {
         SCANNER("Employee scanning", new ScannerFragment()),
         COATCHECK("Coatcheck", new Fragment()),
         PROFILE("Profile Fragment", new ProfileFragment()),
@@ -40,10 +40,16 @@ public class MainActivityViewPagerAdapter extends FragmentPagerAdapter {
 
     private MainFragments[] fragments;
 
-    public MainActivityViewPagerAdapter(FragmentManager fm) {
+    public MainActivityViewPagerAdapter(FragmentManager fm, boolean isEmployee) {
         super(fm);
 
         this.fragments = MainFragments.values();
+
+        if(isEmployee) {
+            // Todo: Remove the scanner fragment from fragments.
+        } else {
+            // Todo: Remove the coatcheck fragment from fragments.
+        }
     }
 
     @Override

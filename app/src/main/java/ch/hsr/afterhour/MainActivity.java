@@ -73,7 +73,8 @@ public class MainActivity extends AppCompatActivity implements EventListFragment
 
         ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tablayout);
-        MainActivityViewPagerAdapter pagerAdapter = new MainActivityViewPagerAdapter(getSupportFragmentManager());
+        boolean isEmployee = Application.get().getUser().isEmployee();
+        MainActivityViewPagerAdapter pagerAdapter = new MainActivityViewPagerAdapter(getSupportFragmentManager(), isEmployee);
         viewPager.setAdapter(pagerAdapter);
         viewPager.setCurrentItem(1);
         tabLayout.setupWithViewPager(viewPager);
