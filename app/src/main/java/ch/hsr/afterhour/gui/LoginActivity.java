@@ -8,6 +8,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -47,6 +48,10 @@ public class LoginActivity extends AppCompatActivity implements EventListFragmen
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        Toolbar myToolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(myToolbar);
+
         setupMainViews();
         settings = getSharedPreferences(LOGIN_PREFS, MODE_PRIVATE);
         Map<String, ?> preferenceMap = settings.getAll();
@@ -83,7 +88,6 @@ public class LoginActivity extends AppCompatActivity implements EventListFragmen
         });
         mRemembermeCb = (CheckBox) findViewById(R.id.login_autologin_checkbox);
     }
-
 
     private void attemptLogin() {
         if (mAuthTask != null) {
@@ -148,7 +152,6 @@ public class LoginActivity extends AppCompatActivity implements EventListFragmen
         //TODO: Replace this with your own logic
         return password.length() > 3;
     }
-
 
     private void showProgress(final boolean show) {
         int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
@@ -216,7 +219,7 @@ public class LoginActivity extends AppCompatActivity implements EventListFragmen
                 finish();
             } else {
                 Snackbar snackbar = Snackbar.make(
-                        LoginActivity.this.findViewById(R.id.activity_login),
+                        LoginActivity.this.findViewById(R.id.container),
                         getString(R.string.wrong_login_credentials),
                         Snackbar.LENGTH_LONG
                 );
