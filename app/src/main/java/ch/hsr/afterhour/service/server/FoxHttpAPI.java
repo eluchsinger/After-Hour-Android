@@ -5,6 +5,7 @@ import android.graphics.BitmapFactory;
 
 import java.net.MalformedURLException;
 
+import ch.hsr.afterhour.model.CoatCheck;
 import ch.hsr.afterhour.model.Event;
 import ch.hsr.afterhour.model.User;
 import ch.viascom.groundwork.foxhttp.FoxHttpClient;
@@ -110,5 +111,14 @@ public class FoxHttpAPI {
         foxHttpRequest.setUrl("{host}" + urlParameters);
         foxHttpRequest.setRequestType(RequestType.GET);
         FoxHttpResponse foxHttpResponse = foxHttpRequest.execute();
+    }
+
+    public CoatCheck handOverJacket(String email, int coatHangerNumber, int locationId) throws FoxHttpException, MalformedURLException {
+        FoxHttpRequest foxHttpRequest = new FoxHttpRequest(httpClient);
+        String urlParameters = "/handOverJacket/" + email + "/" + coatHangerNumber + "/" + locationId;
+        foxHttpRequest.setUrl("{host}" + urlParameters);
+        foxHttpRequest.setRequestType(RequestType.GET);
+        FoxHttpResponse foxHttpResponse = foxHttpRequest.execute();
+        return foxHttpResponse.getParsedBody(CoatCheck.class);
     }
 }

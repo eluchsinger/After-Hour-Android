@@ -5,9 +5,6 @@ import android.graphics.Bitmap;
 import java.text.DateFormat;
 import java.util.Date;
 
-/**
- * Created by Marcel on 03.04.17.
- */
 
 public class Event {
 

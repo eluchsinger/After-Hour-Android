@@ -37,7 +37,7 @@ public class ProfileFragment extends Fragment {
 
     // Data Holders
     private User scannedUser;
-    List<CoatCheck> coatChecks;
+    private List<CoatCheck> coatChecks;
     private CoatCheck scannedCoatCheck;
     private FabButtonClickedListener mListener;
     private Context rootContext;
@@ -70,7 +70,7 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         mViewPager = (ViewPager) view.findViewById(R.id.viewpager);
-        mViewPager.setAdapter(new SamplePagerAdapter());
+        mViewPager.setAdapter(new TabPagerAdapter());
         scannedUser = ((ProfileActivity) rootContext).getScannedUser();
         mViewPager.setCurrentItem( (scannedUser!=null || scannedCoatCheck!=null) ? ADDITIONAL_FRAGMENT : PROFILE_FRAGMENT );
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -99,7 +99,7 @@ public class ProfileFragment extends Fragment {
         mSlidingTabLayout.setViewPager(mViewPager);
     }
 
-    class SamplePagerAdapter extends PagerAdapter {
+    class TabPagerAdapter extends PagerAdapter {
 
         /**
          * @return the number of pages to display
@@ -186,25 +186,23 @@ public class ProfileFragment extends Fragment {
         }
 
         private View initProfileView(ViewGroup container) {
-            View view;
-            view = getActivity().getLayoutInflater().inflate(R.layout.profile_layout,
+            View view = getActivity().getLayoutInflater().inflate(R.layout.profile_layout,
                     container, false);
             return view;
         }
 
         @NonNull
         private View setUserView(ViewGroup container) {
-            View view;
-            view = getActivity().getLayoutInflater().inflate(R.layout.coatcheck_layout,
+            View view = getActivity().getLayoutInflater().inflate(R.layout.coatcheck_layout,
                     container, false);
             TextView coatCheckId = (TextView) view.findViewById(R.id.coatcheck_id);
             TextView coatCheckEvent = (TextView) view.findViewById(R.id.coatcheck_event);
             CoatCheck coatCheck;
             coatCheck = coatChecks.isEmpty() ? null : coatChecks.get(0);
             coatCheckId.setText(
-                    coatCheck!=null ? Integer.toString(coatCheck.getId()) : getString(R.string.coatcheck));
+                    coatCheck!=null ? Integer.toString(coatCheck.getPublicIdentifier()) : getString(R.string.coatcheck));
             coatCheckEvent.setText(
-                    coatCheck!=null ? coatCheck.getEvent().getTitle() : "No Coat Check registered");
+                    coatCheck!=null ? coatCheck.getCoatHanger().getLocation().getName() : "No Coat Check registered");
             return view;
         }
 
@@ -213,7 +211,6 @@ public class ProfileFragment extends Fragment {
             View view;
             view = getActivity().getLayoutInflater().inflate(R.layout.scanned_user_layout,
                     container, false);
-
             TextView firstName, lastName,errorMessageTextView;
             firstName =(TextView) view.findViewById(R.id.scanned_user_firstname);
             lastName =(TextView) view.findViewById(R.id.scanned_user_lastname);
@@ -224,7 +221,6 @@ public class ProfileFragment extends Fragment {
                 lastName.setText(scannedUser.getLastName());
                 firstName.setVisibility(View.VISIBLE);
                 lastName.setVisibility(View.VISIBLE);
-
             } else {
                 firstName.setVisibility(View.GONE);
                 lastName.setVisibility(View.GONE);
