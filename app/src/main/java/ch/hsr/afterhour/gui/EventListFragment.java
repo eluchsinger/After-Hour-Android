@@ -1,12 +1,9 @@
 package ch.hsr.afterhour.gui;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.support.v4.util.ArrayMap;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -14,18 +11,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.EventListener;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 
 import ch.hsr.afterhour.Application;
 import ch.hsr.afterhour.R;
+import ch.hsr.afterhour.gui.adapters.EventRecyclerViewAdapter;
 import ch.hsr.afterhour.gui.listeners.OnEventInteractionListener;
 import ch.hsr.afterhour.model.Event;
 import ch.hsr.afterhour.model.TicketCategory;
@@ -33,7 +25,6 @@ import ch.hsr.afterhour.model.User;
 import ch.hsr.afterhour.tasks.BuyTicketTask;
 import ch.hsr.afterhour.tasks.DownloadEventPicturesTask;
 import ch.hsr.afterhour.tasks.DownloadEventsTask;
-import ch.viascom.groundwork.foxhttp.exception.FoxHttpException;
 
 /**
  * A fragment representing a list of Items.
