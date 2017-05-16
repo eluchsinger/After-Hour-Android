@@ -93,21 +93,24 @@ public class ScannerFragment extends Fragment {
             infoPane.setText(R.string.scan_coat_check);
         }
 
-        this.permissionsGrantedCallback = () -> {
-            // Start the scanner only if the permissions are granted.
-            entryScanner = new EntryScanner(getContext());
-            uiHandler = new Handler() {
-                @Override
-                public void handleMessage(Message msg) {
-                    switch (msg.what) {
-                        case QR_DETECTED:
-                            entryScanner.stop();
-                            showProgress(Application.get().getUser().isEmployee());
-                            break;
+        this.permissionsGrantedCallback = new OnCameraPermissionsGranted() {
+            @Override
+            public void permissionGranted() {
+                // Start the scanner only if the permissions are granted.
+                entryScanner = new EntryScanner(getContext());
+                uiHandler = new Handler() {
+                    @Override
+                    public void handleMessage(Message msg) {
+                        switch (msg.what) {
+                            case QR_DETECTED:
+                                entryScanner.stop();
+                                showProgress(Application.get().getUser().isEmployee());
+                                break;
+                        }
                     }
-                }
-            };
-            entryScanner.start();
+                };
+                entryScanner.start();
+            }
         };
 
         requestCameraPermissions();

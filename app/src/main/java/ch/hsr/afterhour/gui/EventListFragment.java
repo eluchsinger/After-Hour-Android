@@ -6,6 +6,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.util.ArrayMap;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -14,12 +15,20 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import java.net.MalformedURLException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 import ch.hsr.afterhour.Application;
 import ch.hsr.afterhour.R;
 import ch.hsr.afterhour.model.Event;
 import ch.hsr.afterhour.model.TicketCategory;
+import ch.hsr.afterhour.tasks.DownloadEventPicturesTask;
+import ch.hsr.afterhour.tasks.DownloadEventsTask;
 import ch.viascom.groundwork.foxhttp.exception.FoxHttpException;
 
 /**
@@ -29,6 +38,8 @@ import ch.viascom.groundwork.foxhttp.exception.FoxHttpException;
  * interface.
  */
 public class EventListFragment extends Fragment {
+
+    private static final int SERVER_REQUEST_TIMEOUT = 4000;
 
     private static final String ARG_COLUMN_COUNT = "column-count";
     private int mColumnCount = 1;
@@ -68,10 +79,27 @@ public class EventListFragment extends Fragment {
             } else {
                 mRecyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            mDownloadTask = new DownloadEventsTask();
-            mDownloadTask.execute();
+            downloadEventsAndPictures();
         }
         return rootView;
+    }
+
+    private void downloadEventsAndPictures() {
+        mDownloadTask = new DownloadEventsTask(result -> {
+            List<Event> eventList = new ArrayList<>(Arrays.asList(result));
+            eventRecyclerViewAdapter = new EventRecyclerViewAdapter(eventList, mListener);
+            mRecyclerView.setAdapter(eventRecyclerViewAdapter);
+
+            // Every event that's loaded -> Load it's bitmap
+            eventList.forEach(event -> {
+                DownloadEventPicturesTask task = new DownloadEventPicturesTask((picture) -> {
+                    event.setPicture(picture);
+                    eventRecyclerViewAdapter.notifyDataSetChanged();
+                });
+                task.execute(event);
+            });
+        });
+        mDownloadTask.execute();
     }
 
 
@@ -104,67 +132,5 @@ public class EventListFragment extends Fragment {
      */
     public interface OnMyEventListListener {
         void buyTicket(TicketCategory ticketCategoryId);
-    }
-
-
-    class DownloadEventsTask extends AsyncTask<Void, Void, Boolean> {
-
-        @Override
-        protected Boolean doInBackground(Void... params) {
-            try {
-                events = Application.get().getServerAPI().downloadEvents();
-                return true;
-            } catch (FoxHttpException e) {
-                e.printStackTrace();
-                return false;
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-                return false;
-            }
-        }
-
-        @Override
-        protected void onPostExecute(Boolean success) {
-            if (success) {
-                if (mRecyclerView != null) {
-                    eventRecyclerViewAdapter = new EventRecyclerViewAdapter(Arrays.asList(events), mListener);
-                    mRecyclerView.setAdapter(eventRecyclerViewAdapter);
-                    DownloadEventPicturesTask downloadEventPicturesTask = new DownloadEventPicturesTask();
-                    downloadEventPicturesTask.execute();
-                } else {
-                    Snackbar snackbar = Snackbar.make(
-                            getActivity().findViewById(R.id.fragment_user_container),
-                            R.string.unexpected_error,
-                            Snackbar.LENGTH_SHORT);
-                    snackbar.show();
-                }
-            }
-        }
-    }
-
-    class DownloadEventPicturesTask extends AsyncTask<Void, Void, Boolean> {
-
-        @Override
-        protected Boolean doInBackground(Void... params) {
-            try {
-                for (Event event : events){
-                    final Bitmap bitmap = Application.get().getServerAPI().getEventImage(event.getId());
-                    event.setPicture(bitmap);
-                }
-                return true;
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            } catch (FoxHttpException e) {
-                e.printStackTrace();
-            }
-            return false;
-        }
-
-        @Override
-        protected void onPostExecute(Boolean success){
-            if (success){
-                eventRecyclerViewAdapter.notifyDataSetChanged();
-            }
-        }
     }
 }
