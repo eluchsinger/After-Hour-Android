@@ -37,7 +37,6 @@
             android:name=".gui.RegisterActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait" />
-        <activity android:name=".gui.EventListActivity" />
         <activity
             android:name=".MainActivity"
             android:label="@string/title_activity_main"
