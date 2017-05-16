@@ -1,4 +1,4 @@
-package ch.hsr.afterhour.gui;
+package ch.hsr.afterhour.gui.adapters;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;

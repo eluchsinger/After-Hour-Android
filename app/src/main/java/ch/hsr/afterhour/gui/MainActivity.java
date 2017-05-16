@@ -1,4 +1,4 @@
-package ch.hsr.afterhour;
+package ch.hsr.afterhour.gui;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -21,6 +21,8 @@ import android.widget.Toast;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
+import ch.hsr.afterhour.Application;
+import ch.hsr.afterhour.R;
 import ch.hsr.afterhour.gui.EventListFragment;
 import ch.hsr.afterhour.gui.LoginActivity;
 import ch.hsr.afterhour.gui.ProfileFragment;

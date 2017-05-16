@@ -21,10 +21,7 @@ import java.net.MalformedURLException;
 import java.util.Map;
 
 import ch.hsr.afterhour.Application;
-import ch.hsr.afterhour.MainActivity;
 import ch.hsr.afterhour.R;
-import ch.hsr.afterhour.model.Event;
-import ch.hsr.afterhour.model.TicketCategory;
 import ch.hsr.afterhour.model.User;
 import ch.viascom.groundwork.foxhttp.exception.FoxHttpException;
 

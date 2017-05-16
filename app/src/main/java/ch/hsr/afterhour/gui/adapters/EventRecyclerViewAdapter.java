@@ -1,4 +1,4 @@
-package ch.hsr.afterhour.gui;
+package ch.hsr.afterhour.gui.adapters;
 
 import android.support.constraint.ConstraintLayout;
 import android.support.constraint.ConstraintSet;
