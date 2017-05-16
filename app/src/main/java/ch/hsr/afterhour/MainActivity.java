@@ -38,25 +38,6 @@ public class MainActivity extends AppCompatActivity implements EventListFragment
 
     private CoordinatorLayout container;
 
-    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
-            = new BottomNavigationView.OnNavigationItemSelectedListener() {
-
-        @Override
-        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-            switch (item.getItemId()) {
-                case R.id.navigation_profile:
-                    changeFragment(new ProfileFragment());
-                    break;
-                case R.id.navigation_events:
-                    changeFragment(new EventListFragment());
-                    break;
-                default:
-                    changeFragment(new ProfileFragment());
-            }
-            return true;
-        }
-
-    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,9 +48,6 @@ public class MainActivity extends AppCompatActivity implements EventListFragment
 
         Toolbar myToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(myToolbar);
-
-        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.bottom_navigation);
-        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
         ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
         // This sets the amount of pages that can be off screen without being destroyed.
@@ -90,12 +68,6 @@ public class MainActivity extends AppCompatActivity implements EventListFragment
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
-    }
-
-    private void changeFragment(final Fragment fragment) {
-        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.fragment_container, fragment);
-        fragmentTransaction.commit();
     }
 
     @Override
