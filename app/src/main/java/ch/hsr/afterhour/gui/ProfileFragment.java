@@ -35,6 +35,9 @@ import ch.hsr.afterhour.service.barcode.QrBarcodeGenerator;
 
 public class ProfileFragment extends Fragment {
 
+    /**
+     * The size of the barcode in pixel
+     */
     private static final int BARCODE_SIZE = 250;
 
     private SlidingTabLayout mSlidingTabLayout;
