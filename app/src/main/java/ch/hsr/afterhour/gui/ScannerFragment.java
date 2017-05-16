@@ -1,5 +1,6 @@
 package ch.hsr.afterhour.gui;
 
+import android.Manifest;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.content.Context;
@@ -7,6 +8,7 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
@@ -36,7 +38,12 @@ public class ScannerFragment extends Fragment {
 
     public interface OnEntryScannerListener {
         void onUserScanned(String id);
+
         void onCoatCheckScanned(CoatCheck coatCheck);
+    }
+
+    public interface OnCameraPermissionsGranted {
+        void permissionGranted();
     }
 
     // UI Elements & Views
@@ -44,6 +51,8 @@ public class ScannerFragment extends Fragment {
     FloatingActionButton fab;
 
     // camera
+    private final static int CAMERA_PERMISSION_CODE = 117;
+    private OnCameraPermissionsGranted permissionsGrantedCallback;
     private SurfaceView cameraView;
     private TextView infoPane;
     private Scanner entryScanner;
@@ -53,6 +62,23 @@ public class ScannerFragment extends Fragment {
     private final int QR_DETECTED = 0;
     private Handler uiHandler;
 
+    private void requestCameraPermissions() {
+        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            String[] permissions = { Manifest.permission.CAMERA };
+            requestPermissions(permissions, CAMERA_PERMISSION_CODE);
+        } else {
+            this.permissionsGrantedCallback.permissionGranted();
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if(requestCode == CAMERA_PERMISSION_CODE) {
+            this.permissionsGrantedCallback.permissionGranted();
+        }
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -61,32 +87,41 @@ public class ScannerFragment extends Fragment {
         progressView = rootView.findViewById(R.id.scan_entry_progressbar);
         cameraView = (SurfaceView) rootView.findViewById(R.id.scan_entry_camera_view);
         infoPane = (TextView) rootView.findViewById(R.id.scan_entry_info_bar);
-        if (Application.get().getUser().isEmployeee()) {
+        if (Application.get().getUser().isEmployee()) {
             infoPane.setText(R.string.scan_user_id);
         } else {
             infoPane.setText(R.string.scan_coat_check);
         }
-        entryScanner = new EntryScanner(getContext());
-        uiHandler = new Handler() {
-            @Override
-            public void handleMessage(Message msg) {
-                switch (msg.what) {
-                    case QR_DETECTED:
-                        entryScanner.stop();
-                        showProgress(Application.get().getUser().isEmployeee());
-                        break;
+
+        this.permissionsGrantedCallback = () -> {
+            // Start the scanner only if the permissions are granted.
+            entryScanner = new EntryScanner(getContext());
+            uiHandler = new Handler() {
+                @Override
+                public void handleMessage(Message msg) {
+                    switch (msg.what) {
+                        case QR_DETECTED:
+                            entryScanner.stop();
+                            showProgress(Application.get().getUser().isEmployee());
+                            break;
+                    }
                 }
-            }
+            };
+            entryScanner.start();
         };
-        fab = ((ProfileActivity) getContext()).getFab();
-        fab.setVisibility(View.GONE);
+
+        requestCameraPermissions();
+
+
         return rootView;
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        entryScanner.start();
+        if(entryScanner != null) {
+            entryScanner.start();
+        }
     }
 
     @Override
@@ -102,7 +137,9 @@ public class ScannerFragment extends Fragment {
 
     @Override
     public void onPause() {
-        entryScanner.stop();
+        if(entryScanner != null) {
+            entryScanner.stop();
+        }
         mListener = null;
         super.onPause();
     }
@@ -157,7 +194,7 @@ public class ScannerFragment extends Fragment {
                     }
                     String qrCode = barcodes.valueAt(0).displayValue;
                     String id = qrCode.substring(8, qrCode.length());
-                    boolean isEmployee = Application.get().getUser().isEmployeee();
+                    boolean isEmployee = Application.get().getUser().isEmployee();
                     validateQrCode(qrCode, isEmployee);
                     if (itemScanned) {
                         Message message = uiHandler.obtainMessage(QR_DETECTED);
@@ -195,9 +232,7 @@ public class ScannerFragment extends Fragment {
                 public void surfaceCreated(SurfaceHolder holder) {
             /* call the start method of the CameraSource to start drawing the preview frames */
                     try {
-                        if (ActivityCompat.checkSelfPermission(getContext(), android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-                            return;
-                        }
+                        //noinspection MissingPermission
                         mCameraSource.start(cameraView.getHolder());
                     } catch (IOException ie) {
                         ie.printStackTrace();
@@ -223,6 +258,7 @@ public class ScannerFragment extends Fragment {
                 mCameraSource.stop();
             }
         }
+
     }
 
     private void showProgress(final boolean show) {

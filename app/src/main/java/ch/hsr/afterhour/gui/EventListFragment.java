@@ -103,7 +103,6 @@ public class EventListFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnMyEventListListener {
-        void onMyEventInteraction(Event item);
         void buyTicket(TicketCategory ticketCategoryId);
     }
 

@@ -15,19 +15,23 @@ public class User implements Serializable {
     private String email;
     private String mobileNumber;
     private String dateOfBirth;
+    private Gender gender;
     private boolean isWorking = false;
     private List<Ticket> tickets;
     private Bitmap qrImage = null;
-    private boolean isEmployeee;
+    private boolean employee;
     private ArrayList<CoatCheck> coatChecks = new ArrayList<>();
 
-    public User(String lastName, String firstName, String email, String mobileNumber, String dateOfBirth, boolean isEmployee) {
+    public User(String lastName, String firstName,
+                String email, Gender gender, String mobileNumber,
+                String dateOfBirth, boolean isEmployee) {
         this.lastName = lastName;
         this.firstName = firstName;
         this.email = email;
+        this.gender = gender;
         this.mobileNumber = mobileNumber;
         this.dateOfBirth = dateOfBirth;
-        this.isEmployeee = isEmployee;
+        this.employee = isEmployee;
     }
 
     public User() {
@@ -42,12 +46,12 @@ public class User implements Serializable {
         coatChecks.add(coatCheck);
     }
 
-    public boolean isEmployeee() {
-        return isEmployeee;
+    public boolean isEmployee() {
+        return employee;
     }
 
-    public void setIsEmployeee(boolean employeee) {
-        isEmployeee = employeee;
+    public void setIsEmployee(boolean employee) {
+        this.employee = employee;
     }
 
     public Bitmap getQrImage() {
@@ -65,6 +69,10 @@ public class User implements Serializable {
     public void setEmail(String email) {
         this.email = email;
     }
+
+    public Gender getGender() {return gender;}
+
+    public void setGender(Gender gender) {this.gender = gender;}
 
     public String getMobileNumber() {
         return mobileNumber;
