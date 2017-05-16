@@ -31,7 +31,7 @@ import ch.viascom.groundwork.foxhttp.exception.FoxHttpException;
 /**
  * A login screen that offers login via email/password.
  */
-public class LoginActivity extends AppCompatActivity implements EventListFragment.OnMyEventListListener {
+public class LoginActivity extends AppCompatActivity {
     private UserLoginTask mAuthTask = null;
     private final String LOGIN_PREFS = "login_credentials";
 
@@ -173,11 +173,6 @@ public class LoginActivity extends AppCompatActivity implements EventListFragmen
             }
         });
     }
-
-    @Override
-    public void buyTicket(TicketCategory ticketCategoryId) {
-    }
-
 
     private class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
         private final String mEmail;

@@ -1,5 +1,7 @@
 package ch.hsr.afterhour;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -20,6 +22,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 import ch.hsr.afterhour.gui.EventListFragment;
+import ch.hsr.afterhour.gui.LoginActivity;
 import ch.hsr.afterhour.gui.ProfileFragment;
 import ch.hsr.afterhour.gui.ScannerFragment;
 import ch.hsr.afterhour.gui.adapters.MainActivityViewPagerAdapter;
@@ -35,9 +38,9 @@ public class MainActivity extends AppCompatActivity implements EventListFragment
      * Time for the timeout of a server request async task.
      */
     private final static int TASK_TIMEOUT = 4000;
+    private final static String LOGIN_PREFS = "login_credentials";
 
     private CoordinatorLayout container;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +71,25 @@ public class MainActivity extends AppCompatActivity implements EventListFragment
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch(item.getItemId()) {
+            case R.id.menu_logout:
+                logout();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    public void logout() {
+        final SharedPreferences settings = getSharedPreferences(LOGIN_PREFS, MODE_PRIVATE);
+        SharedPreferences.Editor editor = settings.edit();
+        editor.clear().apply();
+        final Intent loginIntent = new Intent(this, LoginActivity.class);
+        loginIntent.setFlags(loginIntent.getFlags() | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(loginIntent);
     }
 
     @Override
