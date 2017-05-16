@@ -5,7 +5,7 @@
               android:orientation="vertical">
 
     <ProgressBar
-        android:id="@+id/scan_entry_progressbar"
+        android:id="@+id/scanner_progressbar"
         style="?android:attr/progressBarStyleLarge"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -14,14 +14,14 @@
         android:visibility="gone" />
 
     <SurfaceView
-        android:id="@+id/scan_entry_camera_view"
+        android:id="@+id/scanner_camera_view"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
         />
 
     <TextView
-        android:id="@+id/scan_entry_info_bar"
+        android:id="@+id/scanner_info_bar"
         android:layout_width="match_parent"
         android:layout_height="80dp"
         android:textSize="20sp"

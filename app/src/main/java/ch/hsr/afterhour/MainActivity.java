@@ -19,17 +19,36 @@ import android.widget.Toast;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
+import ch.hsr.afterhour.gui.CoatCheckFragment;
+import ch.hsr.afterhour.gui.CoatCheckListFragment;
+import ch.hsr.afterhour.gui.CoatCheckScannerFragment;
+import ch.hsr.afterhour.gui.EntryScannerFragment;
 import ch.hsr.afterhour.gui.EventListFragment;
 import ch.hsr.afterhour.gui.ProfileFragment;
-import ch.hsr.afterhour.gui.ScannerFragment;
 import ch.hsr.afterhour.gui.adapters.MainActivityViewPagerAdapter;
-import ch.hsr.afterhour.model.CoatCheck;
 import ch.hsr.afterhour.model.TicketCategory;
 import ch.hsr.afterhour.model.User;
 import ch.hsr.afterhour.tasks.RetrieveUserByIdTask;
 
 public class MainActivity extends AppCompatActivity implements EventListFragment.OnMyEventListListener,
-        ScannerFragment.OnEntryScannerListener, ActivityCompat.OnRequestPermissionsResultCallback {
+        EntryScannerFragment.OnEntryScannerListener, ActivityCompat.OnRequestPermissionsResultCallback, CoatCheckListFragment.OnCoatCheckListInteractionListener,
+        CoatCheckFragment.OnCoatCheckFragmentInteractionListener, CoatCheckScannerFragment.CoatCheckScannerListener {
+
+    public enum CoatHangerParameters {
+        COATHANGER_NUMBER("coatHangerNumber"),
+        PUBLICIDENTIFIER("publicIdentifier");
+
+        private final String text;
+
+        CoatHangerParameters(final String text) {
+            this.text = text;
+        }
+
+        @Override
+        public String toString() {
+            return text;
+        }
+    }
 
     /**
      * Time for the timeout of a server request async task.
@@ -105,7 +124,6 @@ public class MainActivity extends AppCompatActivity implements EventListFragment
         RetrieveUserByIdTask task = new RetrieveUserByIdTask();
         try {
             User scannedUser = task.execute(id).get(TASK_TIMEOUT, TimeUnit.MILLISECONDS);
-
         } catch (TimeoutException e) {
             showSnackbar(R.string.async_task_timeout);
             e.printStackTrace();
@@ -116,8 +134,31 @@ public class MainActivity extends AppCompatActivity implements EventListFragment
     }
 
     @Override
-    public void onCoatCheckScanned(CoatCheck coatCheck) {
+    public void onCoatCheckListItemInteraction(int coatHangerNumber, int publicIdentifier) {
+        Bundle argsBundle = new Bundle();
+        argsBundle.putInt(CoatHangerParameters.COATHANGER_NUMBER.toString(), coatHangerNumber);
+        argsBundle.putInt(CoatHangerParameters.PUBLICIDENTIFIER.toString(), publicIdentifier);
+        Fragment coatCheckFragment =  new CoatCheckFragment();
+        coatCheckFragment.setArguments(argsBundle);
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.fragment_container, coatCheckFragment);
 
+        fragmentTransaction.commit();
+    }
+
+    @Override
+    public void onCoatCheckShowed() {
+        changeFragment(new CoatCheckListFragment());
+    }
+
+    @Override
+    public void onAddCoatCheck() {
+        changeFragment(new CoatCheckScannerFragment());
+    }
+
+    @Override
+    public void onCoatCheckScanned() {
+        changeFragment(new CoatCheckListFragment());
     }
 
     private void showSnackbar(int resourceId) {

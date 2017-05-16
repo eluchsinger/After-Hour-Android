@@ -77,4 +77,5 @@
     <string name="scan_coat_check">Bitte Jacke abgeben und Bügel scannen</string>
     <string name="async_task_timeout">Die  Abfrage ging zu lange und wurde abgebrochen</string>
     <string name="async_task_error">Es gab ein Fehler bei der Serverabfrage</string>
+    <string name="empty_coatcheck_list">Sie haben noch keine Jacke abgegeben. Um eine Jacke abzugehen gehen Sie zur Garderobe und klicken auf den roten Knopf weiter unten.</string>
 </resources>

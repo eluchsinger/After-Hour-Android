@@ -6,46 +6,42 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import ch.hsr.afterhour.gui.CoatCheckFragment.OnListFragmentInteractionListener;
-import ch.hsr.afterhour.gui.dummy.DummyContent.DummyItem;
-
 import java.util.List;
 
-/**
- * {@link RecyclerView.Adapter} that can display a {@link DummyItem} and makes a call to the
- * specified {@link OnListFragmentInteractionListener}.
- * TODO: Replace the implementation with code for your data type.
- */
+import ch.hsr.afterhour.R;
+import ch.hsr.afterhour.gui.CoatCheckListFragment.OnCoatCheckListInteractionListener;
+import ch.hsr.afterhour.model.CoatCheck;
+
 public class CoatCheckRecyclerViewAdapter extends RecyclerView.Adapter<CoatCheckRecyclerViewAdapter.ViewHolder> {
 
-    private final List<DummyItem> mValues;
-    private final OnListFragmentInteractionListener mListener;
+    private final List<CoatCheck> mCoatChecks;
+    private final OnCoatCheckListInteractionListener mListener;
 
-    public CoatCheckRecyclerViewAdapter(List<DummyItem> items, OnListFragmentInteractionListener listener) {
-        mValues = items;
+    public CoatCheckRecyclerViewAdapter(List<CoatCheck> items, OnCoatCheckListInteractionListener listener) {
+        mCoatChecks = items;
         mListener = listener;
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.fragment_coatcheck, parent, false);
+                .inflate(R.layout.fragment_coatcheck_item, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        holder.mItem = mValues.get(position);
-        holder.mIdView.setText(mValues.get(position).id);
-        holder.mContentView.setText(mValues.get(position).content);
+        holder.mItem = mCoatChecks.get(position);
+        holder.mIdView.setText(mCoatChecks.get(position).getCoatHanger().getLocation().getName());
+        holder.mContentView.setText(mCoatChecks.get(position).getPublicIdentifier());
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (null != mListener) {
-                    // Notify the active callbacks interface (the activity, if the
-                    // fragment is attached to one) that an item has been selected.
-                    mListener.onListFragmentInteraction(holder.mItem);
+                    mListener.onCoatCheckListItemInteraction(
+                            holder.mItem.getCoatHanger().getCoatHangerNumber(),
+                            holder.mItem.getPublicIdentifier());
                 }
             }
         });
@@ -53,14 +49,14 @@ public class CoatCheckRecyclerViewAdapter extends RecyclerView.Adapter<CoatCheck
 
     @Override
     public int getItemCount() {
-        return mValues.size();
+        return mCoatChecks.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final View mView;
         public final TextView mIdView;
         public final TextView mContentView;
-        public DummyItem mItem;
+        public CoatCheck mItem;
 
         public ViewHolder(View view) {
             super(view);

@@ -82,12 +82,8 @@ public class User implements Serializable {
         this.mobileNumber = mobileNumber;
     }
 
-    public String getTickets() {
-        StringBuilder sb = new StringBuilder(1024);
-        for (Ticket ticket : tickets) {
-            sb.append(ticket.getEvent().getTitle() + ", " + ticket.getEvent().getDescription() + "\n");
-        }
-        return sb.toString();
+    public List<Ticket> getTickets() {
+        return tickets;
     }
 
     public void setTickets(List<Ticket> tickets) { this.tickets = tickets; }

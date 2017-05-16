@@ -5,11 +5,11 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.util.SparseArray;
@@ -27,19 +27,14 @@ import com.google.android.gms.vision.barcode.BarcodeDetector;
 
 import java.io.IOException;
 
-import ch.hsr.afterhour.Application;
 import ch.hsr.afterhour.R;
-import ch.hsr.afterhour.model.CoatCheck;
-import ch.hsr.afterhour.model.Event;
 import ch.hsr.afterhour.service.Scanner.Scanner;
+import ch.hsr.afterhour.tasks.AddCoatCheckTask;
 
+public class CoatCheckScannerFragment extends Fragment {
 
-public class ScannerFragment extends Fragment {
-
-    public interface OnEntryScannerListener {
-        void onUserScanned(String id);
-
-        void onCoatCheckScanned(CoatCheck coatCheck);
+    public interface CoatCheckScannerListener {
+        void onCoatCheckScanned();
     }
 
     public interface OnCameraPermissionsGranted {
@@ -48,17 +43,16 @@ public class ScannerFragment extends Fragment {
 
     // UI Elements & Views
     private View progressView;
-    FloatingActionButton fab;
 
     // camera
     private final static int CAMERA_PERMISSION_CODE = 117;
     private OnCameraPermissionsGranted permissionsGrantedCallback;
     private SurfaceView cameraView;
     private TextView infoPane;
-    private Scanner entryScanner;
+    private Scanner coatcheckScanner;
 
     // Data Holders
-    private OnEntryScannerListener mListener;
+    private CoatCheckScannerListener mListener;
     private final int QR_DETECTED = 0;
     private Handler uiHandler;
 
@@ -83,76 +77,68 @@ public class ScannerFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View rootView = inflater.inflate(R.layout.fragment_scanner_entry, container, false);
-        progressView = rootView.findViewById(R.id.scan_entry_progressbar);
-        cameraView = (SurfaceView) rootView.findViewById(R.id.scan_entry_camera_view);
-        infoPane = (TextView) rootView.findViewById(R.id.scan_entry_info_bar);
-        if (Application.get().getUser().isEmployee()) {
-            infoPane.setText(R.string.scan_user_id);
-        } else {
-            infoPane.setText(R.string.scan_coat_check);
-        }
-
+        View rootView = inflater.inflate(R.layout.fragment_scanner, container, false);
+        progressView = rootView.findViewById(R.id.scanner_progressbar);
+        cameraView = (SurfaceView) rootView.findViewById(R.id.scanner_camera_view);
+        infoPane = (TextView) rootView.findViewById(R.id.scanner_info_bar);
+        infoPane.setText(R.string.scan_coat_check);
         this.permissionsGrantedCallback = () -> {
             // Start the scanner only if the permissions are granted.
-            entryScanner = new EntryScanner(getContext());
+            coatcheckScanner = new CoatCheckScanner(getContext());
             uiHandler = new Handler() {
                 @Override
                 public void handleMessage(Message msg) {
                     switch (msg.what) {
                         case QR_DETECTED:
-                            entryScanner.stop();
-                            showProgress(Application.get().getUser().isEmployee());
+                            coatcheckScanner.stop();
+                            showProgress(true);
                             break;
                     }
                 }
             };
-            entryScanner.start();
+            coatcheckScanner.start();
         };
-
         requestCameraPermissions();
-
-
         return rootView;
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        if(entryScanner != null) {
-            entryScanner.start();
+        if(coatcheckScanner != null) {
+            coatcheckScanner.start();
         }
     }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnEntryScannerListener) {
-            mListener = (OnEntryScannerListener) context;
+        if (context instanceof CoatCheckScannerListener) {
+            mListener = (CoatCheckScannerListener) context;
         } else {
             throw new RuntimeException(context.toString()
-                    + " must implement OnEntryScannerListener");
+                    + " must implement " + getClass() + " CoatCheckScannerListener");
         }
     }
 
     @Override
     public void onPause() {
-        if(entryScanner != null) {
-            entryScanner.stop();
+        if(coatcheckScanner != null) {
+            coatcheckScanner.stop();
         }
         mListener = null;
         super.onPause();
     }
 
 
-    private class EntryScanner implements Scanner {
+    private class CoatCheckScanner implements Scanner {
 
         private CameraSource mCameraSource;
         private BarcodeDetector mBarcodeDetector;
         private Context mContext;
         private boolean itemScanned = false;
 
-        public EntryScanner(Context context) {
+        public CoatCheckScanner(Context context) {
             mContext = context;
             initCamera();
         }
@@ -193,44 +179,41 @@ public class ScannerFragment extends Fragment {
                         return;
                     }
                     String qrCode = barcodes.valueAt(0).displayValue;
-                    String id = qrCode.substring(8, qrCode.length());
-                    boolean isEmployee = Application.get().getUser().isEmployee();
-                    validateQrCode(qrCode, isEmployee);
+                    itemScanned = validateQr(qrCode);
+                    String locationId = qrCode.substring(4, qrCode.indexOf("x"));
+                    String coatHangerNumber = qrCode.substring(qrCode.indexOf("x") + 1, qrCode.length());
                     if (itemScanned) {
                         Message message = uiHandler.obtainMessage(QR_DETECTED);
                         message.sendToTarget();
-                        infoPane.post(() -> {
-                            fab.setVisibility(View.VISIBLE);
-                            if (isEmployee) {
-                                mListener.onUserScanned(id);
-                            } else {
-                                Event dummyEvent = new Event();
-                                dummyEvent.setTitle("Dummy Event");
-                                CoatCheck coatCheck = new CoatCheck(dummyEvent, Integer.parseInt(id));
-                                mListener.onCoatCheckScanned(coatCheck);
-                            }
-                        });
+                        AsyncTask mTask = new AddCoatCheckTask(mListener);
+                        infoPane.post(() ->  mTask.execute(Integer.parseInt(locationId), Integer.parseInt(coatHangerNumber)));
                     }
                 }
             });
         }
 
-        private void validateQrCode(String qrCode, boolean isEmployee) {
-            if (isEmployee) {
-                itemScanned = qrCode.startsWith("USR-");
-            } else {
-                itemScanned = qrCode.startsWith("CCK-");
+        private boolean validateQr(String qrCode) {
+            int minimumQRlength = 7;
+            if (!qrCode.startsWith("CHA-")) {
+                return false;
             }
+            if (!qrCode.contains("x")) {
+                return false;
+            }
+            if (!(qrCode.length() < minimumQRlength)) {
+                return false;
+            }
+            return true;
         }
 
         @Override
         public void start() {
-            /* Callback to the SurfaceHolder of the SurfaceView so that you know
-            * when you can start drawing the preview frames.*/
+        /* Callback to the SurfaceHolder of the SurfaceView so that you know
+        * when you can start drawing the preview frames.*/
             cameraView.getHolder().addCallback(new SurfaceHolder.Callback() {
                 @Override
                 public void surfaceCreated(SurfaceHolder holder) {
-            /* call the start method of the CameraSource to start drawing the preview frames */
+        /* call the start method of the CameraSource to start drawing the preview frames */
                     try {
                         //noinspection MissingPermission
                         mCameraSource.start(cameraView.getHolder());
@@ -263,7 +246,6 @@ public class ScannerFragment extends Fragment {
 
     private void showProgress(final boolean show) {
         int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
-
         progressView.setVisibility(show ? View.VISIBLE : View.GONE);
         progressView.animate().setDuration(shortAnimTime).alpha(
                 show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
