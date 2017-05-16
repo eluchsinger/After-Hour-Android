@@ -7,6 +7,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
@@ -15,6 +16,7 @@ import android.widget.EditText;
 import java.net.MalformedURLException;
 
 import ch.hsr.afterhour.Application;
+import ch.hsr.afterhour.MainActivity;
 import ch.hsr.afterhour.R;
 import ch.hsr.afterhour.model.Gender;
 import ch.hsr.afterhour.model.User;
@@ -48,6 +50,8 @@ public class RegisterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
+        Toolbar myToolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(myToolbar);
 
         mFirstName = (EditText) findViewById(R.id.register_firstname);
         mLastName = (EditText) findViewById(R.id.register_lastname);
@@ -246,7 +250,7 @@ public class RegisterActivity extends AppCompatActivity {
             showProgress(false);
 
             if (success) {
-                Intent intent = new Intent(getBaseContext(), ProfileActivity.class);
+                Intent intent = new Intent(getBaseContext(), MainActivity.class);
                 startActivity(intent);
             } else {
                 Snackbar snackbar = Snackbar.make(

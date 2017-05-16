@@ -75,4 +75,8 @@
     <string name="no_valid_scanned_user_detected">Kein gültiger User gescannt</string>
     <string name="scan_user_id">Bitte scannen Sie den QR Code eines Benutzers</string>
     <string name="scan_coat_check">Bitte Jacke abgeben und Bügel scannen</string>
+    <string name="async_task_timeout">Die  Abfrage ging zu lange und wurde abgebrochen</string>
+    <string name="async_task_error">Es gab ein Fehler bei der Serverabfrage</string>
+    <string name="buy_ticket_success_message">Ticket gekauft - Geniessen Sie Ihren Besuch</string>
+    <string name="buy_ticket_failed_message">Es tut uns leid. Ihr Ticket konnte nicht erworben werden.</string>
 </resources>

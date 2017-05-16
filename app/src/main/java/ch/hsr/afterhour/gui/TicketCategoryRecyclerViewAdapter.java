@@ -8,17 +8,18 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import java.util.List;
+import java.util.Locale;
 
 import ch.hsr.afterhour.R;
-import ch.hsr.afterhour.gui.EventListFragment.OnMyEventListListener;
+import ch.hsr.afterhour.gui.listeners.OnEventInteractionListener;
 import ch.hsr.afterhour.model.TicketCategory;
 
 public class TicketCategoryRecyclerViewAdapter extends RecyclerView.Adapter<TicketCategoryRecyclerViewAdapter.ViewHolder> {
 
     private final List<TicketCategory> mValues;
-    private final OnMyEventListListener mListener;
+    private final OnEventInteractionListener mListener;
 
-    public TicketCategoryRecyclerViewAdapter(List<TicketCategory> items, OnMyEventListListener listener) {
+    public TicketCategoryRecyclerViewAdapter(List<TicketCategory> items, OnEventInteractionListener listener) {
         mValues = items;
         mListener = listener;
     }
@@ -34,7 +35,7 @@ public class TicketCategoryRecyclerViewAdapter extends RecyclerView.Adapter<Tick
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
         holder.mCategoryName.setText(mValues.get(position).getName());
-        holder.mPrice.setText(Double.toString(mValues.get(position).getPrice()));
+        holder.mPrice.setText(String.format(Locale.getDefault(), "%1$,.2f", mValues.get(position).getPrice()));
 
         holder.mButtonBuy.setOnClickListener(v -> {
             if (null != mListener) {

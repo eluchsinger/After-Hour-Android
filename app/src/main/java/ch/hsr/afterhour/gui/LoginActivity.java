@@ -8,6 +8,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -20,6 +21,7 @@ import java.net.MalformedURLException;
 import java.util.Map;
 
 import ch.hsr.afterhour.Application;
+import ch.hsr.afterhour.MainActivity;
 import ch.hsr.afterhour.R;
 import ch.hsr.afterhour.model.Event;
 import ch.hsr.afterhour.model.TicketCategory;
@@ -29,7 +31,7 @@ import ch.viascom.groundwork.foxhttp.exception.FoxHttpException;
 /**
  * A login screen that offers login via email/password.
  */
-public class LoginActivity extends AppCompatActivity implements EventListFragment.OnMyEventListListener {
+public class LoginActivity extends AppCompatActivity {
     private UserLoginTask mAuthTask = null;
     private final String LOGIN_PREFS = "login_credentials";
 
@@ -46,6 +48,10 @@ public class LoginActivity extends AppCompatActivity implements EventListFragmen
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        Toolbar myToolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(myToolbar);
+
         setupMainViews();
         settings = getSharedPreferences(LOGIN_PREFS, MODE_PRIVATE);
         Map<String, ?> preferenceMap = settings.getAll();
@@ -82,7 +88,6 @@ public class LoginActivity extends AppCompatActivity implements EventListFragmen
         });
         mRemembermeCb = (CheckBox) findViewById(R.id.login_autologin_checkbox);
     }
-
 
     private void attemptLogin() {
         if (mAuthTask != null) {
@@ -148,7 +153,6 @@ public class LoginActivity extends AppCompatActivity implements EventListFragmen
         return password.length() > 3;
     }
 
-
     private void showProgress(final boolean show) {
         int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
 
@@ -169,16 +173,6 @@ public class LoginActivity extends AppCompatActivity implements EventListFragmen
             }
         });
     }
-
-    @Override
-    public void onMyEventInteraction(Event item) {
-
-    }
-
-    @Override
-    public void buyTicket(TicketCategory ticketCategoryId) {
-    }
-
 
     private class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
         private final String mEmail;
@@ -215,12 +209,12 @@ public class LoginActivity extends AppCompatActivity implements EventListFragmen
 
             if (success) {
                 Application.get().setUser(user);
-                intent = new Intent(LoginActivity.this, ProfileActivity.class);
+                intent = new Intent(LoginActivity.this, MainActivity.class);
                 startActivity(intent);
                 finish();
             } else {
                 Snackbar snackbar = Snackbar.make(
-                        LoginActivity.this.findViewById(R.id.activity_login),
+                        LoginActivity.this.findViewById(R.id.container),
                         getString(R.string.wrong_login_credentials),
                         Snackbar.LENGTH_LONG
                 );
