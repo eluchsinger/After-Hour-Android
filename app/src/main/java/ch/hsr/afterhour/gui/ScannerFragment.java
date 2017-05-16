@@ -78,8 +78,6 @@ public class ScannerFragment extends Fragment {
                 }
             }
         };
-        fab = ((ProfileActivity) getContext()).getFab();
-        fab.setVisibility(View.GONE);
         return rootView;
     }
 

@@ -8,6 +8,9 @@
     <dimen name="double_text_margin">32dp</dimen>
     <!--<dimen name="fab_margin">16dp</dimen>-->
 
+    <dimen name="bottom_navigation_height">55dp</dimen>
+    <dimen name="bottom_sheet_peek_height">55dp</dimen>
+
     <!-- Event Dimenstions -->
     <dimen name="event_picture_height">136dp</dimen>
     <dimen name="event_picture_width">136dp</dimen>

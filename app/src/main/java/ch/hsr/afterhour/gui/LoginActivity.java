@@ -171,11 +171,6 @@ public class LoginActivity extends AppCompatActivity implements EventListFragmen
     }
 
     @Override
-    public void onMyEventInteraction(Event item) {
-
-    }
-
-    @Override
     public void buyTicket(TicketCategory ticketCategoryId) {
     }
 

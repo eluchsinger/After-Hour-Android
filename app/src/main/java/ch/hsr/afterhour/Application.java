@@ -2,6 +2,7 @@ package ch.hsr.afterhour;
 
 import java.util.concurrent.atomic.AtomicReference;
 
+import ch.hsr.afterhour.model.Gender;
 import ch.hsr.afterhour.model.User;
 import ch.hsr.afterhour.service.server.FoxHttpAPI;
 import ch.viascom.groundwork.foxhttp.exception.FoxHttpException;
@@ -27,6 +28,7 @@ public class Application extends android.app.Application {
     }
 
     public User getUser() {
+        user.compareAndSet(null, new User("Ibrahimovic", "Zlatan", "z.i@yolo.ch", Gender.FEMALE, "078", "10.7.1994", true));
         return user.get();
     }
 

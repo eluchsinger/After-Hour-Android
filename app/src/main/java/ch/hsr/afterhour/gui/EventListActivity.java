@@ -27,10 +27,6 @@ public class EventListActivity extends AppCompatActivity  implements EventListFr
     }
 
     @Override
-    public void onMyEventInteraction(Event item) {
-    }
-
-    @Override
     public void buyTicket(TicketCategory ticketCategory) {
         BuyTicketTask buyTicketTask = new BuyTicketTask();
         buyTicketTask.execute(ticketCategory);

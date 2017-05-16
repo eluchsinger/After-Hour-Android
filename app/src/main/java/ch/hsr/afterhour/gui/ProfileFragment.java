@@ -1,17 +1,25 @@
 package ch.hsr.afterhour.gui;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.NestedScrollView;
+import android.support.v7.widget.CardView;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.flipboard.bottomsheet.BottomSheetLayout;
+import com.flipboard.bottomsheet.OnSheetDismissedListener;
 
 import java.util.List;
 
@@ -42,6 +50,8 @@ public class ProfileFragment extends Fragment {
     private FabButtonClickedListener mListener;
     private Context rootContext;
 
+    private TextView bottomSheetTitle;
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -58,8 +68,10 @@ public class ProfileFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_profile, container, false);
-        activityFab = ((ProfileActivity) getActivity()).getFab();
-        activityFab.setOnClickListener(v -> mListener.intentionToShowPersonalQrCode());
+
+        // Todo: Get fab from activity?
+        // activityFab = ((ProfileActivity) getActivity()).getFab();
+//        activityFab.setOnClickListener(v -> mListener.intentionToShowPersonalQrCode());
         coatChecks = Application.get().getUser().getCoatChecks();
         if (!coatChecks.isEmpty()) {
             scannedCoatCheck = coatChecks.get(0);
@@ -67,36 +79,60 @@ public class ProfileFragment extends Fragment {
         return rootView;
     }
 
+    private float convertToPixel(float dp) {
+        Resources r = getResources();
+        return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, r.getDisplayMetrics());
+    }
+
+    private float calculateBottomsheetPeekHeight() {
+        float peekHeight = getResources().getDimension(R.dimen.bottom_sheet_peek_height);
+        peekHeight += this.bottomSheetTitle.getHeight();
+        return peekHeight;
+    }
+
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-        mViewPager = (ViewPager) view.findViewById(R.id.viewpager);
-        mViewPager.setAdapter(new SamplePagerAdapter());
-        scannedUser = ((ProfileActivity) rootContext).getScannedUser();
-        mViewPager.setCurrentItem( (scannedUser!=null || scannedCoatCheck!=null) ? ADDITIONAL_FRAGMENT : PROFILE_FRAGMENT );
-        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-            }
+        final CardView bottomSheet = (CardView)view.findViewById(R.id.bottom_sheet);
+        this.bottomSheetTitle = (TextView) view.findViewById(R.id.bottom_sheet_title);
+//        bottomSheet.setFillViewport(true);
+        BottomSheetBehavior bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
+        bottomSheetBehavior.setPeekHeight((int) calculateBottomsheetPeekHeight());
+        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+//
+//        bottomSheetLayout = (BottomSheetLayout) view.findViewById(R.id.bottomsheet);
+//        bottomSheetLayout.setPeekSheetTranslation(convertToPixel(50));
+//        bottomSheetLayout.showWithSheetView(LayoutInflater.from(getContext()).inflate(R.layout.bottomsheet_barcode, bottomSheetLayout, false));
+//        bottomSheetLayout.addOnSheetDismissedListener(bottomSheetLayout1 -> bottomSheetLayout1
+//                .showWithSheetView(LayoutInflater.from(getContext()).inflate(R.layout.bottomsheet_barcode, bottomSheetLayout1, false)));
 
-            @Override
-            public void onPageSelected(int position) {
-                switch (position) {
-                    case ADDITIONAL_FRAGMENT:
-                        activityFab.setOnClickListener(v -> mListener.intentionToScan());
-                        break;
-                    default:
-                        activityFab.setOnClickListener(v -> mListener.intentionToShowPersonalQrCode());
-                        break;
-                }
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
-            }
-        });
-        mSlidingTabLayout = (SlidingTabLayout) view.findViewById(R.id.sliding_tabs);
-        mSlidingTabLayout.setViewPager(mViewPager);
+//        mViewPager = (ViewPager) view.findViewById(R.id.viewpager);
+//        mViewPager.setAdapter(new SamplePagerAdapter());
+//        scannedUser = ((ProfileActivity) rootContext).getScannedUser();
+//        mViewPager.setCurrentItem( (scannedUser!=null || scannedCoatCheck!=null) ? ADDITIONAL_FRAGMENT : PROFILE_FRAGMENT );
+//        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+//            @Override
+//            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+//            }
+//
+//            @Override
+//            public void onPageSelected(int position) {
+//                switch (position) {
+//                    case ADDITIONAL_FRAGMENT:
+//                        activityFab.setOnClickListener(v -> mListener.intentionToScan());
+//                        break;
+//                    default:
+//                        activityFab.setOnClickListener(v -> mListener.intentionToShowPersonalQrCode());
+//                        break;
+//                }
+//            }
+//
+//            @Override
+//            public void onPageScrollStateChanged(int state) {
+//
+//            }
+//        });
+//        mSlidingTabLayout = (SlidingTabLayout) view.findViewById(R.id.sliding_tabs);
+//        mSlidingTabLayout.setViewPager(mViewPager);
     }
 
     class SamplePagerAdapter extends PagerAdapter {
