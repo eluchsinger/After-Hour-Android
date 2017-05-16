@@ -76,7 +76,8 @@ public class MainActivity extends AppCompatActivity implements EventListFragment
         boolean isEmployee = Application.get().getUser().isEmployee();
         MainActivityViewPagerAdapter pagerAdapter = new MainActivityViewPagerAdapter(getSupportFragmentManager(), isEmployee);
         viewPager.setAdapter(pagerAdapter);
-        viewPager.setCurrentItem(1);
+        // Select the middle item.
+        viewPager.setCurrentItem(pagerAdapter.getCount()/2);
         tabLayout.setupWithViewPager(viewPager);
     }
 
