@@ -18,6 +18,7 @@ import ch.hsr.afterhour.gui.ScannerFragment;
  * The adapter for the viewpager of the MainActivity (sliding the tabs and navigation)
  */
 public class MainActivityViewPagerAdapter extends FragmentPagerAdapter {
+    private static final String TAG = "MAIN_NAVIGATION";
 
     private enum MainFragments {
         SCANNER("Employee scanning", new ScannerFragment()),
@@ -51,10 +52,10 @@ public class MainActivityViewPagerAdapter extends FragmentPagerAdapter {
 
         if(isEmployee) {
             if(this.fragments.remove(MainFragments.COATCHECK))
-                Logger.getLogger("NAVIGATION").info("Removed Coatcheck tab");
+                Logger.getLogger(TAG).info("Removed Coatcheck Tab");
         } else {
             if(this.fragments.remove(MainFragments.SCANNER))
-                Logger.getLogger("NAVIGATION").info("Removed Scanner Tab");
+                Logger.getLogger(TAG).info("Removed Scanner Tab");
         }
     }
 
