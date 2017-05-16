@@ -1,35 +1,19 @@
 package ch.hsr.afterhour.gui;
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetBehavior;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.ViewPager;
-import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.CardView;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.flipboard.bottomsheet.BottomSheetLayout;
-import com.flipboard.bottomsheet.OnSheetDismissedListener;
-import com.google.android.gms.vision.text.Text;
-
-import java.util.List;
-
 import ch.hsr.afterhour.Application;
 import ch.hsr.afterhour.R;
-import ch.hsr.afterhour.gui.view.SlidingTabLayout;
-import ch.hsr.afterhour.model.CoatCheck;
-import ch.hsr.afterhour.model.User;
 import ch.hsr.afterhour.service.barcode.BarcodeGenerator;
 import ch.hsr.afterhour.service.barcode.QrBarcodeGenerator;
 

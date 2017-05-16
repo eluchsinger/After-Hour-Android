@@ -31,8 +31,7 @@ import ch.hsr.afterhour.model.TicketCategory;
 import ch.hsr.afterhour.model.User;
 import ch.hsr.afterhour.tasks.RetrieveUserByIdTask;
 
-public class MainActivity extends AppCompatActivity implements EventListFragment.OnMyEventListListener,
-        ScannerFragment.OnEntryScannerListener, ActivityCompat.OnRequestPermissionsResultCallback {
+public class MainActivity extends AppCompatActivity implements ScannerFragment.OnEntryScannerListener, ActivityCompat.OnRequestPermissionsResultCallback {
 
     /**
      * Time for the timeout of a server request async task.
@@ -90,11 +89,6 @@ public class MainActivity extends AppCompatActivity implements EventListFragment
         final Intent loginIntent = new Intent(this, LoginActivity.class);
         loginIntent.setFlags(loginIntent.getFlags() | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(loginIntent);
-    }
-
-    @Override
-    public void buyTicket(TicketCategory ticketCategoryId) {
-
     }
 
     @Override

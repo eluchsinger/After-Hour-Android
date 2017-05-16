@@ -11,15 +11,15 @@ import java.util.List;
 import java.util.Locale;
 
 import ch.hsr.afterhour.R;
-import ch.hsr.afterhour.gui.EventListFragment.OnMyEventListListener;
+import ch.hsr.afterhour.gui.listeners.OnEventInteractionListener;
 import ch.hsr.afterhour.model.TicketCategory;
 
 public class TicketCategoryRecyclerViewAdapter extends RecyclerView.Adapter<TicketCategoryRecyclerViewAdapter.ViewHolder> {
 
     private final List<TicketCategory> mValues;
-    private final OnMyEventListListener mListener;
+    private final OnEventInteractionListener mListener;
 
-    public TicketCategoryRecyclerViewAdapter(List<TicketCategory> items, OnMyEventListListener listener) {
+    public TicketCategoryRecyclerViewAdapter(List<TicketCategory> items, OnEventInteractionListener listener) {
         mValues = items;
         mListener = listener;
     }
