@@ -25,9 +25,7 @@ public class DownloadEventsTask extends AsyncTask<Void, Void, Event[]> {
     protected Event[] doInBackground(Void... params) {
         try {
             return Application.get().getServerAPI().downloadEvents();
-        } catch (FoxHttpException e) {
-            e.printStackTrace();
-        } catch (MalformedURLException e) {
+        } catch (FoxHttpException | MalformedURLException e) {
             e.printStackTrace();
         }
         return null;
