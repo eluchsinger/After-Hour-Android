@@ -15,6 +15,7 @@ import android.widget.EditText;
 import java.net.MalformedURLException;
 
 import ch.hsr.afterhour.Application;
+import ch.hsr.afterhour.MainActivity;
 import ch.hsr.afterhour.R;
 import ch.hsr.afterhour.model.Gender;
 import ch.hsr.afterhour.model.User;
@@ -246,7 +247,7 @@ public class RegisterActivity extends AppCompatActivity {
             showProgress(false);
 
             if (success) {
-                Intent intent = new Intent(getBaseContext(), ProfileActivity.class);
+                Intent intent = new Intent(getBaseContext(), MainActivity.class);
                 startActivity(intent);
             } else {
                 Snackbar snackbar = Snackbar.make(

@@ -32,10 +32,6 @@
             android:name=".gui.RegisterActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait" />
-        <activity
-            android:name=".gui.ProfileActivity"
-            android:label="@string/app_name"
-            android:screenOrientation="portrait" />
         <activity android:name=".gui.EventListActivity" />
         <activity
             android:name=".MainActivity"

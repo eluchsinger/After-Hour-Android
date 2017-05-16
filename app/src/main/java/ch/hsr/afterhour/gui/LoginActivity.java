@@ -20,6 +20,7 @@ import java.net.MalformedURLException;
 import java.util.Map;
 
 import ch.hsr.afterhour.Application;
+import ch.hsr.afterhour.MainActivity;
 import ch.hsr.afterhour.R;
 import ch.hsr.afterhour.model.Event;
 import ch.hsr.afterhour.model.TicketCategory;
@@ -210,7 +211,7 @@ public class LoginActivity extends AppCompatActivity implements EventListFragmen
 
             if (success) {
                 Application.get().setUser(user);
-                intent = new Intent(LoginActivity.this, ProfileActivity.class);
+                intent = new Intent(LoginActivity.this, MainActivity.class);
                 startActivity(intent);
                 finish();
             } else {
