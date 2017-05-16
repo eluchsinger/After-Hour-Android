@@ -72,6 +72,9 @@ public class MainActivity extends AppCompatActivity implements EventListFragment
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
         ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
+        // This sets the amount of pages that can be off screen without being destroyed.
+        // We will set this to 0, in order to avoid having problems with the scanners
+        viewPager.setOffscreenPageLimit(0);
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tablayout);
         boolean isEmployee = Application.get().getUser().isEmployee();
         MainActivityViewPagerAdapter pagerAdapter = new MainActivityViewPagerAdapter(getSupportFragmentManager(), isEmployee);
