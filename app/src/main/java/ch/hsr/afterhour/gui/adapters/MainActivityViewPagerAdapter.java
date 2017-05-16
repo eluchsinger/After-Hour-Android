@@ -4,14 +4,18 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import ch.hsr.afterhour.MainActivity;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.logging.Logger;
+
 import ch.hsr.afterhour.gui.EventListFragment;
 import ch.hsr.afterhour.gui.ProfileFragment;
 import ch.hsr.afterhour.gui.ScannerFragment;
 
 /**
  * Created by Esteban Luchsinger on 16.05.2017.
- * The adapter for the viewpager of the MainActivity
+ * The adapter for the viewpager of the MainActivity (sliding the tabs and navigation)
  */
 public class MainActivityViewPagerAdapter extends FragmentPagerAdapter {
 
@@ -38,32 +42,34 @@ public class MainActivityViewPagerAdapter extends FragmentPagerAdapter {
         }
     }
 
-    private MainFragments[] fragments;
+    private List<MainFragments> fragments;
 
     public MainActivityViewPagerAdapter(FragmentManager fm, boolean isEmployee) {
         super(fm);
 
-        this.fragments = MainFragments.values();
+        this.fragments = new ArrayList<>(Arrays.asList(MainFragments.values()));
 
         if(isEmployee) {
-            // Todo: Remove the scanner fragment from fragments.
+            if(this.fragments.remove(MainFragments.COATCHECK))
+                Logger.getLogger("NAVIGATION").info("Removed Coatcheck tab");
         } else {
-            // Todo: Remove the coatcheck fragment from fragments.
+            if(this.fragments.remove(MainFragments.SCANNER))
+                Logger.getLogger("NAVIGATION").info("Removed Scanner Tab");
         }
     }
 
     @Override
     public CharSequence getPageTitle(int position) {
-        return fragments[position].getTitle();
+        return fragments.get(position).getTitle();
     }
 
     @Override
     public Fragment getItem(int position) {
-        return fragments[position].getFragment();
+        return fragments.get(position).getFragment();
     }
 
     @Override
     public int getCount() {
-        return fragments.length;
+        return fragments.size();
     }
 }
