@@ -2,6 +2,7 @@ package ch.hsr.afterhour.gui;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetBehavior;
@@ -29,11 +30,12 @@ import ch.hsr.afterhour.R;
 import ch.hsr.afterhour.gui.view.SlidingTabLayout;
 import ch.hsr.afterhour.model.CoatCheck;
 import ch.hsr.afterhour.model.User;
+import ch.hsr.afterhour.service.barcode.BarcodeGenerator;
+import ch.hsr.afterhour.service.barcode.QrBarcodeGenerator;
 
 public class ProfileFragment extends Fragment {
 
-    private final int PROFILE_FRAGMENT = 0;
-    private final int ADDITIONAL_FRAGMENT = 1;
+    private static final int BARCODE_SIZE = 250;
 
     private SlidingTabLayout mSlidingTabLayout;
     private ViewPager mViewPager;
@@ -46,9 +48,6 @@ public class ProfileFragment extends Fragment {
     private Context rootContext;
 
     private TextView bottomSheetTitle;
-
-    private TextView firstName;
-    private TextView lastName;
 
     @Override
     public void onAttach(Context context) {
@@ -83,11 +82,28 @@ public class ProfileFragment extends Fragment {
         bottomSheetBehavior.setPeekHeight((int) calculateBottomsheetPeekHeight());
         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
 
-        this.firstName = (TextView) view.findViewById(R.id.profile_firstname);
-        this.lastName = (TextView) view.findViewById(R.id.profile_lastname);
+        final ImageView profileImage = (ImageView) view.findViewById(R.id.profile_image_container);
+        final TextView firstName = (TextView) view.findViewById(R.id.profile_firstname);
+        final TextView lastName = (TextView) view.findViewById(R.id.profile_lastname);
+        final ImageView bottomSheetBarcode = (ImageView) view.findViewById(R.id.bottom_sheet_barcode);
 
-        this.firstName.setText(Application.get().getUser().getFirstName());
-        this.lastName.setText(Application.get().getUser().getLastName());
+
+        profileImage.setImageResource(R.drawable.silvio_berlusconi_portrait);
+
+        firstName.setText(Application.get().getUser().getFirstName());
+        lastName.setText(Application.get().getUser().getLastName());
+
+        Bitmap image = Application.get().getUser().getQrImage();
+        if (image == null) {
+            BarcodeGenerator qrGenerator  = new QrBarcodeGenerator(); // todo: mitgeben beim erzeugen
+            image = qrGenerator.generateBarcodeWithSize(
+                    "USR-ZRH-" + Application.get().getUser().getId(),
+                    BARCODE_SIZE,
+                    BARCODE_SIZE
+            );
+            Application.get().getUser().setQrImage(image);
+        }
+        bottomSheetBarcode.setImageBitmap(image);
     }
 
 //    class SamplePagerAdapter extends PagerAdapter {
