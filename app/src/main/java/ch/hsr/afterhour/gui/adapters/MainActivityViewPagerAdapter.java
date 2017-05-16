@@ -16,7 +16,7 @@ import ch.hsr.afterhour.gui.ScannerFragment;
 public class MainActivityViewPagerAdapter extends FragmentPagerAdapter {
 
     public enum MainFragments {
-        SCANNER("Employee scanning", new ScannerFragment()),
+        SCANNER("Employee scanning", null),
         COATCHECK("Coatcheck", new Fragment()),
         PROFILE("Profile Fragment", new ProfileFragment()),
         EVENTS("Events", new EventListFragment());
@@ -34,6 +34,8 @@ public class MainActivityViewPagerAdapter extends FragmentPagerAdapter {
         }
 
         public Fragment getFragment() {
+            if(this == SCANNER)
+                return new ScannerFragment();
             return fragment;
         }
     }

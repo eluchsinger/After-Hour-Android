@@ -1,10 +1,13 @@
 package ch.hsr.afterhour;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
@@ -15,6 +18,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import java.util.logging.Logger;
+
 import ch.hsr.afterhour.gui.EventListFragment;
 import ch.hsr.afterhour.gui.ProfileFragment;
 import ch.hsr.afterhour.gui.ScannerFragment;
@@ -23,7 +28,7 @@ import ch.hsr.afterhour.model.CoatCheck;
 import ch.hsr.afterhour.model.TicketCategory;
 
 public class MainActivity extends AppCompatActivity implements EventListFragment.OnMyEventListListener,
-        ProfileFragment.FabButtonClickedListener, ScannerFragment.OnEntryScannerListener {
+        ProfileFragment.FabButtonClickedListener, ScannerFragment.OnEntryScannerListener, ActivityCompat.OnRequestPermissionsResultCallback {
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -62,10 +67,6 @@ public class MainActivity extends AppCompatActivity implements EventListFragment
         viewPager.setAdapter(pagerAdapter);
         viewPager.setCurrentItem(1);
         tabLayout.setupWithViewPager(viewPager);
-//        this.changeFragment(new ProfileFragment());
-    }
-
-    private void setupTabs() {
     }
 
     // Menu icons are inflated just as they were with actionbar
