@@ -17,7 +17,6 @@ import java.util.List;
 
 import ch.hsr.afterhour.R;
 import ch.hsr.afterhour.gui.EventListFragment.OnMyEventListListener;
-import ch.hsr.afterhour.gui.widgets.SmartImageButton;
 import ch.hsr.afterhour.model.Event;
 
 /**
