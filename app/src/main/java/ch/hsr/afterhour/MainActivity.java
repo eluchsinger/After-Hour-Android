@@ -6,6 +6,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
@@ -17,7 +19,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 import java.util.logging.Logger;
 
 import ch.hsr.afterhour.gui.EventListFragment;
@@ -26,9 +32,18 @@ import ch.hsr.afterhour.gui.ScannerFragment;
 import ch.hsr.afterhour.gui.adapters.MainActivityViewPagerAdapter;
 import ch.hsr.afterhour.model.CoatCheck;
 import ch.hsr.afterhour.model.TicketCategory;
+import ch.hsr.afterhour.model.User;
+import ch.hsr.afterhour.tasks.RetrieveUserByIdTask;
 
 public class MainActivity extends AppCompatActivity implements EventListFragment.OnMyEventListListener,
-        ProfileFragment.FabButtonClickedListener, ScannerFragment.OnEntryScannerListener, ActivityCompat.OnRequestPermissionsResultCallback {
+        ScannerFragment.OnEntryScannerListener, ActivityCompat.OnRequestPermissionsResultCallback {
+
+    /**
+     * Time for the timeout of a server request async task.
+     */
+    private final static int TASK_TIMEOUT = 4000;
+
+    private CoordinatorLayout container;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -54,6 +69,8 @@ public class MainActivity extends AppCompatActivity implements EventListFragment
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        this.container = (CoordinatorLayout) findViewById(R.id.container);
 
         Toolbar myToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(myToolbar);
@@ -89,22 +106,26 @@ public class MainActivity extends AppCompatActivity implements EventListFragment
     }
 
     @Override
-    public void intentionToShowPersonalQrCode() {
-
-    }
-
-    @Override
-    public void intentionToScan() {
-
-    }
-
-    @Override
     public void onUserScanned(String id) {
+        RetrieveUserByIdTask task = new RetrieveUserByIdTask();
+        try {
+            User scannedUser = task.execute(id).get(TASK_TIMEOUT, TimeUnit.MILLISECONDS);
 
+        } catch (TimeoutException e) {
+            showSnackbar(R.string.async_task_timeout);
+            e.printStackTrace();
+        } catch(Exception e) {
+            showSnackbar(R.string.async_task_error);
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void onCoatCheckScanned(CoatCheck coatCheck) {
 
+    }
+
+    private void showSnackbar(int resourceId) {
+        Snackbar.make(this.container, resourceId, Toast.LENGTH_SHORT).show();
     }
 }
