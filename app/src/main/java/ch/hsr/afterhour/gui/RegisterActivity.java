@@ -16,7 +16,6 @@ import android.widget.EditText;
 import java.net.MalformedURLException;
 
 import ch.hsr.afterhour.Application;
-import ch.hsr.afterhour.MainActivity;
 import ch.hsr.afterhour.R;
 import ch.hsr.afterhour.model.Gender;
 import ch.hsr.afterhour.model.User;

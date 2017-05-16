@@ -1,8 +1,6 @@
 package ch.hsr.afterhour.gui;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
@@ -13,30 +11,34 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.net.MalformedURLException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import ch.hsr.afterhour.Application;
 import ch.hsr.afterhour.R;
+import ch.hsr.afterhour.gui.adapters.EventRecyclerViewAdapter;
+import ch.hsr.afterhour.gui.listeners.OnEventInteractionListener;
 import ch.hsr.afterhour.model.Event;
 import ch.hsr.afterhour.model.TicketCategory;
-import ch.viascom.groundwork.foxhttp.exception.FoxHttpException;
+import ch.hsr.afterhour.model.User;
+import ch.hsr.afterhour.tasks.BuyTicketTask;
+import ch.hsr.afterhour.tasks.DownloadEventPicturesTask;
+import ch.hsr.afterhour.tasks.DownloadEventsTask;
 
 /**
  * A fragment representing a list of Items.
  * <p/>
- * Activities containing this fragment MUST implement the {@link OnMyEventListListener}
+ * Activities containing this fragment MUST implement the {@link OnEventInteractionListener}
  * interface.
  */
-public class EventListFragment extends Fragment {
+public class EventListFragment extends Fragment implements OnEventInteractionListener {
 
     private static final String ARG_COLUMN_COUNT = "column-count";
     private int mColumnCount = 1;
-    private OnMyEventListListener mListener;
+    private OnEventInteractionListener mListener;
     private RecyclerView mRecyclerView;
-    private DownloadEventsTask mDownloadTask;
     private EventRecyclerViewAdapter eventRecyclerViewAdapter;
-    private Event[] events;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -68,21 +70,33 @@ public class EventListFragment extends Fragment {
             } else {
                 mRecyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            mDownloadTask = new DownloadEventsTask();
-            mDownloadTask.execute();
+            downloadEventsAndPictures();
         }
         return rootView;
+    }
+
+    private void downloadEventsAndPictures() {
+        DownloadEventsTask mDownloadTask = new DownloadEventsTask(result -> {
+            List<Event> eventList = new ArrayList<>(Arrays.asList(result));
+            eventRecyclerViewAdapter = new EventRecyclerViewAdapter(eventList, this);
+            mRecyclerView.setAdapter(eventRecyclerViewAdapter);
+
+            // Every event that's loaded -> Load it's bitmap
+            eventList.forEach(event -> {
+                DownloadEventPicturesTask task = new DownloadEventPicturesTask((picture) -> {
+                    event.setPicture(picture);
+                    eventRecyclerViewAdapter.notifyDataSetChanged();
+                });
+                task.execute(event);
+            });
+        });
+        mDownloadTask.execute();
     }
 
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnMyEventListListener) {
-            mListener = (OnMyEventListListener) context;
-        } else {
-           throw new RuntimeException("Must implement OnMyEventListener");
-        }
     }
 
     @Override
@@ -91,80 +105,15 @@ public class EventListFragment extends Fragment {
         mListener = null;
     }
 
-
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnMyEventListListener {
-        void buyTicket(TicketCategory ticketCategoryId);
-    }
-
-
-    class DownloadEventsTask extends AsyncTask<Void, Void, Boolean> {
-
-        @Override
-        protected Boolean doInBackground(Void... params) {
-            try {
-                events = Application.get().getServerAPI().downloadEvents();
-                return true;
-            } catch (FoxHttpException e) {
-                e.printStackTrace();
-                return false;
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-                return false;
-            }
-        }
-
-        @Override
-        protected void onPostExecute(Boolean success) {
-            if (success) {
-                if (mRecyclerView != null) {
-                    eventRecyclerViewAdapter = new EventRecyclerViewAdapter(Arrays.asList(events), mListener);
-                    mRecyclerView.setAdapter(eventRecyclerViewAdapter);
-                    DownloadEventPicturesTask downloadEventPicturesTask = new DownloadEventPicturesTask();
-                    downloadEventPicturesTask.execute();
-                } else {
-                    Snackbar snackbar = Snackbar.make(
-                            getActivity().findViewById(R.id.fragment_user_container),
-                            R.string.unexpected_error,
-                            Snackbar.LENGTH_SHORT);
-                    snackbar.show();
-                }
-            }
-        }
-    }
-
-    class DownloadEventPicturesTask extends AsyncTask<Void, Void, Boolean> {
-
-        @Override
-        protected Boolean doInBackground(Void... params) {
-            try {
-                for (Event event : events){
-                    final Bitmap bitmap = Application.get().getServerAPI().getEventImage(event.getId());
-                    event.setPicture(bitmap);
-                }
-                return true;
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            } catch (FoxHttpException e) {
-                e.printStackTrace();
-            }
-            return false;
-        }
-
-        @Override
-        protected void onPostExecute(Boolean success){
-            if (success){
-                eventRecyclerViewAdapter.notifyDataSetChanged();
-            }
-        }
+    @Override
+    public void buyTicket(TicketCategory ticketCategory) {
+        final User user = Application.get().getUser();
+        final BuyTicketTask task = new BuyTicketTask(user, result -> {
+            if(result)
+                Snackbar.make(this.mRecyclerView, R.string.buy_ticket_success_message,Snackbar.LENGTH_LONG).show();
+            else
+                Snackbar.make(this.mRecyclerView, R.string.buy_ticket_failed_message,Snackbar.LENGTH_LONG).show();
+        });
+        task.execute(ticketCategory);
     }
 }

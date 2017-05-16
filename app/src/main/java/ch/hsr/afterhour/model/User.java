@@ -9,7 +9,7 @@ import java.util.List;
 
 public class User implements Serializable {
 
-    private String id;
+    private int id;
     private String lastName;
     private String firstName;
     private String email;
@@ -88,11 +88,11 @@ public class User implements Serializable {
 
     public void setTickets(List<Ticket> tickets) { this.tickets = tickets; }
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 

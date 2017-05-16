@@ -1,4 +1,4 @@
-package ch.hsr.afterhour.gui;
+package ch.hsr.afterhour.gui.adapters;
 
 import android.support.constraint.ConstraintLayout;
 import android.support.constraint.ConstraintSet;
@@ -16,19 +16,19 @@ import java.util.Arrays;
 import java.util.List;
 
 import ch.hsr.afterhour.R;
-import ch.hsr.afterhour.gui.EventListFragment.OnMyEventListListener;
+import ch.hsr.afterhour.gui.listeners.OnEventInteractionListener;
 import ch.hsr.afterhour.model.Event;
 
 /**
  * {@link RecyclerView.Adapter} that can display a {@link Event} and makes a call to the
- * specified {@link OnMyEventListListener}.
+ * specified {@link OnEventInteractionListener}.
  */
 public class EventRecyclerViewAdapter extends RecyclerView.Adapter<EventRecyclerViewAdapter.ViewHolder> {
 
     private final List<Event> mValues;
-    private final OnMyEventListListener mListener;
+    private final OnEventInteractionListener mListener;
 
-    public EventRecyclerViewAdapter(List<Event> items, OnMyEventListListener listener) {
+    public EventRecyclerViewAdapter(final List<Event> items, final OnEventInteractionListener listener) {
         mValues = items;
         mListener = listener;
     }
@@ -49,13 +49,6 @@ public class EventRecyclerViewAdapter extends RecyclerView.Adapter<EventRecycler
         holder.mEventPicture.setImageBitmap(event.getPicture());
         holder.mEventDate.setText(event.getEventDate());
         holder.mEventLocation.setText(event.getLocation());
-
-        holder.mView.setOnClickListener(v -> {
-            if (null != mListener) {
-                // Notify the active callbacks interface (the activity, if the
-                // fragment is attached to one) that an item has been selected.
-            }
-        });
     }
 
     @Override
@@ -94,13 +87,16 @@ public class EventRecyclerViewAdapter extends RecyclerView.Adapter<EventRecycler
             mShowTicketCategoriesConstraints.clone(mEventCardLayout);
 
             // Make the event details 50% of the width of the card.
-            mShoppingButton.setOnClickListener(v -> {
-                if(isShowingTicketCategories) {
-                    hideTicketCategories();
-                } else {
-                    showTicketCategories();
+            mShoppingButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (isShowingTicketCategories) {
+                        ViewHolder.this.hideTicketCategories();
+                    } else {
+                        ViewHolder.this.showTicketCategories();
+                    }
+                    isShowingTicketCategories = !isShowingTicketCategories;
                 }
-                isShowingTicketCategories = !isShowingTicketCategories;
             });
 
             RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.ticket_category_list);
@@ -140,7 +136,7 @@ public class EventRecyclerViewAdapter extends RecyclerView.Adapter<EventRecycler
         public void setItem(Event item){
             this.mItem = item;
 
-            ticketCategoryRecyclerViewAdapter.updateList(Arrays.asList(item.getTicketCategories()));
+            ticketCategoryRecyclerViewAdapter.updateList(new ArrayList<>(Arrays.asList(item.getTicketCategories())));
         }
     }
 }

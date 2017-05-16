@@ -26,6 +26,7 @@ import com.google.android.gms.vision.barcode.BarcodeDetector;
 
 import java.io.IOException;
 
+import ch.hsr.afterhour.Application;
 import ch.hsr.afterhour.R;
 import ch.hsr.afterhour.service.Scanner.Scanner;
 
@@ -82,21 +83,24 @@ public class EntryScannerFragment extends Fragment {
         infoPane = (TextView) rootView.findViewById(R.id.scanner_info_bar);
         infoPane.setText(R.string.scan_user_id);
 
-        this.permissionsGrantedCallback = () -> {
-            // Start the scanner only if the permissions are granted.
-            entryScanner = new EntryScanner(getContext());
-            uiHandler = new Handler() {
-                @Override
-                public void handleMessage(Message msg) {
-                    switch (msg.what) {
-                        case QR_DETECTED:
-                            entryScanner.stop();
-                            showProgress(true);
-                            break;
+        this.permissionsGrantedCallback = new OnCameraPermissionsGranted() {
+            @Override
+            public void permissionGranted() {
+                // Start the scanner only if the permissions are granted.
+                entryScanner = new EntryScanner(getContext());
+                uiHandler = new Handler() {
+                    @Override
+                    public void handleMessage(Message msg) {
+                        switch (msg.what) {
+                            case QR_DETECTED:
+                                entryScanner.stop();
+                                showProgress(Application.get().getUser().isEmployee());
+                                break;
+                        }
                     }
-                }
-            };
-            entryScanner.start();
+                };
+                entryScanner.start();
+            }
         };
 
         requestCameraPermissions();

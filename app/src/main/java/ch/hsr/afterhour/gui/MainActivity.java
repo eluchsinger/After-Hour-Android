@@ -1,5 +1,7 @@
-package ch.hsr.afterhour;
+package ch.hsr.afterhour.gui;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -23,15 +25,17 @@ import ch.hsr.afterhour.gui.CoatCheckFragment;
 import ch.hsr.afterhour.gui.CoatCheckListFragment;
 import ch.hsr.afterhour.gui.CoatCheckScannerFragment;
 import ch.hsr.afterhour.gui.EntryScannerFragment;
+import ch.hsr.afterhour.Application;
+import ch.hsr.afterhour.R;
 import ch.hsr.afterhour.gui.EventListFragment;
+import ch.hsr.afterhour.gui.LoginActivity;
 import ch.hsr.afterhour.gui.ProfileFragment;
 import ch.hsr.afterhour.gui.adapters.MainActivityViewPagerAdapter;
 import ch.hsr.afterhour.model.TicketCategory;
 import ch.hsr.afterhour.model.User;
 import ch.hsr.afterhour.tasks.RetrieveUserByIdTask;
 
-public class MainActivity extends AppCompatActivity implements EventListFragment.OnMyEventListListener,
-        EntryScannerFragment.OnEntryScannerListener, ActivityCompat.OnRequestPermissionsResultCallback, CoatCheckListFragment.OnCoatCheckListInteractionListener,
+public class MainActivity extends AppCompatActivity implements EntryScannerFragment.OnEntryScannerListener, ActivityCompat.OnRequestPermissionsResultCallback, CoatCheckListFragment.OnCoatCheckListInteractionListener,
         CoatCheckFragment.OnCoatCheckFragmentInteractionListener, CoatCheckScannerFragment.CoatCheckScannerListener {
 
     public enum CoatHangerParameters {
@@ -54,28 +58,9 @@ public class MainActivity extends AppCompatActivity implements EventListFragment
      * Time for the timeout of a server request async task.
      */
     private final static int TASK_TIMEOUT = 4000;
+    private final static String LOGIN_PREFS = "login_credentials";
 
     private CoordinatorLayout container;
-
-    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
-            = new BottomNavigationView.OnNavigationItemSelectedListener() {
-
-        @Override
-        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-            switch (item.getItemId()) {
-                case R.id.navigation_profile:
-                    changeFragment(new ProfileFragment());
-                    break;
-                case R.id.navigation_events:
-                    changeFragment(new EventListFragment());
-                    break;
-                default:
-                    changeFragment(new ProfileFragment());
-            }
-            return true;
-        }
-
-    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,10 +72,10 @@ public class MainActivity extends AppCompatActivity implements EventListFragment
         Toolbar myToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(myToolbar);
 
-        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.bottom_navigation);
-        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-
         ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
+        // This sets the amount of pages that can be off screen without being destroyed.
+        // We will set this to 0, in order to avoid having problems with the scanners
+        viewPager.setOffscreenPageLimit(0);
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tablayout);
         boolean isEmployee = Application.get().getUser().isEmployee();
         MainActivityViewPagerAdapter pagerAdapter = new MainActivityViewPagerAdapter(getSupportFragmentManager(), isEmployee);
@@ -108,15 +93,23 @@ public class MainActivity extends AppCompatActivity implements EventListFragment
         return true;
     }
 
-    private void changeFragment(final Fragment fragment) {
-        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.fragment_container, fragment);
-        fragmentTransaction.commit();
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch(item.getItemId()) {
+            case R.id.menu_logout:
+                logout();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    public void buyTicket(TicketCategory ticketCategoryId) {
-
+    public void logout() {
+        final SharedPreferences settings = getSharedPreferences(LOGIN_PREFS, MODE_PRIVATE);
+        SharedPreferences.Editor editor = settings.edit();
+        editor.clear().apply();
+        final Intent loginIntent = new Intent(this, LoginActivity.class);
+        loginIntent.setFlags(loginIntent.getFlags() | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(loginIntent);
     }
 
     @Override
@@ -163,5 +156,11 @@ public class MainActivity extends AppCompatActivity implements EventListFragment
 
     private void showSnackbar(int resourceId) {
         Snackbar.make(this.container, resourceId, Toast.LENGTH_SHORT).show();
+    }
+
+    private void changeFragment(Fragment fragment) {
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.fragment_container, fragment);
+        transaction.commit();
     }
 }
