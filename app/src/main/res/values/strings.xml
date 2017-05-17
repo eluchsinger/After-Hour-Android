@@ -87,4 +87,5 @@
     <string name="async_task_error">There was an error retrieving the data.</string>
     <string name="buy_ticket_success_message">Ticket bought - Enjoy your visit</string>
     <string name="buy_ticket_failed_message">We\'re sorry, there was an error buying your ticket.</string>
+    <string name="dashboard_card_title">Events coming up</string>
 </resources>

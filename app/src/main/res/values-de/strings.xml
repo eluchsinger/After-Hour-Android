@@ -79,4 +79,5 @@
     <string name="async_task_error">Es gab ein Fehler bei der Serverabfrage</string>
     <string name="buy_ticket_success_message">Ticket gekauft - Geniessen Sie Ihren Besuch</string>
     <string name="buy_ticket_failed_message">Es tut uns leid. Ihr Ticket konnte nicht erworben werden.</string>
+    <string name="dashboard_card_title">Kommende Veranstaltungen</string>
 </resources>
