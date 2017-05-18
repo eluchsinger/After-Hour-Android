@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.util.SparseArray;
@@ -18,6 +19,7 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.vision.CameraSource;
 import com.google.android.gms.vision.Detector;
@@ -25,16 +27,43 @@ import com.google.android.gms.vision.barcode.Barcode;
 import com.google.android.gms.vision.barcode.BarcodeDetector;
 
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 import ch.hsr.afterhour.Application;
 import ch.hsr.afterhour.R;
+import ch.hsr.afterhour.gui.listeners.OnEntryScannerListener;
+import ch.hsr.afterhour.model.User;
 import ch.hsr.afterhour.service.Scanner.Scanner;
+import ch.hsr.afterhour.tasks.RetrieveUserByIdTask;
 
 
-public class EntryScannerFragment extends Fragment {
+public class EntryScannerFragment extends Fragment implements OnEntryScannerListener {
 
-    public interface OnEntryScannerListener {
-        void onUserScanned(String id);
+    /**
+     * Time for the timeout of a server request async task.
+     */
+    private final static int TASK_TIMEOUT = 4000;
+
+    private void showSnackbar(int resourceId) {
+        if(getView() != null)
+            Snackbar.make(getView(), resourceId, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onUserScanned(String id) {
+
+        RetrieveUserByIdTask task = new RetrieveUserByIdTask();
+        try {
+            final User scannedUser = task.execute(id).get(TASK_TIMEOUT, TimeUnit.MILLISECONDS);
+            // Todo: Check tickets of the scanned user
+        } catch (TimeoutException e) {
+            showSnackbar(R.string.async_task_timeout);
+            e.printStackTrace();
+        } catch(Exception e) {
+            showSnackbar(R.string.async_task_error);
+            e.printStackTrace();
+        }
     }
 
     public interface OnCameraPermissionsGranted {
@@ -52,7 +81,6 @@ public class EntryScannerFragment extends Fragment {
     private Scanner entryScanner;
 
     // Data Holders
-    private OnEntryScannerListener mListener;
     private final int QR_DETECTED = 0;
     private Handler uiHandler;
 
@@ -120,12 +148,6 @@ public class EntryScannerFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnEntryScannerListener) {
-            mListener = (OnEntryScannerListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnEntryScannerListener");
-        }
     }
 
     @Override
@@ -133,7 +155,6 @@ public class EntryScannerFragment extends Fragment {
         if(entryScanner != null) {
             entryScanner.stop();
         }
-        mListener = null;
         super.onPause();
     }
 
@@ -191,9 +212,7 @@ public class EntryScannerFragment extends Fragment {
                     if (itemScanned) {
                         Message message = uiHandler.obtainMessage(QR_DETECTED);
                         message.sendToTarget();
-                        infoPane.post(() -> {
-                            mListener.onUserScanned(id);
-                        });
+                        infoPane.post(() -> onUserScanned(id));
                     }
                 }
             });
