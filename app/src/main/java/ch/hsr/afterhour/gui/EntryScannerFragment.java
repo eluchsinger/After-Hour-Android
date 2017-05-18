@@ -57,6 +57,11 @@ public class EntryScannerFragment extends Fragment implements OnEntryScannerList
         try {
             final User scannedUser = task.execute(id).get(TASK_TIMEOUT, TimeUnit.MILLISECONDS);
             // Todo: Check tickets of the scanned user
+            if(scannedUser.getTickets().stream().allMatch(ticket -> ticket.getEvent().getId() == Application.get().getWorkingEventId())) {
+                Snackbar snack = Snackbar.make(getView(), "ACCEPTED", Snackbar.LENGTH_SHORT);
+                snack.getView().setBackgroundResource(R.color.fontColor);
+                snack.show();
+            }
         } catch (TimeoutException e) {
             showSnackbar(R.string.async_task_timeout);
             e.printStackTrace();
