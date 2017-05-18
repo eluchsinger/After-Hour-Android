@@ -36,7 +36,6 @@ public class EventListFragment extends Fragment implements OnEventInteractionLis
 
     private static final String ARG_COLUMN_COUNT = "column-count";
     private int mColumnCount = 1;
-    private OnEventInteractionListener mListener;
     private RecyclerView mRecyclerView;
     private EventRecyclerViewAdapter eventRecyclerViewAdapter;
 
@@ -102,7 +101,6 @@ public class EventListFragment extends Fragment implements OnEventInteractionLis
     @Override
     public void onDetach() {
         super.onDetach();
-        mListener = null;
     }
 
     @Override
