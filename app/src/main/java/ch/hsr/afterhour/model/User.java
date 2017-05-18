@@ -1,6 +1,8 @@
 package ch.hsr.afterhour.model;
 
 import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
+import android.support.v4.content.ContextCompat;
 
 import java.io.Serializable;
 import java.text.DateFormat;
@@ -31,15 +33,27 @@ public class User implements Serializable {
     private String mobileNumber;
     private Date dateOfBirth;
     private Gender gender;
+    private Bitmap profileImage;
     private boolean isWorking = false;
     private List<Ticket> tickets;
     private Bitmap qrImage = null;
     private boolean employee;
     private ArrayList<CoatCheck> coatChecks = new ArrayList<>();
 
+    //region Constructors
+
     public User(String lastName, String firstName,
                 String email, Gender gender, String mobileNumber,
                 Date dateOfBirth, boolean isEmployee) {
+
+        this(lastName, firstName, email, gender, mobileNumber,
+                dateOfBirth, isEmployee, null);
+    }
+
+    public User(String lastName, String firstName,
+                String email, Gender gender, String mobileNumber,
+                Date dateOfBirth, boolean isEmployee, Bitmap profileImage) {
+
         this.lastName = lastName;
         this.firstName = firstName;
         this.email = email;
@@ -47,24 +61,36 @@ public class User implements Serializable {
         this.mobileNumber = mobileNumber;
         this.dateOfBirth = dateOfBirth;
         this.employee = isEmployee;
+        this.profileImage = profileImage;
     }
 
     public User(String lastName, String firstName,
                 String email, Gender gender, String mobileNumber,
                 String dateOfBirth, boolean isEmployee) throws ParseException {
+
+        this(lastName, firstName, email, gender, mobileNumber,
+                dateOfBirth, isEmployee, null);
+    }
+
+
+    public User(String lastName, String firstName,
+                String email, Gender gender, String mobileNumber,
+                String dateOfBirth, boolean isEmployee, Bitmap profileImage) throws ParseException {
         this.lastName = lastName;
         this.firstName = firstName;
         this.email = email;
         this.gender = gender;
         this.mobileNumber = mobileNumber;
-        this.dateOfBirth = dateFormat.parse(dateOfBirth);;
+        this.dateOfBirth = dateFormat.parse(dateOfBirth);
         this.employee = isEmployee;
-
+        this.profileImage = profileImage;
     }
 
     public User() {
 
     }
+
+    //endregion Constructors
 
     public List<CoatCheck> getCoatChecks() {
         return coatChecks;
@@ -101,6 +127,14 @@ public class User implements Serializable {
     public Gender getGender() {return gender;}
 
     public void setGender(Gender gender) {this.gender = gender;}
+
+    public Bitmap getProfileImage() {
+        return this.profileImage;
+    }
+
+    public void setProfileImage(Bitmap profileImage) {
+        this.profileImage = profileImage;
+    }
 
     public String getMobileNumber() {
         return mobileNumber;
@@ -148,12 +182,12 @@ public class User implements Serializable {
         return dateOfBirth;
     }
 
-    public String getDateOfBirthFormatted() {
-        return dateFormat.format(this.getDateOfBirth());
-    }
-
     public void setDateOfBirth(Date dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
+    }
+
+    public String getDateOfBirthFormatted() {
+        return dateFormat.format(this.getDateOfBirth());
     }
 
     public boolean isWorking() {

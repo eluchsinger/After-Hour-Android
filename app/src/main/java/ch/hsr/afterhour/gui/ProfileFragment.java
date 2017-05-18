@@ -63,7 +63,9 @@ public class ProfileFragment extends Fragment {
 
         final User user = Application.get().getUser();
 
-        profileImage.setImageResource(R.drawable.silvio_berlusconi_portrait);
+        if(user.getProfileImage() != null) {
+            profileImage.setImageBitmap(user.getProfileImage());
+        }
         profileName.setText(user.getFirstName() + " " + user.getLastName());
         profileAge.setText(user.getDateOfBirthFormatted());
         profileId.setText(user.getPublicId());
