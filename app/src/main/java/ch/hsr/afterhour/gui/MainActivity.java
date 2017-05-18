@@ -22,25 +22,21 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
 
     private final static String LOGIN_PREFS = "login_credentials";
 
-    private CoordinatorLayout container;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        this.container = (CoordinatorLayout) findViewById(R.id.container);
-
-        Toolbar myToolbar = (Toolbar) findViewById(R.id.toolbar);
+        final Toolbar myToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(myToolbar);
 
-        ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
+        final ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
         // This sets the amount of pages that can be off screen without being destroyed.
         // We will set this to 0, in order to avoid having problems with the scanners
         viewPager.setOffscreenPageLimit(0);
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tablayout);
+        final TabLayout tabLayout = (TabLayout) findViewById(R.id.tablayout);
         boolean isEmployee = Application.get().getUser().isEmployee();
-        MainActivityViewPagerAdapter pagerAdapter = new MainActivityViewPagerAdapter(getSupportFragmentManager(), isEmployee);
+        final MainActivityViewPagerAdapter pagerAdapter = new MainActivityViewPagerAdapter(getSupportFragmentManager(), isEmployee);
         viewPager.setAdapter(pagerAdapter);
         // Select the middle item.
         viewPager.setCurrentItem(pagerAdapter.getCount()/2);
@@ -67,14 +63,10 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
 
     public void logout() {
         final SharedPreferences settings = getSharedPreferences(LOGIN_PREFS, MODE_PRIVATE);
-        SharedPreferences.Editor editor = settings.edit();
+        final SharedPreferences.Editor editor = settings.edit();
         editor.clear().apply();
         final Intent loginIntent = new Intent(this, LoginActivity.class);
         loginIntent.setFlags(loginIntent.getFlags() | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(loginIntent);
-    }
-
-    private void showSnackbar(int resourceId) {
-        Snackbar.make(this.container, resourceId, Toast.LENGTH_SHORT).show();
     }
 }
