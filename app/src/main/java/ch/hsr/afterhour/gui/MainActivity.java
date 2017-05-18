@@ -12,15 +12,18 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TableLayout;
 import android.widget.Toast;
 
 import ch.hsr.afterhour.Application;
 import ch.hsr.afterhour.R;
 import ch.hsr.afterhour.gui.adapters.MainActivityViewPagerAdapter;
+import ch.hsr.afterhour.gui.utils.FragmentWithIcon;
 
 public class MainActivity extends AppCompatActivity implements ActivityCompat.OnRequestPermissionsResultCallback {
 
     private final static String LOGIN_PREFS = "login_credentials";
+    private final static String ACTIVITY_TITLE = "After-Hour";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,11 +39,27 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
         viewPager.setOffscreenPageLimit(0);
         final TabLayout tabLayout = (TabLayout) findViewById(R.id.tablayout);
         boolean isEmployee = Application.get().getUser().isEmployee();
-        final MainActivityViewPagerAdapter pagerAdapter = new MainActivityViewPagerAdapter(getSupportFragmentManager(), isEmployee);
+        final MainActivityViewPagerAdapter pagerAdapter = new MainActivityViewPagerAdapter(this, getSupportFragmentManager(), isEmployee);
         viewPager.setAdapter(pagerAdapter);
         // Select the middle item.
         viewPager.setCurrentItem(pagerAdapter.getCount()/2);
         tabLayout.setupWithViewPager(viewPager);
+        setTabIcons(tabLayout, pagerAdapter);
+    }
+
+    /**
+     * Call this after setupWithViewPager.
+     * @param tabLayout The tablayout set up.
+     */
+    private void setTabIcons(final TabLayout tabLayout, final MainActivityViewPagerAdapter adapter) {
+
+        for(int i = 0; i < adapter.getCount(); i++) {
+            if(adapter.getItem(i) instanceof FragmentWithIcon) {
+                final TabLayout.Tab tab = tabLayout.getTabAt(i);
+                final FragmentWithIcon fragmentWithIcon = (FragmentWithIcon)adapter.getItem(i);
+                tab.setIcon(fragmentWithIcon.getIconRes());
+            }
+        }
     }
 
     // Menu icons are inflated just as they were with actionbar

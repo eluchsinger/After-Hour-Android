@@ -11,8 +11,15 @@ import android.view.ViewGroup;
 import ch.hsr.afterhour.R;
 import ch.hsr.afterhour.gui.listeners.CoatCheckScannerListener;
 import ch.hsr.afterhour.gui.listeners.OnCoatCheckInteractionListener;
+import ch.hsr.afterhour.gui.utils.FragmentWithIcon;
 
-public class CoatCheckFragment extends Fragment implements OnCoatCheckInteractionListener, CoatCheckScannerListener {
+public class CoatCheckFragment extends Fragment implements OnCoatCheckInteractionListener, CoatCheckScannerListener, FragmentWithIcon {
+    private final static int FRAGMENT_ICON = R.drawable.ic_qrcode_scan;
+
+    @Override
+    public int getIconRes() {
+        return FRAGMENT_ICON;
+    }
 
     private enum CoatHangerParameters {
         COATHANGER_NUMBER("coatHangerNumber"),

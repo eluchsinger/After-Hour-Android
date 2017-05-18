@@ -14,16 +14,19 @@ import android.widget.TextView;
 
 import ch.hsr.afterhour.Application;
 import ch.hsr.afterhour.R;
+import ch.hsr.afterhour.gui.utils.FragmentWithIcon;
 import ch.hsr.afterhour.model.User;
 import ch.hsr.afterhour.service.barcode.BarcodeGenerator;
 import ch.hsr.afterhour.service.barcode.QrBarcodeGenerator;
 
-public class ProfileFragment extends Fragment {
+public class ProfileFragment extends Fragment implements FragmentWithIcon {
+    private final static int FRAGMENT_ICON = R.drawable.ic_profile_light;
 
-    /**
-     * The size of the barcode in pixel
-     */
-    private static final int BARCODE_SIZE = 250;
+    @Override
+    public int getIconRes() {
+        return FRAGMENT_ICON;
+    }
+
     private TextView bottomSheetTitle;
 
 
