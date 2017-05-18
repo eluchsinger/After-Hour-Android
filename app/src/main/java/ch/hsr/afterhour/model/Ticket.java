@@ -1,10 +1,12 @@
 package ch.hsr.afterhour.model;
 
+import java.io.Serializable;
+
 /**
  * Created by Marcel on 03.04.17.
  */
 
-public class Ticket {
+public class Ticket implements Serializable {
     private int id;
     private Event event;
     private Enum type;
