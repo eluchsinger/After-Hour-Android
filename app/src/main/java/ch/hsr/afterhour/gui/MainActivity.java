@@ -3,14 +3,11 @@ package ch.hsr.afterhour.gui;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -21,38 +18,13 @@ import android.widget.Toast;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
-import ch.hsr.afterhour.gui.CoatCheckFragment;
-import ch.hsr.afterhour.gui.CoatCheckListFragment;
-import ch.hsr.afterhour.gui.CoatCheckScannerFragment;
-import ch.hsr.afterhour.gui.EntryScannerFragment;
 import ch.hsr.afterhour.Application;
 import ch.hsr.afterhour.R;
-import ch.hsr.afterhour.gui.EventListFragment;
-import ch.hsr.afterhour.gui.LoginActivity;
-import ch.hsr.afterhour.gui.ProfileFragment;
 import ch.hsr.afterhour.gui.adapters.MainActivityViewPagerAdapter;
-import ch.hsr.afterhour.model.TicketCategory;
 import ch.hsr.afterhour.model.User;
 import ch.hsr.afterhour.tasks.RetrieveUserByIdTask;
 
-public class MainActivity extends AppCompatActivity implements EntryScannerFragment.OnEntryScannerListener, ActivityCompat.OnRequestPermissionsResultCallback, CoatCheckListFragment.OnCoatCheckListInteractionListener,
-        CoatCheckFragment.OnCoatCheckFragmentInteractionListener, CoatCheckScannerFragment.CoatCheckScannerListener {
-
-    public enum CoatHangerParameters {
-        COATHANGER_NUMBER("coatHangerNumber"),
-        PUBLICIDENTIFIER("publicIdentifier");
-
-        private final String text;
-
-        CoatHangerParameters(final String text) {
-            this.text = text;
-        }
-
-        @Override
-        public String toString() {
-            return text;
-        }
-    }
+public class MainActivity extends AppCompatActivity implements EntryScannerFragment.OnEntryScannerListener, ActivityCompat.OnRequestPermissionsResultCallback {
 
     /**
      * Time for the timeout of a server request async task.
@@ -126,41 +98,7 @@ public class MainActivity extends AppCompatActivity implements EntryScannerFragm
         }
     }
 
-    @Override
-    public void onCoatCheckListItemInteraction(int coatHangerNumber, int publicIdentifier) {
-        Bundle argsBundle = new Bundle();
-        argsBundle.putInt(CoatHangerParameters.COATHANGER_NUMBER.toString(), coatHangerNumber);
-        argsBundle.putInt(CoatHangerParameters.PUBLICIDENTIFIER.toString(), publicIdentifier);
-        Fragment coatCheckFragment =  new CoatCheckFragment();
-        coatCheckFragment.setArguments(argsBundle);
-        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.fragment_container, coatCheckFragment);
-
-        fragmentTransaction.commit();
-    }
-
-    @Override
-    public void onCoatCheckShowed() {
-        changeFragment(new CoatCheckListFragment());
-    }
-
-    @Override
-    public void onAddCoatCheck() {
-        changeFragment(new CoatCheckScannerFragment());
-    }
-
-    @Override
-    public void onCoatCheckScanned() {
-        changeFragment(new CoatCheckListFragment());
-    }
-
     private void showSnackbar(int resourceId) {
         Snackbar.make(this.container, resourceId, Toast.LENGTH_SHORT).show();
-    }
-
-    private void changeFragment(Fragment fragment) {
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.fragment_container, fragment);
-        transaction.commit();
     }
 }

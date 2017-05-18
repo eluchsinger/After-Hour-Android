@@ -15,17 +15,16 @@ import java.util.List;
 
 import ch.hsr.afterhour.Application;
 import ch.hsr.afterhour.R;
+import ch.hsr.afterhour.gui.listeners.OnCoatCheckInteractionListener;
 import ch.hsr.afterhour.model.CoatCheck;
 
 
 public class CoatCheckListFragment extends Fragment {
 
     // Data Holder
-    private OnCoatCheckListInteractionListener mListener;
+    private OnCoatCheckInteractionListener mListener;
 
-    public interface OnCoatCheckListInteractionListener {
-        void onCoatCheckListItemInteraction(int coatHangerNumber, int publicIdentifier);
-        void onAddCoatCheck();
+    public CoatCheckListFragment() {
     }
 
     @Override
@@ -57,11 +56,13 @@ public class CoatCheckListFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnCoatCheckListInteractionListener) {
-            mListener = (OnCoatCheckListInteractionListener) context;
+        if (context instanceof OnCoatCheckInteractionListener) {
+            mListener = (OnCoatCheckInteractionListener) context;
+        } else if(getParentFragment() instanceof  OnCoatCheckInteractionListener) {
+            mListener = (OnCoatCheckInteractionListener) getParentFragment();
         } else {
             throw new RuntimeException(context.toString()
-                    + " must implement " + getClass() + " OnCoatCheckListInteractionListener");
+                    + " must implement " + getClass() + " OnCoatCheckInteractionListener");
         }
     }
 

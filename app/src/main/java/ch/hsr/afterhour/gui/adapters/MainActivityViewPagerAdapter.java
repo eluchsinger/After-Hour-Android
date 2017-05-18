@@ -9,6 +9,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Logger;
 
+import ch.hsr.afterhour.gui.CoatCheckFragment;
 import ch.hsr.afterhour.gui.CoatCheckListFragment;
 import ch.hsr.afterhour.gui.EventListFragment;
 import ch.hsr.afterhour.gui.ProfileFragment;
@@ -23,7 +24,7 @@ public class MainActivityViewPagerAdapter extends FragmentPagerAdapter {
 
     private enum MainFragments {
         SCANNER("Employee scanning", new EntryScannerFragment()),
-        COATCHECK("Coatcheck", new CoatCheckListFragment()),
+        COATCHECK("Coatcheck", new CoatCheckFragment()),
         PROFILE("Profile Fragment", new ProfileFragment()),
         EVENTS("Events", new EventListFragment());
 

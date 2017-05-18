@@ -1,24 +1,39 @@
 package ch.hsr.afterhour.gui;
 
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import ch.hsr.afterhour.MainActivity;
 import ch.hsr.afterhour.R;
+import ch.hsr.afterhour.gui.listeners.CoatCheckScannerListener;
+import ch.hsr.afterhour.gui.listeners.OnCoatCheckInteractionListener;
 
-public class CoatCheckFragment extends Fragment {
-    private static final String ARG_PARAM1 = MainActivity.CoatHangerParameters.COATHANGER_NUMBER.toString();
-    private static final String ARG_PARAM2 = MainActivity.CoatHangerParameters.PUBLICIDENTIFIER.toString();
+public class CoatCheckFragment extends Fragment implements OnCoatCheckInteractionListener, CoatCheckScannerListener {
+
+    private enum CoatHangerParameters {
+        COATHANGER_NUMBER("coatHangerNumber"),
+        PUBLICIDENTIFIER("publicIdentifier");
+
+        private final String text;
+
+        CoatHangerParameters(final String text) {
+            this.text = text;
+        }
+
+        @Override
+        public String toString() {
+            return text;
+        }
+    }
+    private static final String ARG_PARAM1 = CoatHangerParameters.COATHANGER_NUMBER.toString();
+    private static final String ARG_PARAM2 = CoatHangerParameters.PUBLICIDENTIFIER.toString();
 
     private int mCoatHangerNumber;
     private int mPublicIdentifier;
-
-    private OnCoatCheckFragmentInteractionListener mListener;
 
     public CoatCheckFragment() {
         // Required empty public constructor
@@ -46,34 +61,47 @@ public class CoatCheckFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_coat_check, container, false);
-    }
+        final View rootView = inflater.inflate(R.layout.fragment_coat_check, container, false);
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onCoatCheckShowed();
-        }
+
+        this.changeFragment(new CoatCheckListFragment());
+
+        return rootView;
     }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnCoatCheckFragmentInteractionListener) {
-            mListener = (OnCoatCheckFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnCoatCheckFragmentInteractionListener");
-        }
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-        mListener = null;
     }
 
-    public interface OnCoatCheckFragmentInteractionListener {
-        void onCoatCheckShowed();
+    @Override
+    public void onCoatCheckListItemInteraction(int coatHangerNumber, int publicIdentifier) {
+        Bundle argsBundle = new Bundle();
+        argsBundle.putInt(CoatHangerParameters.COATHANGER_NUMBER.toString(), coatHangerNumber);
+        argsBundle.putInt(CoatHangerParameters.PUBLICIDENTIFIER.toString(), publicIdentifier);
+        Fragment coatCheckFragment =  new CoatCheckFragment();
+        coatCheckFragment.setArguments(argsBundle);
     }
+
+    @Override
+    public void onAddCoatCheck() {
+        changeFragment(new CoatCheckScannerFragment());
+    }
+
+    @Override
+    public void onCoatCheckScanned() {
+        changeFragment(new CoatCheckListFragment());
+    }
+
+    private void changeFragment(Fragment fragment) {
+        FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
+        transaction.replace(R.id.fragment_container, fragment);
+        transaction.commit();
+    }
+
 }

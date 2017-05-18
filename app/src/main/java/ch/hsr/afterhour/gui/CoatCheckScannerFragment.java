@@ -28,14 +28,11 @@ import com.google.android.gms.vision.barcode.BarcodeDetector;
 import java.io.IOException;
 
 import ch.hsr.afterhour.R;
+import ch.hsr.afterhour.gui.listeners.CoatCheckScannerListener;
 import ch.hsr.afterhour.service.Scanner.Scanner;
 import ch.hsr.afterhour.tasks.AddCoatCheckTask;
 
 public class CoatCheckScannerFragment extends Fragment {
-
-    public interface CoatCheckScannerListener {
-        void onCoatCheckScanned();
-    }
 
     public interface OnCameraPermissionsGranted {
         void permissionGranted();
@@ -115,6 +112,8 @@ public class CoatCheckScannerFragment extends Fragment {
         super.onAttach(context);
         if (context instanceof CoatCheckScannerListener) {
             mListener = (CoatCheckScannerListener) context;
+        } else if(getParentFragment() instanceof  CoatCheckScannerListener) {
+            mListener = (CoatCheckScannerListener) getParentFragment();
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement " + getClass() + " CoatCheckScannerListener");

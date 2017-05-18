@@ -5,7 +5,7 @@ import android.os.AsyncTask;
 import java.net.MalformedURLException;
 
 import ch.hsr.afterhour.Application;
-import ch.hsr.afterhour.gui.CoatCheckScannerFragment;
+import ch.hsr.afterhour.gui.listeners.CoatCheckScannerListener;
 import ch.hsr.afterhour.model.CoatCheck;
 import ch.hsr.afterhour.model.User;
 import ch.viascom.groundwork.foxhttp.exception.FoxHttpException;
@@ -16,12 +16,12 @@ import ch.viascom.groundwork.foxhttp.exception.FoxHttpException;
 
 public class AddCoatCheckTask extends AsyncTask<Integer, Void, Boolean> {
 
-    private CoatCheckScannerFragment.CoatCheckScannerListener mListener;
+    private CoatCheckScannerListener mListener;
     private CoatCheck coatCheck;
     private Application app = Application.get();
     private User user = app.getUser();
 
-    public AddCoatCheckTask(CoatCheckScannerFragment.CoatCheckScannerListener listener) {
+    public AddCoatCheckTask(CoatCheckScannerListener listener) {
         mListener = listener;
     }
 

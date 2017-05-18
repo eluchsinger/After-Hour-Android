@@ -9,15 +9,15 @@ import android.widget.TextView;
 import java.util.List;
 
 import ch.hsr.afterhour.R;
-import ch.hsr.afterhour.gui.CoatCheckListFragment.OnCoatCheckListInteractionListener;
+import ch.hsr.afterhour.gui.listeners.OnCoatCheckInteractionListener;
 import ch.hsr.afterhour.model.CoatCheck;
 
 public class CoatCheckRecyclerViewAdapter extends RecyclerView.Adapter<CoatCheckRecyclerViewAdapter.ViewHolder> {
 
     private final List<CoatCheck> mCoatChecks;
-    private final OnCoatCheckListInteractionListener mListener;
+        private final OnCoatCheckInteractionListener mListener;
 
-    public CoatCheckRecyclerViewAdapter(List<CoatCheck> items, OnCoatCheckListInteractionListener listener) {
+    public CoatCheckRecyclerViewAdapter(List<CoatCheck> items, OnCoatCheckInteractionListener listener) {
         mCoatChecks = items;
         mListener = listener;
     }
