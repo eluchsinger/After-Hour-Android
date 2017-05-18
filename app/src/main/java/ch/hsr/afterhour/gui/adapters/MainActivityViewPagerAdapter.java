@@ -1,5 +1,7 @@
 package ch.hsr.afterhour.gui.adapters;
 
+import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -9,11 +11,12 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Logger;
 
+import ch.hsr.afterhour.R;
 import ch.hsr.afterhour.gui.CoatCheckFragment;
-import ch.hsr.afterhour.gui.CoatCheckListFragment;
+import ch.hsr.afterhour.gui.EntryScannerFragment;
 import ch.hsr.afterhour.gui.EventListFragment;
 import ch.hsr.afterhour.gui.ProfileFragment;
-import ch.hsr.afterhour.gui.EntryScannerFragment;
+import ch.hsr.afterhour.gui.utils.FragmentWithIcon;
 
 /**
  * Created by Esteban Luchsinger on 16.05.2017.
@@ -23,17 +26,20 @@ public class MainActivityViewPagerAdapter extends FragmentPagerAdapter {
     private static final String TAG = "MAIN_NAVIGATION";
 
     private enum MainFragments {
-        SCANNER("Employee scanning", new EntryScannerFragment()),
-        COATCHECK("Coatcheck", new CoatCheckFragment()),
-        PROFILE("Profile Fragment", new ProfileFragment()),
-        EVENTS("Events", new EventListFragment());
+        SCANNER("Employee scanning", new EntryScannerFragment(), R.drawable.ic_qrcode_scan),
+        COATCHECK("Coatcheck", new CoatCheckFragment(), R.drawable.ic_qrcode_scan),
+        PROFILE("Profile Fragment", new ProfileFragment(), R.drawable.ic_profile_light),
+        EVENTS("Events", new EventListFragment(), R.drawable.ic_events_light);
 
         private String title;
         private Fragment fragment;
+        private Drawable icon;
+        private int iconResource;
 
-        MainFragments(String title, Fragment fragment) {
+        MainFragments(final String title, final Fragment fragment, int iconResource) {
             this.title = title;
             this.fragment = fragment;
+            this.iconResource = iconResource;
         }
 
         public String getTitle() {
@@ -43,14 +49,25 @@ public class MainActivityViewPagerAdapter extends FragmentPagerAdapter {
         public Fragment getFragment() {
             return fragment;
         }
+
+        public int getIconResource() {
+            return this.iconResource;
+        }
+//        public Drawable getIcon() {
+//            if(this.icon == null) {
+//                this.icon = ResourcesCompat.getDrawable(fragment.getResources(), iconResource, null);
+//            }
+//            return this.icon;
+//        }
     }
 
-    private List<MainFragments> fragments;
+    private final List<MainFragments> fragments;
+    private final Context context;
 
-    public MainActivityViewPagerAdapter(FragmentManager fm, boolean isEmployee) {
+    public MainActivityViewPagerAdapter(Context context, final FragmentManager fm, boolean isEmployee) {
         super(fm);
-
         this.fragments = new ArrayList<>(Arrays.asList(MainFragments.values()));
+        this.context = context;
 
         if(isEmployee) {
             if(this.fragments.remove(MainFragments.COATCHECK))
@@ -63,7 +80,11 @@ public class MainActivityViewPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public CharSequence getPageTitle(int position) {
-        return fragments.get(position).getTitle();
+        if(fragments.get(position).getFragment() instanceof FragmentWithIcon) {
+            return "";
+        } else {
+            return fragments.get(position).getTitle();
+        }
     }
 
     @Override

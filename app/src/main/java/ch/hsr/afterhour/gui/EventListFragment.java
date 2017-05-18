@@ -19,6 +19,7 @@ import ch.hsr.afterhour.Application;
 import ch.hsr.afterhour.R;
 import ch.hsr.afterhour.gui.adapters.EventRecyclerViewAdapter;
 import ch.hsr.afterhour.gui.listeners.OnEventInteractionListener;
+import ch.hsr.afterhour.gui.utils.FragmentWithIcon;
 import ch.hsr.afterhour.model.Event;
 import ch.hsr.afterhour.model.TicketCategory;
 import ch.hsr.afterhour.model.User;
@@ -32,7 +33,13 @@ import ch.hsr.afterhour.tasks.DownloadEventsTask;
  * Activities containing this fragment MUST implement the {@link OnEventInteractionListener}
  * interface.
  */
-public class EventListFragment extends Fragment implements OnEventInteractionListener {
+public class EventListFragment extends Fragment implements OnEventInteractionListener, FragmentWithIcon {
+    private final static int FRAGMENT_ICON = R.drawable.ic_events_light;
+
+    @Override
+    public int getIconRes() {
+        return FRAGMENT_ICON;
+    }
 
     private static final String ARG_COLUMN_COUNT = "column-count";
     private int mColumnCount = 1;
