@@ -51,7 +51,7 @@ public class ProfileFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         final CardView bottomSheet = (CardView) view.findViewById(R.id.bottom_sheet);
         this.bottomSheetTitle = (TextView) view.findViewById(R.id.bottom_sheet_title);
-        BottomSheetBehavior bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
+        final BottomSheetBehavior bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
         bottomSheetBehavior.setPeekHeight((int) calculateBottomsheetPeekHeight());
         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
 
