@@ -1,23 +1,26 @@
 package ch.hsr.afterhour.model;
 
-/**
- * Created by Marcel on 13.05.17.
- */
+import java.io.Serializable;
 
-public class CoatCheck {
-    private int id;
-    private Event event;
 
-    public CoatCheck(Event event, int id) {
-        this.event = event;
-        this.id = id;
+public class CoatCheck implements Serializable {
+    // server & user viewable parameter
+    private int publicIdentifier; // show to employee
+    private CoatHanger coatHanger;
+
+    public int getPublicIdentifier() {
+        return publicIdentifier;
     }
 
-    public int getId() {
-        return id;
+    public void setPublicIdentifier(int publicIdentifier) {
+        this.publicIdentifier = publicIdentifier;
     }
 
-    public Event getEvent() {
-        return event;
+    public CoatHanger getCoatHanger() {
+        return coatHanger;
+    }
+
+    public void setCoatHanger(CoatHanger coatHanger) {
+        this.coatHanger = coatHanger;
     }
 }

@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import java.net.MalformedURLException;
+import java.text.ParseException;
 
 import ch.hsr.afterhour.Application;
 import ch.hsr.afterhour.R;
@@ -176,11 +177,15 @@ public class RegisterActivity extends AppCompatActivity {
         if (cancel) {
             focusView.requestFocus();
         } else {
-            user = new User(lastName, firstName, email, Gender.MALE,
-                    vorwahl + mobile, birthday, false);
-            showProgress(true);
-            mAuthTask = new RegisterUserTask();
-            mAuthTask.execute();
+            try {
+                user = new User(lastName, firstName, email, Gender.MALE,
+                        vorwahl + mobile, birthday, false);
+                showProgress(true);
+                mAuthTask = new RegisterUserTask();
+                mAuthTask.execute();
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
         }
     }
 

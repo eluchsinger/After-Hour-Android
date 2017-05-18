@@ -9,7 +9,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.util.SparseArray;
@@ -19,6 +19,7 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.vision.CameraSource;
 import com.google.android.gms.vision.Detector;
@@ -26,20 +27,48 @@ import com.google.android.gms.vision.barcode.Barcode;
 import com.google.android.gms.vision.barcode.BarcodeDetector;
 
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 import ch.hsr.afterhour.Application;
 import ch.hsr.afterhour.R;
-import ch.hsr.afterhour.model.CoatCheck;
-import ch.hsr.afterhour.model.Event;
+import ch.hsr.afterhour.gui.listeners.OnEntryScannerListener;
+import ch.hsr.afterhour.model.User;
 import ch.hsr.afterhour.service.Scanner.Scanner;
+import ch.hsr.afterhour.tasks.RetrieveUserByIdTask;
 
 
-public class ScannerFragment extends Fragment {
+public class EntryScannerFragment extends Fragment implements OnEntryScannerListener {
 
-    public interface OnEntryScannerListener {
-        void onUserScanned(String id);
+    /**
+     * Time for the timeout of a server request async task.
+     */
+    private final static int TASK_TIMEOUT = 4000;
 
-        void onCoatCheckScanned(CoatCheck coatCheck);
+    private void showSnackbar(int resourceId) {
+        if(getView() != null)
+            Snackbar.make(getView(), resourceId, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onUserScanned(String id) {
+
+        RetrieveUserByIdTask task = new RetrieveUserByIdTask();
+        try {
+            final User scannedUser = task.execute(id).get(TASK_TIMEOUT, TimeUnit.MILLISECONDS);
+            // Todo: Check tickets of the scanned user
+            if(scannedUser.getTickets().stream().allMatch(ticket -> ticket.getEvent().getId() == Application.get().getWorkingEventId())) {
+                Snackbar snack = Snackbar.make(getView(), "ACCEPTED", Snackbar.LENGTH_SHORT);
+                snack.getView().setBackgroundResource(R.color.fontColor);
+                snack.show();
+            }
+        } catch (TimeoutException e) {
+            showSnackbar(R.string.async_task_timeout);
+            e.printStackTrace();
+        } catch(Exception e) {
+            showSnackbar(R.string.async_task_error);
+            e.printStackTrace();
+        }
     }
 
     public interface OnCameraPermissionsGranted {
@@ -48,7 +77,6 @@ public class ScannerFragment extends Fragment {
 
     // UI Elements & Views
     private View progressView;
-    FloatingActionButton fab;
 
     // camera
     private final static int CAMERA_PERMISSION_CODE = 117;
@@ -58,7 +86,6 @@ public class ScannerFragment extends Fragment {
     private Scanner entryScanner;
 
     // Data Holders
-    private OnEntryScannerListener mListener;
     private final int QR_DETECTED = 0;
     private Handler uiHandler;
 
@@ -83,15 +110,11 @@ public class ScannerFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View rootView = inflater.inflate(R.layout.fragment_scanner_entry, container, false);
-        progressView = rootView.findViewById(R.id.scan_entry_progressbar);
-        cameraView = (SurfaceView) rootView.findViewById(R.id.scan_entry_camera_view);
-        infoPane = (TextView) rootView.findViewById(R.id.scan_entry_info_bar);
-        if (Application.get().getUser().isEmployee()) {
-            infoPane.setText(R.string.scan_user_id);
-        } else {
-            infoPane.setText(R.string.scan_coat_check);
-        }
+        View rootView = inflater.inflate(R.layout.fragment_scanner, container, false);
+        progressView = rootView.findViewById(R.id.scanner_progressbar);
+        cameraView = (SurfaceView) rootView.findViewById(R.id.scanner_camera_view);
+        infoPane = (TextView) rootView.findViewById(R.id.scanner_info_bar);
+        infoPane.setText(R.string.scan_user_id);
 
         this.permissionsGrantedCallback = new OnCameraPermissionsGranted() {
             @Override
@@ -130,12 +153,6 @@ public class ScannerFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnEntryScannerListener) {
-            mListener = (OnEntryScannerListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnEntryScannerListener");
-        }
     }
 
     @Override
@@ -143,7 +160,6 @@ public class ScannerFragment extends Fragment {
         if(entryScanner != null) {
             entryScanner.stop();
         }
-        mListener = null;
         super.onPause();
     }
 
@@ -197,33 +213,14 @@ public class ScannerFragment extends Fragment {
                     }
                     String qrCode = barcodes.valueAt(0).displayValue;
                     String id = qrCode.substring(8, qrCode.length());
-                    boolean isEmployee = Application.get().getUser().isEmployee();
-                    validateQrCode(qrCode, isEmployee);
+                    itemScanned = qrCode.startsWith("USR-");
                     if (itemScanned) {
                         Message message = uiHandler.obtainMessage(QR_DETECTED);
                         message.sendToTarget();
-                        infoPane.post(() -> {
-                            fab.setVisibility(View.VISIBLE);
-                            if (isEmployee) {
-                                mListener.onUserScanned(id);
-                            } else {
-                                Event dummyEvent = new Event();
-                                dummyEvent.setTitle("Dummy Event");
-                                CoatCheck coatCheck = new CoatCheck(dummyEvent, Integer.parseInt(id));
-                                mListener.onCoatCheckScanned(coatCheck);
-                            }
-                        });
+                        infoPane.post(() -> onUserScanned(id));
                     }
                 }
             });
-        }
-
-        private void validateQrCode(String qrCode, boolean isEmployee) {
-            if (isEmployee) {
-                itemScanned = qrCode.startsWith("USR-");
-            } else {
-                itemScanned = qrCode.startsWith("CCK-");
-            }
         }
 
         @Override

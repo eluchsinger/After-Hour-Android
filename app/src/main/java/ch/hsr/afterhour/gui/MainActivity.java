@@ -3,14 +3,10 @@ package ch.hsr.afterhour.gui;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -18,27 +14,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
-
 import ch.hsr.afterhour.Application;
 import ch.hsr.afterhour.R;
-import ch.hsr.afterhour.gui.EventListFragment;
-import ch.hsr.afterhour.gui.LoginActivity;
-import ch.hsr.afterhour.gui.ProfileFragment;
-import ch.hsr.afterhour.gui.ScannerFragment;
 import ch.hsr.afterhour.gui.adapters.MainActivityViewPagerAdapter;
-import ch.hsr.afterhour.model.CoatCheck;
-import ch.hsr.afterhour.model.TicketCategory;
-import ch.hsr.afterhour.model.User;
-import ch.hsr.afterhour.tasks.RetrieveUserByIdTask;
 
-public class MainActivity extends AppCompatActivity implements ScannerFragment.OnEntryScannerListener, ActivityCompat.OnRequestPermissionsResultCallback {
+public class MainActivity extends AppCompatActivity implements ActivityCompat.OnRequestPermissionsResultCallback {
 
-    /**
-     * Time for the timeout of a server request async task.
-     */
-    private final static int TASK_TIMEOUT = 4000;
     private final static String LOGIN_PREFS = "login_credentials";
 
     private CoordinatorLayout container;
@@ -91,26 +72,6 @@ public class MainActivity extends AppCompatActivity implements ScannerFragment.O
         final Intent loginIntent = new Intent(this, LoginActivity.class);
         loginIntent.setFlags(loginIntent.getFlags() | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(loginIntent);
-    }
-
-    @Override
-    public void onUserScanned(String id) {
-        RetrieveUserByIdTask task = new RetrieveUserByIdTask();
-        try {
-            User scannedUser = task.execute(id).get(TASK_TIMEOUT, TimeUnit.MILLISECONDS);
-
-        } catch (TimeoutException e) {
-            showSnackbar(R.string.async_task_timeout);
-            e.printStackTrace();
-        } catch(Exception e) {
-            showSnackbar(R.string.async_task_error);
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    public void onCoatCheckScanned(CoatCheck coatCheck) {
-
     }
 
     private void showSnackbar(int resourceId) {
