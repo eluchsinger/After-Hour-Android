@@ -24,8 +24,8 @@ public class ProfileFragment extends Fragment {
      * The size of the barcode in pixel
      */
     private static final int BARCODE_SIZE = 250;
-
     private TextView bottomSheetTitle;
+
 
     @Override
     public void onAttach(Context context) {

@@ -46,7 +46,7 @@ public class LoginTest {
         onView(withId(R.id.login_email_edittext)).perform(typeText(settings.getEmployeeEmail()));
         onView(withId(R.id.login_password_edittext)).perform(typeText(settings.getPassword()));
         onView(withId(R.id.login_sign_in_button)).perform(click());
-        onView(withId(R.id.scan_entry_camera_view)).check(matches(isDisplayed()));
+        onView(withId(R.id.scanner_camera_view)).check(matches(isDisplayed()));
     }
 
     @Test

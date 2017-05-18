@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.util.SparseArray;
@@ -29,17 +28,13 @@ import java.io.IOException;
 
 import ch.hsr.afterhour.Application;
 import ch.hsr.afterhour.R;
-import ch.hsr.afterhour.model.CoatCheck;
-import ch.hsr.afterhour.model.Event;
 import ch.hsr.afterhour.service.Scanner.Scanner;
 
 
-public class ScannerFragment extends Fragment {
+public class EntryScannerFragment extends Fragment {
 
     public interface OnEntryScannerListener {
         void onUserScanned(String id);
-
-        void onCoatCheckScanned(CoatCheck coatCheck);
     }
 
     public interface OnCameraPermissionsGranted {
@@ -48,7 +43,6 @@ public class ScannerFragment extends Fragment {
 
     // UI Elements & Views
     private View progressView;
-    FloatingActionButton fab;
 
     // camera
     private final static int CAMERA_PERMISSION_CODE = 117;
@@ -83,15 +77,11 @@ public class ScannerFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View rootView = inflater.inflate(R.layout.fragment_scanner_entry, container, false);
-        progressView = rootView.findViewById(R.id.scan_entry_progressbar);
-        cameraView = (SurfaceView) rootView.findViewById(R.id.scan_entry_camera_view);
-        infoPane = (TextView) rootView.findViewById(R.id.scan_entry_info_bar);
-        if (Application.get().getUser().isEmployee()) {
-            infoPane.setText(R.string.scan_user_id);
-        } else {
-            infoPane.setText(R.string.scan_coat_check);
-        }
+        View rootView = inflater.inflate(R.layout.fragment_scanner, container, false);
+        progressView = rootView.findViewById(R.id.scanner_progressbar);
+        cameraView = (SurfaceView) rootView.findViewById(R.id.scanner_camera_view);
+        infoPane = (TextView) rootView.findViewById(R.id.scanner_info_bar);
+        infoPane.setText(R.string.scan_user_id);
 
         this.permissionsGrantedCallback = new OnCameraPermissionsGranted() {
             @Override
@@ -197,33 +187,16 @@ public class ScannerFragment extends Fragment {
                     }
                     String qrCode = barcodes.valueAt(0).displayValue;
                     String id = qrCode.substring(8, qrCode.length());
-                    boolean isEmployee = Application.get().getUser().isEmployee();
-                    validateQrCode(qrCode, isEmployee);
+                    itemScanned = qrCode.startsWith("USR-");
                     if (itemScanned) {
                         Message message = uiHandler.obtainMessage(QR_DETECTED);
                         message.sendToTarget();
                         infoPane.post(() -> {
-                            fab.setVisibility(View.VISIBLE);
-                            if (isEmployee) {
-                                mListener.onUserScanned(id);
-                            } else {
-                                Event dummyEvent = new Event();
-                                dummyEvent.setTitle("Dummy Event");
-                                CoatCheck coatCheck = new CoatCheck(dummyEvent, Integer.parseInt(id));
-                                mListener.onCoatCheckScanned(coatCheck);
-                            }
+                            mListener.onUserScanned(id);
                         });
                     }
                 }
             });
-        }
-
-        private void validateQrCode(String qrCode, boolean isEmployee) {
-            if (isEmployee) {
-                itemScanned = qrCode.startsWith("USR-");
-            } else {
-                itemScanned = qrCode.startsWith("CCK-");
-            }
         }
 
         @Override
