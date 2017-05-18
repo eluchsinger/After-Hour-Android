@@ -33,12 +33,19 @@ import java.util.concurrent.TimeoutException;
 import ch.hsr.afterhour.Application;
 import ch.hsr.afterhour.R;
 import ch.hsr.afterhour.gui.listeners.OnEntryScannerListener;
+import ch.hsr.afterhour.gui.utils.FragmentWithIcon;
 import ch.hsr.afterhour.model.User;
 import ch.hsr.afterhour.service.Scanner.Scanner;
 import ch.hsr.afterhour.tasks.RetrieveUserByIdTask;
 
 
-public class EntryScannerFragment extends Fragment implements OnEntryScannerListener {
+public class EntryScannerFragment extends Fragment implements OnEntryScannerListener, FragmentWithIcon {
+    private final static int FRAGMENT_ICON = R.drawable.ic_qrcode_scan;
+
+    @Override
+    public int getIconRes() {
+        return FRAGMENT_ICON;
+    }
 
     /**
      * Time for the timeout of a server request async task.
