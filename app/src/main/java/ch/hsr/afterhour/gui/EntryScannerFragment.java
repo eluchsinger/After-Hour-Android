@@ -34,8 +34,11 @@ import ch.hsr.afterhour.Application;
 import ch.hsr.afterhour.R;
 import ch.hsr.afterhour.gui.listeners.OnEntryScannerListener;
 import ch.hsr.afterhour.gui.utils.FragmentWithIcon;
-import ch.hsr.afterhour.model.User;
+import ch.hsr.afterhour.gui.utils.SnackbarHelper;
+import ch.hsr.afterhour.model.Ticket;
 import ch.hsr.afterhour.service.Scanner.Scanner;
+import ch.hsr.afterhour.tasks.CheckUserAuthorizationForEventTask;
+import ch.hsr.afterhour.tasks.OnTaskCompleted;
 import ch.hsr.afterhour.tasks.RetrieveUserByIdTask;
 
 
@@ -60,15 +63,29 @@ public class EntryScannerFragment extends Fragment implements OnEntryScannerList
     @Override
     public void onUserScanned(String id) {
 
-        RetrieveUserByIdTask task = new RetrieveUserByIdTask();
+        RetrieveUserByIdTask retrieveUserTask = new RetrieveUserByIdTask();
         try {
-            final User scannedUser = task.execute(id).get(TASK_TIMEOUT, TimeUnit.MILLISECONDS);
+            final int scannedUserId = retrieveUserTask.execute(id).get(TASK_TIMEOUT, TimeUnit.MILLISECONDS).getId();
+            final int workingEventId = Application.get().getWorkingEventId();
             // Todo: Check tickets of the scanned user
-            if(scannedUser.getTickets().stream().allMatch(ticket -> ticket.getEvent().getId() == Application.get().getWorkingEventId())) {
-                Snackbar snack = Snackbar.make(getView(), "ACCEPTED", Snackbar.LENGTH_SHORT);
-                snack.getView().setBackgroundResource(R.color.fontColor);
-                snack.show();
-            }
+            final CheckUserAuthorizationForEventTask checkAuthorizationTask = new CheckUserAuthorizationForEventTask(scannedUserId, workingEventId,
+                    new OnTaskCompleted<Ticket>() {
+                @Override
+                public void onTaskCompleted(Ticket result) {
+                    if(result != null) {
+                        final Snackbar snack = Snackbar.make(getView(), "ACCEPTED", Snackbar.LENGTH_SHORT);
+                        snack.getView().setBackgroundResource(R.color.colorAccent);
+                        snack.show();
+                    } else {
+                        final Snackbar snack = Snackbar.make(getView(), "REJECT", Snackbar.LENGTH_SHORT);
+                        snack.getView().setBackgroundResource(android.R.color.holo_red_dark);
+                        snack.show();
+                    }
+                    showProgress(false);
+                    entryScanner.start();
+                }
+            });
+            checkAuthorizationTask.execute();
         } catch (TimeoutException e) {
             showSnackbar(R.string.async_task_timeout);
             e.printStackTrace();
@@ -134,6 +151,7 @@ public class EntryScannerFragment extends Fragment implements OnEntryScannerList
                         switch (msg.what) {
                             case QR_DETECTED:
                                 entryScanner.stop();
+                                // Todo: What is this?
                                 showProgress(Application.get().getUser().isEmployee());
                                 break;
                         }
@@ -144,7 +162,6 @@ public class EntryScannerFragment extends Fragment implements OnEntryScannerList
         };
 
         requestCameraPermissions();
-
 
         return rootView;
     }
@@ -170,7 +187,6 @@ public class EntryScannerFragment extends Fragment implements OnEntryScannerList
         super.onPause();
     }
 
-
     private class EntryScanner implements Scanner {
 
         private CameraSource mCameraSource;
@@ -194,6 +210,10 @@ public class EntryScannerFragment extends Fragment implements OnEntryScannerList
             mBarcodeDetector = new BarcodeDetector.Builder(getContext())
                     .setBarcodeFormats(Barcode.QR_CODE)
                     .build();
+            if(!mBarcodeDetector.isOperational()){
+                SnackbarHelper.showSnackbar(getView(), "Could not set up the barcode detector!");
+                return;
+            }
         }
 
         @Override
