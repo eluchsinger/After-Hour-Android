@@ -180,14 +180,14 @@ public class CoatCheckScannerFragment extends Fragment {
                                 @Override
                                 public void onCoatCheckScanned() {
                                     FragmentTransaction transaction = getParentFragment().getChildFragmentManager().beginTransaction();
-                                    transaction.replace(R.id.fragment_container, new CoatCheckListFragment());
+                                    transaction.replace(R.id.coatcheck_container, new CoatCheckListFragment());
                                     transaction.commit();
                                 }
 
                                 @Override
                                 public void onCoatCheckReceivedErrorReplyFromServer() {
                                     // todo: Snackbar geht nicht
-                                    Snackbar.make(getActivity().findViewById(R.id.viewpager), getString(R.string.unexpected_error), Snackbar.LENGTH_LONG);
+                                    Snackbar.make(getActivity().findViewById(R.id.coatcheck_container), getString(R.string.unexpected_error), Snackbar.LENGTH_LONG);
                                     onCoatCheckScanned();
                                 }
                             };

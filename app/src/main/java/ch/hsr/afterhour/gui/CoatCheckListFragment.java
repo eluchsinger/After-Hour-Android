@@ -37,14 +37,11 @@ public class CoatCheckListFragment extends Fragment {
                 Bundle argsBundle = new Bundle();
                 argsBundle.putInt(CoatCheckSingleFragment.CoatHangerParameters.COATHANGER_NUMBER.toString(), coatHangerNumber);
                 argsBundle.putInt(CoatCheckSingleFragment.CoatHangerParameters.PUBLICIDENTIFIER.toString(), publicIdentifier);
-                Fragment coatCheckFragment =  new CoatCheckSingleFragment();
-                coatCheckFragment.setArguments(argsBundle);
-            }
+                Fragment singleCoatCheckFragment =  new CoatCheckSingleFragment();
+                singleCoatCheckFragment.setArguments(argsBundle);
 
-            @Override
-            public void onAddCoatCheck() {
-                FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
-                transaction.replace(R.id.coatcheck_container, new CoatCheckScannerFragment());
+                FragmentTransaction transaction = getParentFragment().getChildFragmentManager().beginTransaction();
+                transaction.replace(R.id.coatcheck_container, singleCoatCheckFragment);
                 transaction.commit();
             }
         };

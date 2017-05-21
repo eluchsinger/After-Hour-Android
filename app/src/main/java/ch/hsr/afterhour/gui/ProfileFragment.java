@@ -1,7 +1,6 @@
 package ch.hsr.afterhour.gui;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.v4.app.Fragment;
@@ -16,8 +15,6 @@ import ch.hsr.afterhour.Application;
 import ch.hsr.afterhour.R;
 import ch.hsr.afterhour.gui.utils.FragmentWithIcon;
 import ch.hsr.afterhour.model.User;
-import ch.hsr.afterhour.service.barcode.BarcodeGenerator;
-import ch.hsr.afterhour.service.barcode.QrBarcodeGenerator;
 
 public class ProfileFragment extends Fragment implements FragmentWithIcon {
     private final static int FRAGMENT_ICON = R.drawable.ic_profile_light;
@@ -53,7 +50,7 @@ public class ProfileFragment extends Fragment implements FragmentWithIcon {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         final CardView bottomSheet = (CardView) view.findViewById(R.id.bottom_sheet);
-        this.bottomSheetTitle = (TextView) view.findViewById(R.id.bottom_sheet_title);
+        this.bottomSheetTitle = (TextView) view.findViewById(R.id.coatcheck_sheet_title);
         final BottomSheetBehavior bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
         bottomSheetBehavior.setPeekHeight((int) calculateBottomsheetPeekHeight());
         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);

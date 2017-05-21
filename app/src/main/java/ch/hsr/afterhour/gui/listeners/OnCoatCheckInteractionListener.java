@@ -11,9 +11,4 @@ public interface OnCoatCheckInteractionListener {
      * @param publicIdentifier
      */
     void onCoatCheckListItemInteraction(int coatHangerNumber, int publicIdentifier);
-
-    /**
-     * Todo: (Marcel) Erklärung
-     */
-    void onAddCoatCheck();
 }

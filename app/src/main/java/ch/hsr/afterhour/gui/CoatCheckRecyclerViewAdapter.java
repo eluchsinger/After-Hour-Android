@@ -39,6 +39,7 @@ public class CoatCheckRecyclerViewAdapter extends RecyclerView.Adapter<CoatCheck
             @Override
             public void onClick(View v) {
                 if (null != mListener) {
+                    // todo: show single coatcheck fragment
                     mListener.onCoatCheckListItemInteraction(
                             holder.mItem.getCoatHanger().getCoatHangerNumber(),
                             holder.mItem.getPublicIdentifier());
