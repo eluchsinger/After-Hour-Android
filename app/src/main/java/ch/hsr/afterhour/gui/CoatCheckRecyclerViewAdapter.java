@@ -33,7 +33,7 @@ public class CoatCheckRecyclerViewAdapter extends RecyclerView.Adapter<CoatCheck
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mCoatChecks.get(position);
         holder.mIdView.setText(mCoatChecks.get(position).getCoatHanger().getLocation().getName());
-        holder.mContentView.setText(mCoatChecks.get(position).getPublicIdentifier());
+        holder.mContentView.setText(Integer.toString(mCoatChecks.get(position).getPublicIdentifier()));
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
