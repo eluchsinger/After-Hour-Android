@@ -7,4 +7,5 @@ package ch.hsr.afterhour.gui.listeners;
  */
 public interface CoatCheckScannerListener {
     void onCoatCheckScanned();
+    void onCoatCheckReceivedErrorReplyFromServer();
 }

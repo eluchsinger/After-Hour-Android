@@ -81,4 +81,8 @@
     <string name="buy_ticket_success_message">Ticket gekauft - Geniessen Sie Ihren Besuch</string>
     <string name="buy_ticket_failed_message">Es tut uns leid. Ihr Ticket konnte nicht erworben werden.</string>
     <string name="dashboard_card_title">Kommende Veranstaltungen</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Benachrichtigungen</string>
 </resources>

@@ -72,7 +72,7 @@
     <string name="drinks">Drinks</string>
     <string name="autologin">Autologin</string>
 
-    <!-- Strings related to scnned user -->
+    <!-- Strings related to scanned user -->
     <string name="no_valid_scanned_user_detected">No valid scanned user detected</string>
     <string name="scan_user_id">Please Scan a Users QR-ID</string>
     <string name="scan_coat_check">Please Scan a Coat Check</string>

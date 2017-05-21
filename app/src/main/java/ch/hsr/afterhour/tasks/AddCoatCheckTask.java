@@ -14,21 +14,23 @@ import ch.viascom.groundwork.foxhttp.exception.FoxHttpException;
  * Created by Marcel on 16.05.17.
  */
 
-public class AddCoatCheckTask extends AsyncTask<Integer, Void, Boolean> {
+public class AddCoatCheckTask extends AsyncTask<Object, Void, Boolean> {
 
-    private CoatCheckScannerListener mListener;
+    private CoatCheckScannerListener mCallback;
     private CoatCheck coatCheck;
     private Application app = Application.get();
     private User user = app.getUser();
 
-    public AddCoatCheckTask(CoatCheckScannerListener listener) {
-        mListener = listener;
+    private int locationId, coatHangerNumber;
+
+    public AddCoatCheckTask(CoatCheckScannerListener listener, Integer locIdInt,Integer cHint) {
+        mCallback = listener;
+        locationId = locIdInt;
+        coatHangerNumber = cHint;
     }
 
     @Override
-    protected Boolean doInBackground(Integer... params) {
-        int coatHangerNumber = params[0];
-        int locationId = params[1];
+    protected Boolean doInBackground(Object... params) {
         try {
             coatCheck = app.getServerAPI().handOverJacket(user.getEmail(), coatHangerNumber, locationId );
             return true;
@@ -44,7 +46,9 @@ public class AddCoatCheckTask extends AsyncTask<Integer, Void, Boolean> {
     protected void onPostExecute(Boolean success) {
         if(success) {
             Application.get().getUser().addCoatCheck(coatCheck);
-            mListener.onCoatCheckScanned();
+            mCallback.onCoatCheckScanned();
+        } else {
+            mCallback.onCoatCheckReceivedErrorReplyFromServer();
         }
     }
 }

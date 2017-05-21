@@ -10,8 +10,10 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.SurfaceHolder;
@@ -49,7 +51,6 @@ public class CoatCheckScannerFragment extends Fragment {
     private Scanner coatcheckScanner;
 
     // Data Holders
-    private CoatCheckScannerListener mListener;
     private final int QR_DETECTED = 0;
     private Handler uiHandler;
 
@@ -79,6 +80,7 @@ public class CoatCheckScannerFragment extends Fragment {
         cameraView = (SurfaceView) rootView.findViewById(R.id.scanner_camera_view);
         infoPane = (TextView) rootView.findViewById(R.id.scanner_info_bar);
         infoPane.setText(R.string.scan_coat_check);
+        View scannerView = rootView.findViewById(R.id.coatcheckscanner_view);
         this.permissionsGrantedCallback = () -> {
             // Start the scanner only if the permissions are granted.
             coatcheckScanner = new CoatCheckScanner(getContext());
@@ -88,6 +90,7 @@ public class CoatCheckScannerFragment extends Fragment {
                     switch (msg.what) {
                         case QR_DETECTED:
                             coatcheckScanner.stop();
+                            scannerView.setVisibility(View.GONE);
                             showProgress(true);
                             break;
                     }
@@ -108,24 +111,10 @@ public class CoatCheckScannerFragment extends Fragment {
     }
 
     @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof CoatCheckScannerListener) {
-            mListener = (CoatCheckScannerListener) context;
-        } else if(getParentFragment() instanceof  CoatCheckScannerListener) {
-            mListener = (CoatCheckScannerListener) getParentFragment();
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement " + getClass() + " CoatCheckScannerListener");
-        }
-    }
-
-    @Override
     public void onPause() {
         if(coatcheckScanner != null) {
             coatcheckScanner.stop();
         }
-        mListener = null;
         super.onPause();
     }
 
@@ -184,8 +173,27 @@ public class CoatCheckScannerFragment extends Fragment {
                     if (itemScanned) {
                         Message message = uiHandler.obtainMessage(QR_DETECTED);
                         message.sendToTarget();
-                        AsyncTask mTask = new AddCoatCheckTask(mListener);
-                        infoPane.post(() ->  mTask.execute(Integer.parseInt(locationId), Integer.parseInt(coatHangerNumber)));
+                        infoPane.post(() ->  {
+                            Integer locIdInt = Integer.parseInt(locationId);
+                            Integer cHint = Integer.parseInt(coatHangerNumber);
+                            CoatCheckScannerListener callback = new CoatCheckScannerListener() {
+                                @Override
+                                public void onCoatCheckScanned() {
+                                    FragmentTransaction transaction = getParentFragment().getChildFragmentManager().beginTransaction();
+                                    transaction.replace(R.id.fragment_container, new CoatCheckListFragment());
+                                    transaction.commit();
+                                }
+
+                                @Override
+                                public void onCoatCheckReceivedErrorReplyFromServer() {
+                                    // todo: Snackbar geht nicht
+                                    Snackbar.make(getActivity().findViewById(R.id.viewpager), getString(R.string.unexpected_error), Snackbar.LENGTH_LONG);
+                                    onCoatCheckScanned();
+                                }
+                            };
+                            AsyncTask mTask = new AddCoatCheckTask(callback, locIdInt, cHint);
+                            mTask.execute();
+                        });
                     }
                 }
             });
@@ -193,13 +201,13 @@ public class CoatCheckScannerFragment extends Fragment {
 
         private boolean validateQr(String qrCode) {
             int minimumQRlength = 7;
-            if (!qrCode.startsWith("CHA-")) {
+            if (!qrCode.startsWith("CCH-")) {
                 return false;
             }
             if (!qrCode.contains("x")) {
                 return false;
             }
-            if (!(qrCode.length() < minimumQRlength)) {
+            if ((qrCode.length() < minimumQRlength)) {
                 return false;
             }
             return true;

@@ -1,6 +1,5 @@
 package ch.hsr.afterhour.gui;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -9,11 +8,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import ch.hsr.afterhour.R;
-import ch.hsr.afterhour.gui.listeners.CoatCheckScannerListener;
-import ch.hsr.afterhour.gui.listeners.OnCoatCheckInteractionListener;
 import ch.hsr.afterhour.gui.utils.FragmentWithIcon;
 
-public class CoatCheckFragment extends Fragment implements OnCoatCheckInteractionListener, CoatCheckScannerListener, FragmentWithIcon {
+public class CoatCheckFragment extends Fragment implements FragmentWithIcon {
     private final static int FRAGMENT_ICON = R.drawable.ic_qrcode_scan;
 
     @Override
@@ -21,7 +18,7 @@ public class CoatCheckFragment extends Fragment implements OnCoatCheckInteractio
         return FRAGMENT_ICON;
     }
 
-    private enum CoatHangerParameters {
+    public enum CoatHangerParameters {
         COATHANGER_NUMBER("coatHangerNumber"),
         PUBLICIDENTIFIER("publicIdentifier");
 
@@ -74,35 +71,6 @@ public class CoatCheckFragment extends Fragment implements OnCoatCheckInteractio
         this.changeFragment(new CoatCheckListFragment());
 
         return rootView;
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-    }
-
-    @Override
-    public void onCoatCheckListItemInteraction(int coatHangerNumber, int publicIdentifier) {
-        Bundle argsBundle = new Bundle();
-        argsBundle.putInt(CoatHangerParameters.COATHANGER_NUMBER.toString(), coatHangerNumber);
-        argsBundle.putInt(CoatHangerParameters.PUBLICIDENTIFIER.toString(), publicIdentifier);
-        Fragment coatCheckFragment =  new CoatCheckFragment();
-        coatCheckFragment.setArguments(argsBundle);
-    }
-
-    @Override
-    public void onAddCoatCheck() {
-        changeFragment(new CoatCheckScannerFragment());
-    }
-
-    @Override
-    public void onCoatCheckScanned() {
-        changeFragment(new CoatCheckListFragment());
     }
 
     private void changeFragment(Fragment fragment) {

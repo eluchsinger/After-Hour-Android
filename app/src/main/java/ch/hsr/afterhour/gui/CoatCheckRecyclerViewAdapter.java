@@ -17,9 +17,9 @@ public class CoatCheckRecyclerViewAdapter extends RecyclerView.Adapter<CoatCheck
     private final List<CoatCheck> mCoatChecks;
         private final OnCoatCheckInteractionListener mListener;
 
-    public CoatCheckRecyclerViewAdapter(List<CoatCheck> items, OnCoatCheckInteractionListener listener) {
+    public CoatCheckRecyclerViewAdapter(List<CoatCheck> items, OnCoatCheckInteractionListener callback) {
         mCoatChecks = items;
-        mListener = listener;
+        mListener = callback;
     }
 
     @Override

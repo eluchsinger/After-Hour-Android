@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -20,9 +21,6 @@ import ch.hsr.afterhour.model.CoatCheck;
 
 
 public class CoatCheckListFragment extends Fragment {
-
-    // Data Holder
-    private OnCoatCheckInteractionListener mListener;
 
     public CoatCheckListFragment() {
     }
@@ -43,32 +41,38 @@ public class CoatCheckListFragment extends Fragment {
                 Context context = view.getContext();
                 recyclerView = (RecyclerView) view;
                 recyclerView.setLayoutManager(new LinearLayoutManager(context));
-                recyclerView.setAdapter(new CoatCheckRecyclerViewAdapter(coatchecks, mListener));
+                OnCoatCheckInteractionListener callback = new OnCoatCheckInteractionListener() {
+                    @Override
+                    public void onCoatCheckListItemInteraction(int coatHangerNumber, int publicIdentifier) {
+                        Bundle argsBundle = new Bundle();
+                        argsBundle.putInt(CoatCheckFragment.CoatHangerParameters.COATHANGER_NUMBER.toString(), coatHangerNumber);
+                        argsBundle.putInt(CoatCheckFragment.CoatHangerParameters.PUBLICIDENTIFIER.toString(), publicIdentifier);
+                        Fragment coatCheckFragment =  new CoatCheckFragment();
+                        coatCheckFragment.setArguments(argsBundle);
+                    }
+
+                    @Override
+                    public void onAddCoatCheck() {
+                        FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
+                        transaction.replace(R.id.fragment_container, new CoatCheckScannerFragment());
+                        transaction.commit();
+                    }
+                };
+                recyclerView.setAdapter(new CoatCheckRecyclerViewAdapter(coatchecks, callback));
             }
         }
 
         FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.coatcheck_list_fab);
-        fab.setOnClickListener(v -> mListener.onAddCoatCheck());
+        fab.setOnClickListener(v -> {
+                FragmentTransaction transaction = getParentFragment().getChildFragmentManager().beginTransaction();
+                transaction.replace(R.id.fragment_container, new CoatCheckScannerFragment());
+                transaction.commit();
+        });
         return view;
-    }
-
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnCoatCheckInteractionListener) {
-            mListener = (OnCoatCheckInteractionListener) context;
-        } else if(getParentFragment() instanceof  OnCoatCheckInteractionListener) {
-            mListener = (OnCoatCheckInteractionListener) getParentFragment();
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement " + getClass() + " OnCoatCheckInteractionListener");
-        }
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-        mListener = null;
     }
 }
