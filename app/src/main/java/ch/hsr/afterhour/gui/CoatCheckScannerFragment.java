@@ -187,7 +187,9 @@ public class CoatCheckScannerFragment extends Fragment {
                                 @Override
                                 public void onCoatCheckReceivedErrorReplyFromServer() {
                                     // todo: Snackbar geht nicht
-                                    Snackbar.make(getActivity().findViewById(R.id.coatcheck_container), getString(R.string.unexpected_error), Snackbar.LENGTH_LONG);
+                                    final Snackbar snack = Snackbar.make(getView(), getString(R.string.unexpected_error), Snackbar.LENGTH_SHORT);
+                                    snack.getView().setBackgroundResource(R.color.colorAccent);
+                                    snack.show();
                                     onCoatCheckScanned();
                                 }
                             };

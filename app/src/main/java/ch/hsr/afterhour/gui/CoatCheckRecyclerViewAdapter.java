@@ -9,17 +9,14 @@ import android.widget.TextView;
 import java.util.List;
 
 import ch.hsr.afterhour.R;
-import ch.hsr.afterhour.gui.listeners.OnCoatCheckInteractionListener;
 import ch.hsr.afterhour.model.CoatCheck;
 
 public class CoatCheckRecyclerViewAdapter extends RecyclerView.Adapter<CoatCheckRecyclerViewAdapter.ViewHolder> {
 
     private final List<CoatCheck> mCoatChecks;
-        private final OnCoatCheckInteractionListener mListener;
 
-    public CoatCheckRecyclerViewAdapter(List<CoatCheck> items, OnCoatCheckInteractionListener callback) {
+    public CoatCheckRecyclerViewAdapter(List<CoatCheck> items) {
         mCoatChecks = items;
-        mListener = callback;
     }
 
     @Override
@@ -34,18 +31,6 @@ public class CoatCheckRecyclerViewAdapter extends RecyclerView.Adapter<CoatCheck
         holder.mItem = mCoatChecks.get(position);
         holder.mIdView.setText(mCoatChecks.get(position).getCoatHanger().getLocation().getName());
         holder.mContentView.setText(Integer.toString(mCoatChecks.get(position).getPublicIdentifier()));
-
-        holder.mView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (null != mListener) {
-                    // todo: show single coatcheck fragment
-                    mListener.onCoatCheckListItemInteraction(
-                            holder.mItem.getCoatHanger().getCoatHangerNumber(),
-                            holder.mItem.getPublicIdentifier());
-                }
-            }
-        });
     }
 
     @Override
