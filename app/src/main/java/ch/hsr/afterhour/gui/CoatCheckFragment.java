@@ -14,10 +14,17 @@ import java.util.List;
 
 import ch.hsr.afterhour.Application;
 import ch.hsr.afterhour.R;
+import ch.hsr.afterhour.gui.utils.FragmentWithIcon;
 import ch.hsr.afterhour.model.CoatCheck;
 
 
-public class CoatCheckFragment extends Fragment {
+public class CoatCheckFragment extends Fragment implements FragmentWithIcon {
+    private final static int FRAGMENT_ICON = R.drawable.ic_qrcode_scan;
+
+    @Override
+    public int getIconRes() {
+        return FRAGMENT_ICON;
+    }
 
     @Nullable
     @Override
@@ -46,4 +53,5 @@ public class CoatCheckFragment extends Fragment {
         });
         return view;
     }
+
 }
