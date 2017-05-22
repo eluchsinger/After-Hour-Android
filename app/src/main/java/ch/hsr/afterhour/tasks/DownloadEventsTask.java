@@ -20,7 +20,6 @@ public class DownloadEventsTask extends AsyncTask<Void, Void, Event[]> {
         this.onTaskCompleted = onTaskCompletedCallback;
     }
 
-
     @Override
     protected Event[] doInBackground(Void... params) {
         try {
@@ -34,6 +33,8 @@ public class DownloadEventsTask extends AsyncTask<Void, Void, Event[]> {
     @Override
     protected void onPostExecute(Event[] events) {
         super.onPostExecute(events);
-        this.onTaskCompleted.onTaskCompleted(events);
+        if(this.onTaskCompleted != null) {
+            this.onTaskCompleted.onTaskCompleted(events);
+        }
     }
 }

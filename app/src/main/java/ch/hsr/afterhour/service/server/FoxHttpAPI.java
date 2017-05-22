@@ -4,6 +4,9 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
 import java.net.MalformedURLException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import ch.hsr.afterhour.model.CoatCheck;
 import ch.hsr.afterhour.model.Event;
@@ -136,5 +139,26 @@ public class FoxHttpAPI {
         foxHttpRequest.setRequestType(RequestType.GET);
         FoxHttpResponse foxHttpResponse = foxHttpRequest.execute();
         return foxHttpResponse.getParsedBody(Ticket.class);
+    }
+
+    public Bitmap getProfileImage(final int userId) throws MalformedURLException, FoxHttpException {
+        FoxHttpRequest foxHttpRequest = new FoxHttpRequest(httpClient);
+        String urlParameters = "/users/" + userId + "/image";
+        foxHttpRequest.setUrl("{host}" + urlParameters);
+        foxHttpRequest.setRequestType(RequestType.GET);
+        FoxHttpResponse foxHttpResponse = foxHttpRequest.execute();
+        final byte[] bytes = foxHttpResponse.getResponseBody().getBody().toByteArray();
+        return BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+    }
+
+    public List<Event> getUpcomingEvents(final int userId) throws MalformedURLException, FoxHttpException {
+        FoxHttpRequest foxHttpRequest = new FoxHttpRequest(httpClient);
+        String urlParameters = "/users/" + userId + "/events";
+        foxHttpRequest.setUrl("{host}" + urlParameters);
+        foxHttpRequest.setRequestType(RequestType.GET);
+        FoxHttpResponse foxHttpResponse = foxHttpRequest.execute();
+        final Event[] events = foxHttpResponse.getParsedBody(Event[].class);
+        return new ArrayList<>(Arrays.asList(events));
+
     }
 }
