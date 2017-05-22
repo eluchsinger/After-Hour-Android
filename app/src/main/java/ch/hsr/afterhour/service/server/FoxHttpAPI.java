@@ -140,7 +140,7 @@ public class FoxHttpAPI {
 
     public Bitmap getProfileImage(final int userId) throws MalformedURLException, FoxHttpException {
         FoxHttpRequest foxHttpRequest = new FoxHttpRequest(httpClient);
-        String urlParameters = "/events/" + userId + "/image";
+        String urlParameters = "/users/" + userId + "/image";
         foxHttpRequest.setUrl("{host}" + urlParameters);
         foxHttpRequest.setRequestType(RequestType.GET);
         FoxHttpResponse foxHttpResponse = foxHttpRequest.execute();
