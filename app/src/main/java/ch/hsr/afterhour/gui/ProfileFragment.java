@@ -3,6 +3,7 @@ package ch.hsr.afterhour.gui;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.CardView;
@@ -19,13 +20,14 @@ import ch.hsr.afterhour.Application;
 import ch.hsr.afterhour.R;
 import ch.hsr.afterhour.gui.adapters.UpcomingEventsListViewAdapter;
 import ch.hsr.afterhour.gui.utils.FragmentWithIcon;
+import ch.hsr.afterhour.gui.utils.ReloadableFragment;
 import ch.hsr.afterhour.model.Event;
 import ch.hsr.afterhour.model.User;
 import ch.hsr.afterhour.tasks.DownloadProfileImageTask;
 import ch.hsr.afterhour.tasks.DownloadUpcomingEventsTask;
 import ch.hsr.afterhour.tasks.OnTaskCompleted;
 
-public class ProfileFragment extends Fragment implements FragmentWithIcon {
+public class ProfileFragment extends Fragment implements FragmentWithIcon, ReloadableFragment {
     private final static int FRAGMENT_ICON = R.drawable.ic_profile_light;
 
     @Override
@@ -34,7 +36,8 @@ public class ProfileFragment extends Fragment implements FragmentWithIcon {
     }
 
     private TextView bottomSheetTitle;
-
+    private ImageView profileImage;
+    private ListView upcomingEvents;
 
     @Override
     public void onAttach(Context context) {
@@ -48,6 +51,12 @@ public class ProfileFragment extends Fragment implements FragmentWithIcon {
         View rootView = inflater.inflate(R.layout.fragment_profile, container, false);
 
         return rootView;
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        setHasOptionsMenu(true);
+        super.onActivityCreated(savedInstanceState);
     }
 
     private float calculateBottomsheetPeekHeight() {
@@ -64,17 +73,17 @@ public class ProfileFragment extends Fragment implements FragmentWithIcon {
         bottomSheetBehavior.setPeekHeight((int) calculateBottomsheetPeekHeight());
         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
 
-        final ImageView profileImage = (ImageView) view.findViewById(R.id.profile_image_container);
+        this.profileImage = (ImageView) view.findViewById(R.id.profile_image_container);
         final TextView profileName = (TextView) view.findViewById(R.id.profile_name);
         final TextView profileAge = (TextView) view.findViewById(R.id.profile_age);
         final ImageView bottomSheetBarcode = (ImageView) view.findViewById(R.id.bottom_sheet_barcode);
         final TextView profileId = (TextView) view.findViewById(R.id.bottom_sheet_userid);
-        final ListView upcomingEvents = (ListView) view.findViewById(R.id.upcoming_events_listview);
+        this.upcomingEvents = (ListView) view.findViewById(R.id.upcoming_events_listview);
 
         final User user = Application.get().getUser();
 
-        loadProfileImage(user, profileImage);
-        loadUpcomingEvents(user, upcomingEvents);
+        loadProfileImage();
+        loadUpcomingEvents();
 
         profileName.setText(user.getFirstName() + " " + user.getLastName());
         profileAge.setText(user.getDateOfBirthFormatted());
@@ -83,34 +92,42 @@ public class ProfileFragment extends Fragment implements FragmentWithIcon {
         bottomSheetBarcode.setImageBitmap(user.getQrImage());
     }
 
-    private void loadProfileImage(final User user, final ImageView profileView) {
+    private void loadProfileImage() {
+        final User user = Application.get().getUser();
         if(user.getProfileImage() == null) {
             final DownloadProfileImageTask task = new DownloadProfileImageTask(new OnTaskCompleted<Bitmap>() {
                 @Override
                 public void onTaskCompleted(Bitmap result) {
                     if (result != null) {
                         user.setProfileImage(result);
-                        profileView.setImageBitmap(user.getProfileImage());
+                        profileImage.setImageBitmap(user.getProfileImage());
                     }
                 }
             });
             task.execute(user);
         } else {
-            profileView.setImageBitmap(user.getProfileImage());
+            profileImage.setImageBitmap(user.getProfileImage());
         }
     }
 
-    private void loadUpcomingEvents(final User user, final ListView listView) {
+    private void loadUpcomingEvents() {
+        final User user = Application.get().getUser();
         final DownloadUpcomingEventsTask task = new DownloadUpcomingEventsTask(user, new OnTaskCompleted<List<Event>>() {
             @Override
             public void onTaskCompleted(List<Event> result) {
                 if(result != null && result.size() > 0) {
-                    listView.setAdapter(new UpcomingEventsListViewAdapter<>(ProfileFragment.this.getContext(),
+                    upcomingEvents.setAdapter(new UpcomingEventsListViewAdapter<>(ProfileFragment.this.getContext(),
                             android.R.layout.simple_list_item_1,
                             result));
                 }
             }
         });
         task.execute();
+    }
+
+    @Override
+    public void onReloadRequested() {
+        this.loadProfileImage();
+        this.loadUpcomingEvents();
     }
 }
