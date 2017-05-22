@@ -10,13 +10,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
+
+import java.util.List;
 
 import ch.hsr.afterhour.Application;
 import ch.hsr.afterhour.R;
+import ch.hsr.afterhour.gui.adapters.UpcomingEventsListViewAdapter;
 import ch.hsr.afterhour.gui.utils.FragmentWithIcon;
+import ch.hsr.afterhour.model.Event;
 import ch.hsr.afterhour.model.User;
 import ch.hsr.afterhour.tasks.DownloadProfileImageTask;
+import ch.hsr.afterhour.tasks.DownloadUpcomingEventsTask;
 import ch.hsr.afterhour.tasks.OnTaskCompleted;
 
 public class ProfileFragment extends Fragment implements FragmentWithIcon {
@@ -63,27 +69,48 @@ public class ProfileFragment extends Fragment implements FragmentWithIcon {
         final TextView profileAge = (TextView) view.findViewById(R.id.profile_age);
         final ImageView bottomSheetBarcode = (ImageView) view.findViewById(R.id.bottom_sheet_barcode);
         final TextView profileId = (TextView) view.findViewById(R.id.bottom_sheet_userid);
+        final ListView upcomingEvents = (ListView) view.findViewById(R.id.upcoming_events_listview);
 
         final User user = Application.get().getUser();
 
+        loadProfileImage(user, profileImage);
+        loadUpcomingEvents(user, upcomingEvents);
+
+        profileName.setText(user.getFirstName() + " " + user.getLastName());
+        profileAge.setText(user.getDateOfBirthFormatted());
+        profileId.setText(user.getPublicId());
+
+        bottomSheetBarcode.setImageBitmap(user.getQrImage());
+    }
+
+    private void loadProfileImage(final User user, final ImageView profileView) {
         if(user.getProfileImage() == null) {
             final DownloadProfileImageTask task = new DownloadProfileImageTask(new OnTaskCompleted<Bitmap>() {
                 @Override
                 public void onTaskCompleted(Bitmap result) {
                     if (result != null) {
                         user.setProfileImage(result);
-                        profileImage.setImageBitmap(user.getProfileImage());
+                        profileView.setImageBitmap(user.getProfileImage());
                     }
                 }
             });
             task.execute(user);
         } else {
-            profileImage.setImageBitmap(user.getProfileImage());
+            profileView.setImageBitmap(user.getProfileImage());
         }
-        profileName.setText(user.getFirstName() + " " + user.getLastName());
-        profileAge.setText(user.getDateOfBirthFormatted());
-        profileId.setText(user.getPublicId());
+    }
 
-        bottomSheetBarcode.setImageBitmap(user.getQrImage());
+    private void loadUpcomingEvents(final User user, final ListView listView) {
+        final DownloadUpcomingEventsTask task = new DownloadUpcomingEventsTask(user, new OnTaskCompleted<List<Event>>() {
+            @Override
+            public void onTaskCompleted(List<Event> result) {
+                if(result != null && result.size() > 0) {
+                    listView.setAdapter(new UpcomingEventsListViewAdapter<>(ProfileFragment.this.getContext(),
+                            android.R.layout.simple_list_item_1,
+                            result));
+                }
+            }
+        });
+        task.execute();
     }
 }

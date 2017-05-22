@@ -71,4 +71,9 @@ public class Event {
     public void setTicketCategories(TicketCategory[] ticketCategories) {
         this.ticketCategories = ticketCategories;
     }
+
+    @Override
+    public String toString() {
+        return this.getTitle() + " - " + this.getEventDate();
+    }
 }
