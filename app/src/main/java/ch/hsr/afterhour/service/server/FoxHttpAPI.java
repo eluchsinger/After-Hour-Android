@@ -4,6 +4,9 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
 import java.net.MalformedURLException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import ch.hsr.afterhour.model.CoatCheck;
 import ch.hsr.afterhour.model.Event;
@@ -17,6 +20,7 @@ import ch.viascom.groundwork.foxhttp.body.request.FoxHttpRequestBody;
 import ch.viascom.groundwork.foxhttp.body.request.RequestObjectBody;
 import ch.viascom.groundwork.foxhttp.builder.FoxHttpClientBuilder;
 import ch.viascom.groundwork.foxhttp.exception.FoxHttpException;
+import ch.viascom.groundwork.foxhttp.exception.FoxHttpRequestException;
 import ch.viascom.groundwork.foxhttp.interceptor.FoxHttpInterceptorType;
 import ch.viascom.groundwork.foxhttp.log.SystemOutFoxHttpLogger;
 import ch.viascom.groundwork.foxhttp.parser.GsonParser;
@@ -146,5 +150,16 @@ public class FoxHttpAPI {
         FoxHttpResponse foxHttpResponse = foxHttpRequest.execute();
         final byte[] bytes = foxHttpResponse.getResponseBody().getBody().toByteArray();
         return BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+    }
+
+    public List<Event> getUpcomingEvents(final int userId) throws MalformedURLException, FoxHttpException {
+        FoxHttpRequest foxHttpRequest = new FoxHttpRequest(httpClient);
+        String urlParameters = "/users/" + userId + "/events";
+        foxHttpRequest.setUrl("{host}" + urlParameters);
+        foxHttpRequest.setRequestType(RequestType.GET);
+        FoxHttpResponse foxHttpResponse = foxHttpRequest.execute();
+        final Event[] events = foxHttpResponse.getParsedBody(Event[].class);
+        return new ArrayList<>(Arrays.asList(events));
+
     }
 }
