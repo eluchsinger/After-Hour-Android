@@ -1,6 +1,7 @@
 package ch.hsr.afterhour.gui;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.v4.app.Fragment;
@@ -15,6 +16,8 @@ import ch.hsr.afterhour.Application;
 import ch.hsr.afterhour.R;
 import ch.hsr.afterhour.gui.utils.FragmentWithIcon;
 import ch.hsr.afterhour.model.User;
+import ch.hsr.afterhour.tasks.DownloadProfileImageTask;
+import ch.hsr.afterhour.tasks.OnTaskCompleted;
 
 public class ProfileFragment extends Fragment implements FragmentWithIcon {
     private final static int FRAGMENT_ICON = R.drawable.ic_profile_light;
@@ -63,7 +66,18 @@ public class ProfileFragment extends Fragment implements FragmentWithIcon {
 
         final User user = Application.get().getUser();
 
-        if(user.getProfileImage() != null) {
+        if(user.getProfileImage() == null) {
+            final DownloadProfileImageTask task = new DownloadProfileImageTask(new OnTaskCompleted<Bitmap>() {
+                @Override
+                public void onTaskCompleted(Bitmap result) {
+                    if (result != null) {
+                        user.setProfileImage(result);
+                        profileImage.setImageBitmap(user.getProfileImage());
+                    }
+                }
+            });
+            task.execute(user);
+        } else {
             profileImage.setImageBitmap(user.getProfileImage());
         }
         profileName.setText(user.getFirstName() + " " + user.getLastName());
