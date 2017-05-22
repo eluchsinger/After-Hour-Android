@@ -21,18 +21,19 @@ public class AddCoatCheckTask extends AsyncTask<Object, Void, Boolean> {
     private Application app = Application.get();
     private User user = app.getUser();
 
-    private int locationId, coatHangerNumber;
+    private String placeId;
+    private int coatHangerNumber;
 
-    public AddCoatCheckTask(CoatCheckScannerListener listener, Integer locIdInt,Integer cHint) {
+    public AddCoatCheckTask(CoatCheckScannerListener listener, String placeId,Integer cHint) {
         mCallback = listener;
-        locationId = locIdInt;
+        this.placeId = placeId;
         coatHangerNumber = cHint;
     }
 
     @Override
     protected Boolean doInBackground(Object... params) {
         try {
-            coatCheck = app.getServerAPI().handOverJacket(user.getEmail(), coatHangerNumber, locationId );
+            coatCheck = app.getServerAPI().handOverJacket(user.getEmail(), coatHangerNumber, placeId);
             return true;
         } catch (FoxHttpException e) {
             e.printStackTrace();

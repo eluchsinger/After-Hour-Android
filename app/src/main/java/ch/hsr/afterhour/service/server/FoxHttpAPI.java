@@ -17,7 +17,6 @@ import ch.viascom.groundwork.foxhttp.body.request.FoxHttpRequestBody;
 import ch.viascom.groundwork.foxhttp.body.request.RequestObjectBody;
 import ch.viascom.groundwork.foxhttp.builder.FoxHttpClientBuilder;
 import ch.viascom.groundwork.foxhttp.exception.FoxHttpException;
-import ch.viascom.groundwork.foxhttp.exception.FoxHttpRequestException;
 import ch.viascom.groundwork.foxhttp.interceptor.FoxHttpInterceptorType;
 import ch.viascom.groundwork.foxhttp.log.SystemOutFoxHttpLogger;
 import ch.viascom.groundwork.foxhttp.parser.GsonParser;
@@ -115,9 +114,9 @@ public class FoxHttpAPI {
         FoxHttpResponse foxHttpResponse = foxHttpRequest.execute();
     }
 
-    public CoatCheck handOverJacket(String email, int coatHangerNumber, int locationId) throws FoxHttpException, MalformedURLException {
+    public CoatCheck handOverJacket(String email, int coatHangerNumber, String placeId) throws FoxHttpException, MalformedURLException {
         FoxHttpRequest foxHttpRequest = new FoxHttpRequest(httpClient);
-        String urlParameters = "/handOverJacket/" + email + "/" + coatHangerNumber + "/" + locationId;
+        String urlParameters = "/handOverJacket/" + email + "/" + coatHangerNumber + "/" + placeId;
         foxHttpRequest.setUrl("{host}" + urlParameters);
         foxHttpRequest.setRequestType(RequestType.GET);
         FoxHttpResponse foxHttpResponse = foxHttpRequest.execute();

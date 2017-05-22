@@ -53,6 +53,7 @@ public class CoatCheckScannerFragment extends Fragment {
     // Data Holders
     private final int QR_DETECTED = 0;
     private Handler uiHandler;
+    private final String coatHangerSplitter = "/";
 
     private void requestCameraPermissions() {
         if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
@@ -168,13 +169,12 @@ public class CoatCheckScannerFragment extends Fragment {
                     }
                     String qrCode = barcodes.valueAt(0).displayValue;
                     itemScanned = validateQr(qrCode);
-                    String locationId = qrCode.substring(4, qrCode.indexOf("x"));
-                    String coatHangerNumber = qrCode.substring(qrCode.indexOf("x") + 1, qrCode.length());
+                    String placeId = qrCode.substring(4, qrCode.indexOf(coatHangerSplitter));
+                    String coatHangerNumber = qrCode.substring(qrCode.indexOf(coatHangerSplitter) + 1, qrCode.length());
                     if (itemScanned) {
                         Message message = uiHandler.obtainMessage(QR_DETECTED);
                         message.sendToTarget();
                         infoPane.post(() ->  {
-                            Integer locIdInt = Integer.parseInt(locationId);
                             Integer cHint = Integer.parseInt(coatHangerNumber);
                             CoatCheckScannerListener callback = new CoatCheckScannerListener() {
                                 @Override
@@ -186,14 +186,13 @@ public class CoatCheckScannerFragment extends Fragment {
 
                                 @Override
                                 public void onCoatCheckReceivedErrorReplyFromServer() {
-                                    // todo: Snackbar geht nicht
                                     final Snackbar snack = Snackbar.make(getView(), getString(R.string.unexpected_error), Snackbar.LENGTH_SHORT);
                                     snack.getView().setBackgroundResource(R.color.colorAccent);
                                     snack.show();
                                     onCoatCheckScanned();
                                 }
                             };
-                            AsyncTask mTask = new AddCoatCheckTask(callback, locIdInt, cHint);
+                            AsyncTask mTask = new AddCoatCheckTask(callback, placeId, cHint);
                             mTask.execute();
                         });
                     }
@@ -206,7 +205,7 @@ public class CoatCheckScannerFragment extends Fragment {
             if (!qrCode.startsWith("CCH-")) {
                 return false;
             }
-            if (!qrCode.contains("x")) {
+            if (!qrCode.contains(coatHangerSplitter)) {
                 return false;
             }
             if ((qrCode.length() < minimumQRlength)) {
