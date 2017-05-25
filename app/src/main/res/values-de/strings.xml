@@ -1,21 +1,8 @@
 <resources>
     <string name="app_name">After-Hour</string>
 
-    // Permissions
-    <string name="permission_reason_camera">Damit After-Hour QR Codes scannen kann, braucht die App Zugirff auf die Kamera!</string>
-
-    // Buttons
-    <string name="button_cancel">Abbrechen</string>
-    <string name="button_okay">Okay</string>
-
-    // Titel
-    <string name="title_codescanner">Code Scanner</string>
-    <string name="title_myprofile">Mein Profil</string>
-
     // Navigation Bar
-    <string name="navigation_drawer_open">Öffnen</string>
-    <string name="navigation_drawer_close">Schließen</string>
-    <string name="events">Events</string>
+    <string name="reload">Refresh</string>
     <string name="logout">Abmelden</string>
 
     // Placeholders
@@ -24,7 +11,6 @@
     <string name="placeholder_date">Date</string>
     <string name="placeholder_event_picture">Event Picture</string>
     <string name="placeholder_text">Nothing to read.</string>
-    <string name="descr_afterhour_icon">After-Hour Icon</string>
     <string name="placeholder_event_description">Event Beschreibung</string>
 
     <!-- Strings related to login -->
@@ -35,11 +21,8 @@
     <string name="error_invalid_password">Passwort zu kurz</string>
     <string name="error_incorrect_password">Ungültiges Passwort</string>
     <string name="error_field_required">Dieses Feld wird benötigt</string>
-    <string name="permission_rationale">"Der Zugriff auf die Kontakte wird benoetigt für Email Vervollstaendigung."
-    </string>
     <string name="action_register">Registrieren</string>
     <string name="unexpected_error">Ein unerwarteter Fehler ist aufgetreten</string>
-    <string name="date_of_birth">Gerburtstag: </string>
     <string name="wrong_login_credentials">Falscher Username oder Password</string>
 
     <!-- Strings related to Profile-->
@@ -54,35 +37,27 @@
     <string name="year">Jahr</string>
     <string name="month">Monat</string>
     <string name="day">Tag</string>
-    <string name="employee_login">Mitarbeiter Login</string>
-    <string name="user_login">Benutzer Login</string>
-    <string name="section_format">Hello World from section: %1$d</string>
-    <string name="profile">Profil</string>
-    <string name="coatcheck">Jackenabgabe</string>
     <string name="dummy_text">Dummy text</string>
     <string name="profile_picture">Profilbild</string>
-    <string name="dummy_userid">USR-ZRH-000000</string>
-    <string name="last_name">Nachname</string>
-    <string name="creditcard">Kreditkarte</string>
-    <string name="employee">Mitarbeiter</string>
 
     <!-- Strings related to bottom bar-->
-    <string name="billing">Abrechnung</string>
-    <string name="drinks">Drinks</string>
     <string name="autologin">Autologin</string>
 
     <!-- Strings related to scanned user -->
-    <string name="no_valid_scanned_user_detected">Kein gültiger User gescannt</string>
     <string name="scan_user_id">Bitte scannen Sie den QR Code eines Benutzers</string>
     <string name="scan_coat_check">Bitte Jacke abgeben und Bügel scannen</string>
     <string name="async_task_timeout">Die  Abfrage ging zu lange und wurde abgebrochen</string>
     <string name="async_task_error">Es gab ein Fehler bei der Serverabfrage</string>
     <string name="empty_coatcheck_list">Sie haben noch keine Jacke abgegeben. Um eine Jacke abzugehen gehen Sie zur Garderobe und klicken auf den roten Knopf weiter unten.</string>
-    <string name="buy_ticket_success_message">Ticket gekauft - Geniessen Sie Ihren Besuch</string>
+    <string name="buy_ticket_success_message">Ticket gekauft - Genießen Sie Ihren Besuch</string>
     <string name="buy_ticket_failed_message">Es tut uns leid. Ihr Ticket konnte nicht erworben werden.</string>
     <string name="dashboard_card_title">Kommende Veranstaltungen</string>
-    <string name="title_activity_main">MainActivity</string>
-    <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Benachrichtigungen</string>
+    <string name="chf">CHF</string>
+    <string name="evening_caisse">Abendkasse</string>
+    <string name="your_id">DEINE ID</string>
+    <string name="userid">UserID</string>
+    <string name="dummy_phone">79 123 45 67</string>
+    <string name="dummy_intl_phone">+41</string>
+    <string name="mobile_number">Telefonnumber</string>
+    <string name="dummy_price">13</string>
 </resources>

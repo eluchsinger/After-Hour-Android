@@ -2,7 +2,6 @@ package ch.hsr.afterhour.service.barcode;
 
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.util.Size;
 
 /**
  * Created by Esteban Luchsinger on 27.04.2017.

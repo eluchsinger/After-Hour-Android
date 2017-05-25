@@ -2,17 +2,10 @@ package ch.hsr.afterhour.tasks;
 
 import android.os.AsyncTask;
 
-import java.net.MalformedURLException;
-
 import ch.hsr.afterhour.Application;
 import ch.hsr.afterhour.gui.listeners.CoatCheckScannerListener;
 import ch.hsr.afterhour.model.CoatCheck;
 import ch.hsr.afterhour.model.User;
-import ch.viascom.groundwork.foxhttp.exception.FoxHttpException;
-
-/**
- * Created by Marcel on 16.05.17.
- */
 
 public class AddCoatCheckTask extends AsyncTask<Object, Void, Boolean> {
 
@@ -35,9 +28,7 @@ public class AddCoatCheckTask extends AsyncTask<Object, Void, Boolean> {
         try {
             coatCheck = app.getServerAPI().handOverJacket(user.getEmail(), coatHangerNumber, placeId);
             return true;
-        } catch (FoxHttpException e) {
-            e.printStackTrace();
-        } catch (MalformedURLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return false;

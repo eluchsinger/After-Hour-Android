@@ -23,10 +23,6 @@ import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 
-/**
- * Created by Marcel on 04.04.17.
- */
-
 @RunWith(AndroidJUnit4.class)
 public class EventListTest {
 
@@ -49,7 +45,7 @@ public class EventListTest {
     @Test
     @Ignore
     //TODO: Make Test.
-    public void ChangeToEvents_ShowsEventlist() {
+    public void ChangeToEvents_ShowsEventList() {
         onView(withId(R.id.user_drawer_layout)).perform(DrawerActions.open());
         onView(withId(R.id.user_nav_view))
                 .perform(NavigationViewActions.navigateTo(R.id.nav_item_user_login));

@@ -18,10 +18,6 @@ import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 
-/**
- * Created by Marcel on 04.04.17.
- */
-
 public class LogoutTest {
 
     private GlobalSettings settings = new GlobalSettings();

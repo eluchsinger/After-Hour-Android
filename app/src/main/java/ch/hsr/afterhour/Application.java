@@ -2,7 +2,6 @@ package ch.hsr.afterhour;
 
 import java.util.concurrent.atomic.AtomicReference;
 
-import ch.hsr.afterhour.model.Gender;
 import ch.hsr.afterhour.model.User;
 import ch.hsr.afterhour.service.server.FoxHttpAPI;
 import ch.viascom.groundwork.foxhttp.exception.FoxHttpException;
@@ -40,4 +39,7 @@ public class Application extends android.app.Application {
 
     public FoxHttpAPI getServerAPI() { return api;}
 
+    public String getLoginPrefs() {
+        return "login_credentials";
+    }
 }

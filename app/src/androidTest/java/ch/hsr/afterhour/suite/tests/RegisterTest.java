@@ -19,10 +19,6 @@ import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 
-/**
- * Created by Marcel on 18.04.17.
- */
-
 @RunWith(AndroidJUnit4.class)
 public class RegisterTest {
 
@@ -41,7 +37,7 @@ public class RegisterTest {
             onView(withId(R.id.register_birth_day)).perform(typeText("02"));
             onView(withId(R.id.register_email)).perform(scrollTo(), typeText("me@world.com"));
             onView(withId(R.id.register_password)).perform(scrollTo(), typeText("1234"));
-            onView(withId(R.id.register_reapeat_password)).perform(scrollTo(), typeText("1234"));
+            onView(withId(R.id.register_repeat_password)).perform(scrollTo(), typeText("1234"));
             onView(withId(R.id.register_vorwahl)).perform(scrollTo(), typeText("+41"));
             onView(withId(R.id.register_mobilenumber)).perform(scrollTo(), typeText("791234567"));
             onView(withId(R.id.register_register_button)).perform(scrollTo(), click());

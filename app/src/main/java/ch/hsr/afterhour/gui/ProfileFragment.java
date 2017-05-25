@@ -48,9 +48,7 @@ public class ProfileFragment extends Fragment implements FragmentWithIcon, Reloa
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View rootView = inflater.inflate(R.layout.fragment_profile, container, false);
-
-        return rootView;
+        return inflater.inflate(R.layout.fragment_profile, container, false);
     }
 
     @Override
@@ -59,7 +57,7 @@ public class ProfileFragment extends Fragment implements FragmentWithIcon, Reloa
         super.onActivityCreated(savedInstanceState);
     }
 
-    private float calculateBottomsheetPeekHeight() {
+    private float calculateBottomSheetPeekHeight() {
         float peekHeight = getResources().getDimension(R.dimen.bottom_sheet_peek_height);
         peekHeight += this.bottomSheetTitle.getHeight();
         return peekHeight;
@@ -70,7 +68,7 @@ public class ProfileFragment extends Fragment implements FragmentWithIcon, Reloa
         final CardView bottomSheet = (CardView) view.findViewById(R.id.bottom_sheet);
         this.bottomSheetTitle = (TextView) view.findViewById(R.id.coatcheck_sheet_title);
         final BottomSheetBehavior bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
-        bottomSheetBehavior.setPeekHeight((int) calculateBottomsheetPeekHeight());
+        bottomSheetBehavior.setPeekHeight((int) calculateBottomSheetPeekHeight());
         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
 
         this.profileImage = (ImageView) view.findViewById(R.id.profile_image_container);

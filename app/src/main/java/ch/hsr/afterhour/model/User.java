@@ -1,8 +1,6 @@
 package ch.hsr.afterhour.model;
 
 import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
-import android.support.v4.content.ContextCompat;
 
 import java.io.Serializable;
 import java.text.DateFormat;

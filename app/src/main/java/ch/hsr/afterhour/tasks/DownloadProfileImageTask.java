@@ -9,10 +9,6 @@ import ch.hsr.afterhour.Application;
 import ch.hsr.afterhour.model.User;
 import ch.viascom.groundwork.foxhttp.exception.FoxHttpException;
 
-/**
- * Created by Fabian on 22.05.17.
- */
-
 public class DownloadProfileImageTask extends AsyncTask<User, Void, Bitmap>  {
     private final OnTaskCompleted<Bitmap> onTaskCompleted;
 

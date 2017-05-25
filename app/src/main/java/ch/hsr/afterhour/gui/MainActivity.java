@@ -8,11 +8,9 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.view.menu.ActionMenuItemView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 
 import ch.hsr.afterhour.Application;
 import ch.hsr.afterhour.R;
@@ -22,7 +20,6 @@ import ch.hsr.afterhour.gui.utils.ReloadableFragment;
 
 public class MainActivity extends AppCompatActivity implements ActivityCompat.OnRequestPermissionsResultCallback, ViewPager.OnPageChangeListener {
 
-    private final static String LOGIN_PREFS = "login_credentials";
     private final static String ACTIVITY_TITLE = "After-Hour";
     private ViewPager viewPager;
     private MainActivityViewPagerAdapter mainActivityViewPagerAdapter;
@@ -62,7 +59,9 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
             if(adapter.getItem(i) instanceof FragmentWithIcon) {
                 final TabLayout.Tab tab = tabLayout.getTabAt(i);
                 final FragmentWithIcon fragmentWithIcon = (FragmentWithIcon)adapter.getItem(i);
-                tab.setIcon(fragmentWithIcon.getIconRes());
+                if (tab != null) {
+                    tab.setIcon(fragmentWithIcon.getIconRes());
+                }
             }
         }
     }
@@ -91,8 +90,8 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
         return super.onOptionsItemSelected(item);
     }
 
-    public void logout() {
-        final SharedPreferences settings = getSharedPreferences(LOGIN_PREFS, MODE_PRIVATE);
+    private void logout() {
+        final SharedPreferences settings = getSharedPreferences(Application.get().getLoginPrefs(), MODE_PRIVATE);
         final SharedPreferences.Editor editor = settings.edit();
         editor.clear().apply();
         final Intent loginIntent = new Intent(this, LoginActivity.class);
@@ -103,7 +102,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
     /**
      * The child fragments reload their data.
      */
-    public void reload() {
+    private void reload() {
         int currentPosition = this.viewPager.getCurrentItem();
         final Fragment fragment = this.mainActivityViewPagerAdapter.getItem(currentPosition);
         if(fragment instanceof ReloadableFragment) {
@@ -111,7 +110,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
         }
     }
 
-    public void setReloadMenuItemVisibility(boolean visible) {
+    private void setReloadMenuItemVisibility(boolean visible) {
         this.isReloadVisible = visible;
         invalidateOptionsMenu();
     }

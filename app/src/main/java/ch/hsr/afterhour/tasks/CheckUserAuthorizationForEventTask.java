@@ -8,10 +8,6 @@ import ch.hsr.afterhour.Application;
 import ch.hsr.afterhour.model.Ticket;
 import ch.viascom.groundwork.foxhttp.exception.FoxHttpException;
 
-/**
- * Created by eluch on 18.05.2017.
- */
-
 public class CheckUserAuthorizationForEventTask extends AsyncTask<Void, Void, Ticket> {
 
     private final int userId;

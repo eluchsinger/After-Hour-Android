@@ -8,7 +8,7 @@ import ch.viascom.groundwork.foxhttp.annotation.types.Path;
 import ch.viascom.groundwork.foxhttp.exception.FoxHttpException;
 
 @Path("{host}")
-public interface FoxHttpRequests {
+interface FoxHttpRequests {
 
     @POST("/users/login")
     @FormUrlEncodedBody

@@ -14,10 +14,6 @@ import java.util.List;
 
 import ch.hsr.afterhour.R;
 
-/**
- * Created by eluch on 22.05.2017.
- */
-
 public class UpcomingEventsListViewAdapter<T> extends ArrayAdapter<T> {
     public UpcomingEventsListViewAdapter(@NonNull Context context, @LayoutRes int resource) {
         super(context, resource);

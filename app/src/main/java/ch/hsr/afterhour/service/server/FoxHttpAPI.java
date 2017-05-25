@@ -68,8 +68,8 @@ public class FoxHttpAPI {
         return foxHttpRequest.execute();
     }
 
-    public User authenticateUser(String qrcode) throws FoxHttpException, MalformedURLException {
-        return makeRequest("{host}/users/" + qrcode, RequestType.GET).getParsedBody(User.class);
+    public User authenticateUser(String qrCode) throws FoxHttpException, MalformedURLException {
+        return makeRequest("{host}/users/" + qrCode, RequestType.GET).getParsedBody(User.class);
     }
 
     public User login(String email, String password) throws FoxHttpException, MalformedURLException {
@@ -114,7 +114,7 @@ public class FoxHttpAPI {
         String urlParameters = "/ticket/" + ticketCategoryId + "/user/" + userId;
         foxHttpRequest.setUrl("{host}" + urlParameters);
         foxHttpRequest.setRequestType(RequestType.GET);
-        FoxHttpResponse foxHttpResponse = foxHttpRequest.execute();
+        foxHttpRequest.execute();
     }
 
     public CoatCheck handOverJacket(String email, int coatHangerNumber, String placeId) throws FoxHttpException, MalformedURLException {

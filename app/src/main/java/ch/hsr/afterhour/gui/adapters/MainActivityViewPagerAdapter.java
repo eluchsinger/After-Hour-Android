@@ -49,16 +49,6 @@ public class MainActivityViewPagerAdapter extends FragmentPagerAdapter {
         public Fragment getFragment() {
             return fragment;
         }
-
-        public int getIconResource() {
-            return this.iconResource;
-        }
-//        public Drawable getIcon() {
-//            if(this.icon == null) {
-//                this.icon = ResourcesCompat.getDrawable(fragment.getResources(), iconResource, null);
-//            }
-//            return this.icon;
-//        }
     }
 
     private final List<MainFragments> fragments;

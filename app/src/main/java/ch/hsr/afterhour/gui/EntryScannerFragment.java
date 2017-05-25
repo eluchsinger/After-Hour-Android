@@ -72,12 +72,13 @@ public class EntryScannerFragment extends Fragment implements OnEntryScannerList
                     new OnTaskCompleted<Ticket>() {
                 @Override
                 public void onTaskCompleted(Ticket result) {
-                    if(result != null) {
-                        final Snackbar snack = Snackbar.make(getView(), "ACCEPTED", Snackbar.LENGTH_SHORT);
+                    View view = getView();
+                    if(result != null && view != null) {
+                        final Snackbar snack = Snackbar.make(view, "ACCEPTED", Snackbar.LENGTH_SHORT);
                         snack.getView().setBackgroundResource(R.color.colorAccent);
                         snack.show();
                     } else {
-                        final Snackbar snack = Snackbar.make(getView(), "REJECT", Snackbar.LENGTH_SHORT);
+                        final Snackbar snack = Snackbar.make(view, "REJECT", Snackbar.LENGTH_SHORT);
                         snack.getView().setBackgroundResource(android.R.color.holo_red_dark);
                         snack.show();
                     }
@@ -212,7 +213,6 @@ public class EntryScannerFragment extends Fragment implements OnEntryScannerList
                     .build();
             if(!mBarcodeDetector.isOperational()){
                 SnackbarHelper.showSnackbar(getView(), "Could not set up the barcode detector!");
-                return;
             }
         }
 

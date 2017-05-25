@@ -87,16 +87,13 @@ public class EventRecyclerViewAdapter extends RecyclerView.Adapter<EventRecycler
             mShowTicketCategoriesConstraints.clone(mEventCardLayout);
 
             // Make the event details 50% of the width of the card.
-            mShoppingButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (isShowingTicketCategories) {
-                        ViewHolder.this.hideTicketCategories();
-                    } else {
-                        ViewHolder.this.showTicketCategories();
-                    }
-                    isShowingTicketCategories = !isShowingTicketCategories;
+            mShoppingButton.setOnClickListener(v -> {
+                if (isShowingTicketCategories) {
+                    ViewHolder.this.hideTicketCategories();
+                } else {
+                    ViewHolder.this.showTicketCategories();
                 }
+                isShowingTicketCategories = !isShowingTicketCategories;
             });
 
             RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.ticket_category_list);

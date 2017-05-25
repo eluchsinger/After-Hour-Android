@@ -25,22 +25,22 @@ import ch.viascom.groundwork.foxhttp.exception.FoxHttpException;
 public class RegisterActivity extends AppCompatActivity {
 
     // UI
-    EditText mFirstName;
-    EditText mLastName;
-    EditText mEmail;
-    EditText mBirthYear;
-    EditText mBirthMonth;
-    EditText mBirthDay;
-    EditText mPassword;
-    EditText mPasswordRepeat;
-    EditText mVorwahl;
-    EditText mMobileNumber;
-    Button mRegisterButton;
+    private EditText mFirstName;
+    private EditText mLastName;
+    private EditText mEmail;
+    private EditText mBirthYear;
+    private EditText mBirthMonth;
+    private EditText mBirthDay;
+    private EditText mPassword;
+    private EditText mPasswordRepeat;
+    private EditText mVorwahl;
+    private EditText mMobileNumber;
+    private Button mRegisterButton;
     private View mProgressView;
     private View mRegisterForm;
 
     // Placeholder
-    User user;
+    private User user;
 
 
     private RegisterUserTask mAuthTask = null;
@@ -60,7 +60,7 @@ public class RegisterActivity extends AppCompatActivity {
         mBirthMonth = (EditText) findViewById(R.id.register_birth_month);
         mBirthDay = (EditText) findViewById(R.id.register_birth_day);
         mPassword = (EditText) findViewById(R.id.register_password);
-        mPasswordRepeat = (EditText) findViewById(R.id.register_reapeat_password);
+        mPasswordRepeat = (EditText) findViewById(R.id.register_repeat_password);
         mVorwahl = (EditText) findViewById(R.id.register_vorwahl);
         mMobileNumber = (EditText) findViewById(R.id.register_mobilenumber);
 
@@ -96,7 +96,7 @@ public class RegisterActivity extends AppCompatActivity {
         String passwordRepeat = mPasswordRepeat.getText().toString();
         String vorwahl = mVorwahl.getText().toString();
         String mobile = mMobileNumber.getText().toString();
-        StringBuffer buf = new StringBuffer();
+        StringBuilder buf = new StringBuilder();
         String birthYear = mBirthYear.getText().toString();
         String birthMonth = mBirthMonth.getText().toString();
         String birthDay = mBirthDay.getText().toString();
@@ -231,7 +231,7 @@ public class RegisterActivity extends AppCompatActivity {
      * Represents an asynchronous login/registration task used to authenticate
      * the user.
      */
-    public class RegisterUserTask extends AsyncTask<Void, Void, Boolean> {
+    private class RegisterUserTask extends AsyncTask<Void, Void, Boolean> {
 
         @Override
         protected Boolean doInBackground(Void... params) {

@@ -1,17 +1,9 @@
 package ch.hsr.afterhour.model;
 
-/**
- * Created by eluch on 05.05.2017.
- */
-
 public class Location {
     private String name;
     private String description;
     private String placeId;
-
-    public Location() {
-        this("", "", "");
-    }
 
     public Location(String name, String description, String placeId) {
         this.name = name;

@@ -186,13 +186,16 @@ public class CoatCheckScannerFragment extends Fragment {
 
                                 @Override
                                 public void onCoatCheckReceivedErrorReplyFromServer() {
-                                    final Snackbar snack = Snackbar.make(getView(), getString(R.string.unexpected_error), Snackbar.LENGTH_SHORT);
-                                    snack.getView().setBackgroundResource(R.color.colorAccent);
-                                    snack.show();
+                                    View view = getView();
+                                    if (view!=null) {
+                                        final Snackbar snack = Snackbar.make(view, getString(R.string.unexpected_error), Snackbar.LENGTH_SHORT);
+                                        snack.getView().setBackgroundResource(R.color.colorAccent);
+                                        snack.show();
+                                    }
                                     onCoatCheckScanned();
                                 }
                             };
-                            AsyncTask mTask = new AddCoatCheckTask(callback, placeId, cHint);
+                            AsyncTask<Object, Void, Boolean> mTask = new AddCoatCheckTask(callback, placeId, cHint);
                             mTask.execute();
                         });
                     }
@@ -201,14 +204,14 @@ public class CoatCheckScannerFragment extends Fragment {
         }
 
         private boolean validateQr(String qrCode) {
-            int minimumQRlength = 7;
+            int minimumQrLength = 7;
             if (!qrCode.startsWith("CCH-")) {
                 return false;
             }
             if (!qrCode.contains(coatHangerSplitter)) {
                 return false;
             }
-            if ((qrCode.length() < minimumQRlength)) {
+            if ((qrCode.length() < minimumQrLength)) {
                 return false;
             }
             return true;

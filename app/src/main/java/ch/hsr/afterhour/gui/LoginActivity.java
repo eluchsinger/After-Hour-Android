@@ -30,7 +30,6 @@ import ch.viascom.groundwork.foxhttp.exception.FoxHttpException;
  */
 public class LoginActivity extends AppCompatActivity {
     private UserLoginTask mAuthTask = null;
-    private final String LOGIN_PREFS = "login_credentials";
 
     // UI references.
     private AutoCompleteTextView mEmailView;
@@ -38,7 +37,7 @@ public class LoginActivity extends AppCompatActivity {
     private View mProgressView;
     private View mLoginFormView;
     private View mRegisterButton;
-    private CheckBox mRemembermeCb;
+    private CheckBox mRememberMeCb;
     private SharedPreferences settings = null;
 
     @Override
@@ -50,7 +49,7 @@ public class LoginActivity extends AppCompatActivity {
         setSupportActionBar(myToolbar);
 
         setupMainViews();
-        settings = getSharedPreferences(LOGIN_PREFS, MODE_PRIVATE);
+        settings = getSharedPreferences(Application.get().getLoginPrefs(), MODE_PRIVATE);
         Map<String, ?> preferenceMap = settings.getAll();
         if (!preferenceMap.isEmpty()) {
             showProgress(true);
@@ -83,7 +82,7 @@ public class LoginActivity extends AppCompatActivity {
             Intent register = new Intent(this, RegisterActivity.class);
             startActivity(register);
         });
-        mRemembermeCb = (CheckBox) findViewById(R.id.login_autologin_checkbox);
+        mRememberMeCb = (CheckBox) findViewById(R.id.login_autologin_checkbox);
     }
 
     private void attemptLogin() {
@@ -109,7 +108,7 @@ public class LoginActivity extends AppCompatActivity {
             cancel = true;
         }
         if (!isPasswordValid(password)) {
-            mPasswordView.setError(getString(R.string.error_invalid_password));
+            mPasswordView.setError(getString(R.string.error_incorrect_password));
             focusView = mPasswordView;
             cancel = true;
         }
@@ -129,7 +128,7 @@ public class LoginActivity extends AppCompatActivity {
             focusView.requestFocus();
         } else {
             showProgress(true);
-            if (mRemembermeCb.isChecked()) {
+            if (mRememberMeCb.isChecked()) {
                 SharedPreferences.Editor editor = settings.edit();
                 editor.putString("email", email);
                 editor.putString("password", password);

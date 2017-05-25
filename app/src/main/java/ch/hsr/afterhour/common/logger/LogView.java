@@ -18,7 +18,6 @@ package ch.hsr.afterhour.common.logger;
 import android.app.Activity;
 import android.content.Context;
 import android.util.AttributeSet;
-import android.widget.TextView;
 
 /** Simple TextView which is used to output log data received through the LogNode interface.
 */
@@ -92,12 +91,9 @@ public class LogView extends android.support.v7.widget.AppCompatTextView impleme
 
         // In case this was originally called from an AsyncTask or some other off-UI thread,
         // make sure the update occurs within the UI thread.
-        ((Activity) getContext()).runOnUiThread( (new Thread(new Runnable() {
-            @Override
-            public void run() {
-                // Display the text we just generated within the LogView.
-                appendToLog(outputBuilder.toString());
-            }
+        ((Activity) getContext()).runOnUiThread( (new Thread(() -> {
+            // Display the text we just generated within the LogView.
+            appendToLog(outputBuilder.toString());
         })));
 
         if (mNext != null) {

@@ -5,10 +5,10 @@
     <item
         android:id="@+id/menu_reload"
         android:icon="@mipmap/ic_reload"
-        android:title="Reload"
+        android:title="@string/reload"
         app:showAsAction="always" />
     <item
         android:id="@+id/menu_logout"
         android:icon="@drawable/ic_logout"
-        android:title="Logout" />
+        android:title="@string/logout" />
 </menu>

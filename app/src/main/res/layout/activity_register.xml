@@ -6,7 +6,6 @@
     android:background="@color/colorPrimary">
 
     <android.support.design.widget.AppBarLayout
-        android:id="@+id/appbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -18,7 +17,7 @@
             android:background="@color/colorPrimary"
             android:elevation="4dp"
             android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Dark"></android.support.v7.widget.Toolbar>
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Dark" />
 
     </android.support.design.widget.AppBarLayout>
 
@@ -65,7 +64,7 @@
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:orientation="vertical">
 
                         <EditText
@@ -170,7 +169,7 @@
                             android:textColorHint="@color/fontColorHint" />
 
                         <EditText
-                            android:id="@+id/register_reapeat_password"
+                            android:id="@+id/register_repeat_password"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="3dp"
@@ -185,7 +184,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="3dp"
-                            android:hint="Mobile Number"
+                            android:hint="@string/mobile_number"
                             android:textColorHint="@color/fontColorHint" />
 
                         <LinearLayout
@@ -200,7 +199,7 @@
                                 android:layout_marginEnd="7dp"
                                 android:layout_marginTop="3dp"
                                 android:backgroundTint="@color/colorAccent"
-                                android:hint="+41"
+                                android:hint="@string/dummy_intl_phone"
                                 android:inputType="phone"
                                 android:maxLines="1"
                                 android:textColor="@color/fontColor"
@@ -212,7 +211,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="3dp"
                                 android:backgroundTint="@color/colorAccent"
-                                android:hint="79 123 45 67"
+                                android:hint="@string/dummy_phone"
                                 android:inputType="phone"
                                 android:maxLines="1"
                                 android:textColor="@color/fontColor"

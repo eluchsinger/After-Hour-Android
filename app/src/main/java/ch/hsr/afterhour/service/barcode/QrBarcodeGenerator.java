@@ -1,10 +1,8 @@
 package ch.hsr.afterhour.service.barcode;
 
 import android.graphics.Bitmap;
-import android.util.Size;
 
 import net.glxn.qrgen.android.QRCode;
-import net.glxn.qrgen.core.image.ImageType;
 
 /**
  * Created by Esteban Luchsinger on 27.04.2017.

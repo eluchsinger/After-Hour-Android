@@ -2,10 +2,6 @@ package ch.hsr.afterhour.model;
 
 import java.util.Date;
 
-/**
- * Created by Fabian on 04.05.17.
- */
-
 public class TicketCategory {
     private int id;
     private String name;
