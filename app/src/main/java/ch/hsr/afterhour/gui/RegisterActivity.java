@@ -251,6 +251,7 @@ public class RegisterActivity extends AppCompatActivity {
 
             if (success) {
                 Intent intent = new Intent(getBaseContext(), MainActivity.class);
+                intent.setFlags(intent.getFlags() | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
             } else {
                 Snackbar snackbar = Snackbar.make(
