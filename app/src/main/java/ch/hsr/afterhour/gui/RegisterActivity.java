@@ -177,7 +177,7 @@ public class RegisterActivity extends AppCompatActivity {
         } else {
             try {
                 user = new User(lastName, firstName, email, Gender.MALE,
-                        vorwahl + mobile, birthday, false);
+                        vorwahl + mobile, birthday, false, null, password);
                 showProgress(true);
                 mAuthTask = new RegisterUserTask();
                 mAuthTask.execute();
