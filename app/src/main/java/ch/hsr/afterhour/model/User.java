@@ -21,10 +21,10 @@ public class User implements Serializable {
     private static final int BARCODE_SIZE = 250;
     private static final String PREFIX_USER_BC = "USR-ZRH-";
 
-    private final BarcodeGenerator barcodeGenerator = new QrBarcodeGenerator();
-    private final DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+    private final transient BarcodeGenerator barcodeGenerator = new QrBarcodeGenerator();
+    private final transient DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
 
-    private int id;
+    private Integer id;
     private String lastName;
     private String firstName;
     private String email;

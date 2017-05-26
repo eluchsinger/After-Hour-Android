@@ -3,7 +3,11 @@ package ch.hsr.afterhour.service.server;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import java.net.MalformedURLException;
+import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -28,7 +32,7 @@ import ch.viascom.groundwork.foxhttp.type.RequestType;
 
 
 public class FoxHttpAPI {
-    private final static String SERVER_PATH = "http://sinv-56049.edu.hsr.ch:40000";
+    private final static String SERVER_PATH = "http://152.96.233.185:9000";
     private final static String LOGGER_NAME = "After-Hour App | Logger";
 
     private FoxHttpClient httpClient;
@@ -36,10 +40,13 @@ public class FoxHttpAPI {
 
     public FoxHttpAPI() throws FoxHttpException {
 
+        final Gson gson = new GsonBuilder()
+                .setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").create();
+
         // Non-encrypted Client / Requests
         FoxHttpClientBuilder builder = new FoxHttpClientBuilder();
-        builder.setFoxHttpResponseParser(new GsonParser())
-                .setFoxHttpRequestParser(new GsonParser())
+        builder.setFoxHttpResponseParser(new CustomGsonParser(gson))
+                .setFoxHttpRequestParser(new CustomGsonParser(gson))
                 .registerFoxHttpInterceptor(FoxHttpInterceptorType.RESPONSE, new DefaultServiceResultFaultInterceptor())
                 .addFoxHttpPlaceholderEntry("host", SERVER_PATH)
                 .setFoxHttpLogger(new SystemOutFoxHttpLogger(true, LOGGER_NAME))
@@ -73,11 +80,7 @@ public class FoxHttpAPI {
     }
 
     public User login(String email, String password) throws FoxHttpException, MalformedURLException {
-        //Todo: Delete Temporary Login and Return requests.login
         return requests.login(email, password);
-//        User user = new User("Muster", "Max", "me@world.com", "+41791234567", "2017-02-02", true);
-//        user.setId("1");
-//        return user;
     }
 
     public Event[] downloadEvents() throws FoxHttpException , MalformedURLException {

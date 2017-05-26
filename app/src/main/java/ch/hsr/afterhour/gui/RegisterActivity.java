@@ -100,17 +100,15 @@ public class RegisterActivity extends AppCompatActivity {
         String birthYear = mBirthYear.getText().toString();
         String birthMonth = mBirthMonth.getText().toString();
         String birthDay = mBirthDay.getText().toString();
-        buf.append(birthYear)
+        buf.append(birthDay)
                 .append("-")
                 .append(birthMonth)
                 .append("-")
-                .append(birthDay);
+                .append(birthYear);
         String birthday = buf.toString();
 
-
-
-            boolean cancel = false;
-            View focusView = null;
+        boolean cancel = false;
+        View focusView = null;
 
             // Check for a valid password, if the user entered one.
         if (TextUtils.isEmpty(firstName)) {
@@ -218,12 +216,10 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private boolean isEmailValid(String email) {
-        //TODO: Replace this with your own logic
         return email.contains("@");
     }
 
     private boolean isPasswordValid(String password) {
-        //TODO: Replace this with your own logic
         return password.length() > 3;
     }
 
