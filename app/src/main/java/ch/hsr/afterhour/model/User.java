@@ -18,11 +18,11 @@ public class User implements Serializable {
     /**
      * The size of the barcode in pixel
      */
-    private static final int BARCODE_SIZE = 250;
-    private static final String PREFIX_USER_BC = "USR-ZRH-";
+    private transient static final int BARCODE_SIZE = 250;
+    private transient static final String PREFIX_USER_BC = "USR-ZRH-";
 
-    private final BarcodeGenerator barcodeGenerator = new QrBarcodeGenerator();
-    private final DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+    private transient final BarcodeGenerator barcodeGenerator = new QrBarcodeGenerator();
+    private transient final DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
 
     private int id;
     private String lastName;
@@ -31,7 +31,7 @@ public class User implements Serializable {
     private String mobileNumber;
     private Date dateOfBirth;
     private Gender gender;
-    private Bitmap profileImage;
+    private  Bitmap profileImage;
     private boolean isWorking = false;
     private List<Ticket> tickets;
     private Bitmap qrImage = null;
