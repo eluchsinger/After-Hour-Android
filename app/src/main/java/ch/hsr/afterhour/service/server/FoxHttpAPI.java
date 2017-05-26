@@ -32,7 +32,7 @@ import ch.viascom.groundwork.foxhttp.type.RequestType;
 
 
 public class FoxHttpAPI {
-    private final static String SERVER_PATH = "http://152.96.233.185:9000";
+    private final static String SERVER_PATH = "http://sinv-56049.edu.hsr.ch:40000";
     private final static String LOGGER_NAME = "After-Hour App | Logger";
 
     private FoxHttpClient httpClient;
