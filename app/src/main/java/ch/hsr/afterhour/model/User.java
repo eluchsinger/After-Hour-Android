@@ -21,13 +21,14 @@ public class User implements Serializable {
     private static final int BARCODE_SIZE = 250;
     private static final String PREFIX_USER_BC = "USR-ZRH-";
 
-    private final BarcodeGenerator barcodeGenerator = new QrBarcodeGenerator();
-    private final DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+    private final transient BarcodeGenerator barcodeGenerator = new QrBarcodeGenerator();
+    private final transient DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
 
-    private int id;
+    private Integer id;
     private String lastName;
     private String firstName;
     private String email;
+    private String password;
     private String mobileNumber;
     private Date dateOfBirth;
     private Gender gender;
@@ -60,6 +61,21 @@ public class User implements Serializable {
         this.dateOfBirth = dateOfBirth;
         this.employee = isEmployee;
         this.profileImage = profileImage;
+    }
+
+    public User(String lastName, String firstName,
+                String email, Gender gender, String mobileNumber,
+                String dateOfBirth, boolean isEmployee, Bitmap profileImage, String password) throws ParseException {
+
+        this.lastName = lastName;
+        this.firstName = firstName;
+        this.email = email;
+        this.gender = gender;
+        this.mobileNumber = mobileNumber;
+        this.dateOfBirth = dateFormat.parse(dateOfBirth);
+        this.employee = isEmployee;
+        this.profileImage = profileImage;
+        this.password = password;
     }
 
     public User(String lastName, String firstName,

@@ -100,17 +100,15 @@ public class RegisterActivity extends AppCompatActivity {
         String birthYear = mBirthYear.getText().toString();
         String birthMonth = mBirthMonth.getText().toString();
         String birthDay = mBirthDay.getText().toString();
-        buf.append(birthYear)
+        buf.append(birthDay)
                 .append("-")
                 .append(birthMonth)
                 .append("-")
-                .append(birthDay);
+                .append(birthYear);
         String birthday = buf.toString();
 
-
-
-            boolean cancel = false;
-            View focusView = null;
+        boolean cancel = false;
+        View focusView = null;
 
             // Check for a valid password, if the user entered one.
         if (TextUtils.isEmpty(firstName)) {
@@ -179,7 +177,7 @@ public class RegisterActivity extends AppCompatActivity {
         } else {
             try {
                 user = new User(lastName, firstName, email, Gender.MALE,
-                        vorwahl + mobile, birthday, false);
+                        vorwahl + mobile, birthday, false, null, password);
                 showProgress(true);
                 mAuthTask = new RegisterUserTask();
                 mAuthTask.execute();
@@ -218,12 +216,10 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private boolean isEmailValid(String email) {
-        //TODO: Replace this with your own logic
         return email.contains("@");
     }
 
     private boolean isPasswordValid(String password) {
-        //TODO: Replace this with your own logic
         return password.length() > 3;
     }
 
@@ -255,6 +251,7 @@ public class RegisterActivity extends AppCompatActivity {
 
             if (success) {
                 Intent intent = new Intent(getBaseContext(), MainActivity.class);
+                intent.setFlags(intent.getFlags() | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
             } else {
                 Snackbar snackbar = Snackbar.make(
